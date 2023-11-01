@@ -23,7 +23,7 @@ function AuthenticatedNavbar() {
             <p onClick={() => setVisible(!visible)}>My Account</p>
 
             {visible && (
-              <div className="bg-blue-50 absolute mt-2 w-28 text-md">
+              <div className="bg-teal-800 absolute mt-2 w-28 text-md">
                 <p>Profile</p>
                 <p>Orders</p>
                 <p>wishlist</p>

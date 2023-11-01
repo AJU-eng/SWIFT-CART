@@ -10,6 +10,7 @@ const CategorySchema = mongoose.Schema({
   CategoryImage:{
     type:String
   },
-});
+
+},{timestampsP:true});
 
 module.exports=mongoose.model("Category",CategorySchema)

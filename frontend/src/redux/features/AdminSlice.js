@@ -78,6 +78,12 @@ export const addCategory = createAsyncThunk(
   }
 );
 
+export const AddProductspo=createAsyncThunk("admin/addProducts",async(formData,{rejectWithValue})=>{
+  const res=axios.post("http://localhost:3000/admin/AddProducts",formData)
+  return (await res).data
+})
+
+
 const adminSlice = createSlice({
   name: "admin",
   initialState: { ...initialDataState },

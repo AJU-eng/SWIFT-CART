@@ -6,6 +6,8 @@ require("dotenv").config();
 const otpModel = require("../model/otp");
 const userModel = require("../model/userModel");
 const jwt = require("jsonwebtoken");
+
+
 // const { ModuleNode } = require('vite')
 const Transport = nodemailer.createTransport({
   service: "gmail",
@@ -51,7 +53,7 @@ const generate = async (req, res) => {
     res.send(req.body.userCredentials);
     console.log(JSON.stringify(sendMail) + "messagesent");
   } catch (err) {
-    res.status(400).send("email already exist")
+    res.status(400).send("email already exist");
   }
 };
 
@@ -68,6 +70,7 @@ const verifyOtp = async (req, res) => {
       name: name,
       email: email,
       Password: password,
+      status:"unblocked"
     });
     if (data) {
       console.log("registered sucessfully");
@@ -110,17 +113,47 @@ const logout = async (req, res) => {
     })
     .send(false);
 };
+
 const login = async (req, res) => {
   const { email, password } = req.body;
-  const data = userModel.findOne({
-    email: email,
-  });
-  if (data) {
-    res.send("logined")
+  console.log(password);
+  console.log(req.body);
+  
+  if (email === "admin@gmail.com" && password === "admin123") {
+    console.log("test1 passed");
+    
+    const adminToken = jwt.sign({ role: "admin" }, process.env.SECRET_KEY);
+    res
+      .cookie("admin_token", adminToken, {
+        httpOnly: true,
+      })
+      .send("admin logined");
+    console.log("Admin logined");
+    return;
   }
-  else{
-    res.send("not logined")
+  try {
+    const data = await userModel.findOne({
+      email: email,
+      status:"unblocked"
+    });
+    if (data) {
+      if (data.Password === password) {
+        const userToken = jwt.sign({ user_id: data._id }, process.env.SECRET_KEY);
+        res
+          .cookie("token", userToken, {
+            httpOnly: true,
+          })
+          .send("logined");
+        console.log("User logined");
+      } 
+    } else {
+      res.send("not logined");
+      console.log("User not logined");
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
   }
 };
 
-module.exports = { generate, verifyOtp, loggedIn, logout,login };
+module.exports = { generate, verifyOtp, loggedIn, logout, login };

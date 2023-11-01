@@ -8,9 +8,11 @@ function Form_auth() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const { loading, user, err } = useSelector((state) => state.user);
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
   const nav = useNavigate();
 
-  const [password, setPassword] = useState("");
   const userCredentials = {
     name,
     email,
@@ -26,7 +28,13 @@ function Form_auth() {
   const dispatch = useDispatch();
   const submits = (e) => {
     e.preventDefault();
-    dispatch(registerUser(userCredentials));
+    if (password === confirmPassword) {
+      dispatch(registerUser(userCredentials));
+      setError("");
+    } else {
+      console.log("passwords doesn't match");
+      setError("password doesn't match");
+    }
   };
   return (
     <div className="min-h-screen py-40 pt-32 main">
@@ -56,7 +64,7 @@ function Form_auth() {
                   placeholder="email"
                   className="border border-gray-400 py-1 px-2 w-full"
                 />
-                <p>{err}</p>
+                {err=="Rejected"&&<p className="text-red-500 font-serif">email already registered</p>}
               </div>
               <div className="mt-5">
                 <input
@@ -70,8 +78,10 @@ function Form_auth() {
                 <input
                   type="password"
                   placeholder="Confirm Password"
+                  onChange={(e) => setConfirmPassword(e.target.value)}
                   className="border border-gray-400 py-1 px-2 w-full"
                 />
+                <p className="text-red-600">{error}</p>
               </div>
               <div className="mt-5">
                 <button

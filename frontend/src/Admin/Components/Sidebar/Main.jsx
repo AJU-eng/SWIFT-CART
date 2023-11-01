@@ -10,16 +10,14 @@ import AddProducts from "../pages/AddProducts";
 
 function Main() {
   return (
-    <BrowserRouter>
-      <RootLayout>
-        <Routes>
-          <Route path="/" element={<Dashboard/>}/>
-          <Route path="/user" element={<UserManagement />} />
-          <Route path="/category" element={<CateogryManagment/>} />
-          <Route path="/addProducts" element={<AddProducts/>} />
-        </Routes>
-      </RootLayout>
-    </BrowserRouter>
+    <RootLayout>
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/user" element={<UserManagement />} />
+        <Route path="/category" element={<CateogryManagment />} />
+        <Route path="/admin/addProducts" element={<AddProducts />} />
+      </Routes>
+    </RootLayout>
   );
 }
 

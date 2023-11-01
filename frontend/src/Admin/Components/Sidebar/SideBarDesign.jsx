@@ -63,26 +63,26 @@ function SideBarDesign() {
                   Order Managment
                 </h1>
               </div>
-              <a href="/user">
-                <div className="flex mx-9 flex-1">
+             
+                <div className="flex mx-9 flex-1" onClick={()=>nav("/user")}> 
                   <img src={users} alt="" />
                   <h1 className="text-sm mx-2 my-3 text-slate-500">
                     Customers
                   </h1>
                 </div>
-              </a>
+              
               <div className="flex mx-9  flex-1">
                 <img src={coupon} alt="" />
                 <h1 className="text-sm mx-2 my-3  text-slate-500">
                   Coupon code
                 </h1>
               </div>
-              <a href="/category">
-              <div className="flex mx-9 flex-1">
+              
+              <div className="flex mx-9 flex-1" onClick={()=>nav("/category")}>
                 <img src={category} alt="" />
                 <h1 className="text-sm mx-2 my-3 text-slate-500">Categories</h1>
               </div>
-               </a>
+               
               <div className="flex mx-9 flex-1">
                 <img src={transaction} alt="" />
                 <h1 className="text-sm mx-2 my-3 text-slate-500">
@@ -94,7 +94,7 @@ function SideBarDesign() {
               <h1 className="text-xs mx-6 my-5 flex-1 text-slate-500">
                 PRODUCTS
               </h1>
-              <div className="flex mx-9 flex-1" onClick={()=>nav("/addProducts")}>
+              <div className="flex mx-9 flex-1" onClick={()=>nav("/admin/addProducts")}>
                 <img src={Add} alt="" />
                 <h1 className="text-sm mx-2   text-slate-500">Add Products</h1>
               </div>

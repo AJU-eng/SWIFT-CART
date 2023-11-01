@@ -1,6 +1,7 @@
 const validator = require("validator");
 const userModel = require("../model/userModel");
 const CategoryModal = require("../model/CategoryModal");
+const ProductModel = require("../model/ProductModel");
 const getUser = async (req, res) => {
   const hello = await userModel.find();
   res.send(hello);
@@ -62,24 +63,29 @@ const CategoryAdd = async (req, res) => {
 };
 
 const AddProducts = async (req, res) => {
+  console.log("hello world");
+  const { name, price, category, stock,description } = req.body;
+  console.log(req.body);
+  console.log(req.files);
   const images = req.files;
-
-  const attributes = JSON.parse(formData.attributes);
-  formData.attributes = attributes;
-  if (files && files.length > 0) {
-    formData.moreImageURL = [];
-    formData.imageURL = "";
-    files.map((file) => {
-      if (file.fieldname === "imageURL") {
-        formData.imageURL = file.filename;
-      } else {
-        formData.moreImageURL.push(file.filename);
-      }
-    });
+  console.log(images);
+  let imageArray = [];
+  for (let i = 0; i < images.length; i++) {
+    imageArray.push(images[i].filename);
   }
+  console.log(imageArray);
+  const hel = await ProductModel.create({
+    name: name,
+    price: price,
+    Category: category,
+    stock: stock,
+    description:description,
+    moreImage: imageArray,
 
-  console.log(formData);
+  });
+  console.log(hel);
 };
+
 const getCategories = async (req, res) => {
   const catData = await CategoryModal.find();
   res.send(catData);
@@ -92,5 +98,5 @@ module.exports = {
   userDelete,
   CategoryAdd,
   getCategories,
-  AddProducts
+  AddProducts,
 };
