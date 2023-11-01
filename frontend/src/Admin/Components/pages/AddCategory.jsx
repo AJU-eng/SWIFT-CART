@@ -13,10 +13,6 @@ function AddCategory({ visible, onClose }) {
 
   const CategorySubmit = (e) => {
     e.preventDefault();
-    console.log("Name:", name);
-    console.log("Image:", image);
-    console.log("Stock:", stock);
-  
     const formData = new FormData();
     formData.append("name",name)
     formData.append("stock",stock)

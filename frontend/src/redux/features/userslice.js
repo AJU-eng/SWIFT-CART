@@ -1,16 +1,15 @@
-import {
-  createSlice,
-  createAsyncThunk,
-  getDefaultMiddleware,
-} from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import build from "otp-input-react";
 
 const initialUserState = {
   loading: false,
   user: "",
   err: "",
   otp_status: "",
-  login_status:""
+  login_status: "",
+  products: "",
+  SingleProduct: [],
 };
 
 const initialLoggedState = {
@@ -28,7 +27,7 @@ export const registerUser = createAsyncThunk(
       );
       return res.data;
     } catch (err) {
-      console.log(err.message+"=======================");
+      console.log(err.message + "=======================");
       return rejectWithValue(err);
     }
   }
@@ -46,6 +45,17 @@ export const verifyUser = createAsyncThunk(
   }
 );
 
+export const findProduct = createAsyncThunk("user/findProduct", async (id) => {
+ const res= await axios.post(`http://localhost:3000/user/findProduct/${id}`);
+  console.log(res.data);
+  return res.data;
+});
+
+export const GetProducts = createAsyncThunk("user/products", async () => {
+  const res = await axios.get("http://localhost:3000/user/getProducts");
+  return res.data;
+});
+
 export const logouts = createAsyncThunk("user/logout", async () => {
   return axios.get("http://localhost:3000/user/logout").then((res) => res.data);
 });
@@ -54,10 +64,22 @@ export const logged = createAsyncThunk("user/logged", async () => {
   const res = await axios.get("http://localhost:3000/user/checkLogStatus");
   return res.data;
 });
-export const userLogin=createAsyncThunk("user/login",async({name,email},{rejectWithValue})=>{
-  const res=await axios.post("http://localhost:3000/user/login",{name,email})
-  return res.data
-})
+export const userLogin = createAsyncThunk(
+  "user/login",
+  async ({ email, password }, { rejectWithValue }) => {
+    const res = await axios.post(
+      "http://localhost:3000/user/login",
+      { email, password },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    console.log(res);
+    return res.data;
+  }
+);
 const userSlice = createSlice({
   name: "user",
   initialState: { ...initialUserState },
@@ -75,9 +97,18 @@ const userSlice = createSlice({
     builder.addCase(verifyUser.fulfilled, (state, action) => {
       state.otp_status = action.payload;
     });
-    builder.addCase(userLogin.fulfilled,(state,action)=>{
-      state.login_status=action.payload
-    })
+    builder.addCase(userLogin.fulfilled, (state, action) => {
+      state.login_status = action.payload;
+    });
+    builder.addCase(logouts.fulfilled, (state) => {
+      state.login_status = "not logined";
+    });
+    builder.addCase(GetProducts.fulfilled, (state, action) => {
+      state.products = action.payload;
+    });
+    builder.addCase(findProduct.fulfilled, (state, action) => {
+      state.SingleProduct = action.payload;
+    });
   },
 });
 

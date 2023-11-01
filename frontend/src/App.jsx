@@ -27,18 +27,20 @@ function App() {
   }, [dispatch]);
   return (
     <>
-      {/* <BrowserRouter>
+      <BrowserRouter>
         <Routes>
           <Route path="/" element={user ? <Home /> : <UnAuthorizedHome />} />
           <Route path="/register" element={<FormAuth />} />
           <Route path="/otp" element={<Otp />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/login" element={<Authentication/>}/>
+          <Route path="/login" element={<Authentication />} />
+          <Route path="/ProductDetail/:id" element={<ProductsDetailPage />} />
+          <Route path="/admin" element={<Main/>}/>
         </Routes>
-      </BrowserRouter> */}
-      <Main/>  
-    {/* <Authentication/> */}
-    {/* <Home/> 
+      </BrowserRouter>
+      {/* <Main/>    */}
+      {/* <Authentication/> */}
+      {/* <Home/>  */}
 
       {/* <ProductsDetailPage/> */}
     </>

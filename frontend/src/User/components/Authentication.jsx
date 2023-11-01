@@ -15,10 +15,15 @@ function Authentication() {
     if (login_status == "logined") {
       nav("/home");
     }
+    else if(login_status=="admin logined")
+    {
+      nav("/admin")
+    }
   },[nav,login_status]);
 
   const loginUser = (e) => {
     e.preventDefault();
+    console.log(email,password);
     dispatch(userLogin({ email, password }));
   };
   return (

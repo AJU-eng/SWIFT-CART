@@ -1,5 +1,6 @@
 const express = require("express");
 const app=express()
+const path=require("path")
 require('dotenv').config()
 const monngoose=require('mongoose')
 const cookie=require('cookie-parser')
@@ -14,6 +15,7 @@ app.use(cors({
 }))
 app.use(cookie())
 app.use(express.urlencoded({extended:true}))
+app.use("/images",express.static(path.join(__dirname,"public/products")));
 app.use(express.json())
 app.use(session({
     secret:'ajau',

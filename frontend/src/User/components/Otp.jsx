@@ -32,11 +32,11 @@ function Otp() {
   };
 
   return (
-    <div className="main min-h-screen py-40">
+    <div className="main min-h-screen py-40 bg-blue-300">
       <div className=" container mx-auto ">
-        <div className="mx-auto backdrop-filter backdrop-blur-sm bg-opacity-10 overflow-hidden bg-white w-4/12 rounded-lg ">
-          <h1 className="text-center font-serif text-2xl mt-3">Verify OTP</h1>
-          <p className="text-center mt-3 font-serif mb-6 ">
+        <div className="mx-auto  overflow-hidden bg-blue-500 w-4/12 rounded-lg ">
+          <h1 className="text-center font-serif text-2xl mt-3 text-white">Verify OTP</h1>
+          <p className="text-center mt-3 font-serif mb-6 text-white ">
             code has been send to your mail
           </p>
           <div className=" flex justify-center">
@@ -52,7 +52,7 @@ function Otp() {
           </div>
           <button
             onClick={verify}
-            className="bg-blue-500 mx-52 mt-10 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mb-20"
+            className="bg-blue-400 font-serif mx-52 mt-10 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mb-20"
           >
             Verify
           </button>

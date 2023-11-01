@@ -6,11 +6,12 @@ import { FiEdit } from "react-icons/fi";
 import { FaUnlock } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { getCategory } from "../../../redux/features/AdminSlice";
+import date from 'date-and-time'
 function CateogryManagment() {
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
 
-  const categories = useSelector((state) => state.admin.updatedCategories);
+  const categories = useSelector((state) => state.admin.categories);
   const hanldeClose = () => setShowModal(false);
   useEffect(() => {
     dispatch(getCategory());
@@ -44,7 +45,7 @@ function CateogryManagment() {
                   <tr className="border border-b-2 text-center h-12 font-serif">
                     <td>{index + 1}</td>
                     <td>{category.name}</td>
-                    <td>0</td>
+                    <td>{category.createdAt?date.format(new Date(category.createdAt),"MM DD YYYY"):"no data"}</td>
                     <td className="flex justify-center  ">{category.Stock}</td>
                     <td></td>
                     <td className="flex justify-center space-x-4 mt-2">
