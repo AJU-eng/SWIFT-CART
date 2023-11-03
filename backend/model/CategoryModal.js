@@ -3,14 +3,17 @@ const mongoose = require("mongoose");
 const CategorySchema = mongoose.Schema({
   name: {
     type: String,
+    unique:true,
   },
-  Stock: {
-    type: Number,
+ 
+  status: {
+    type: String,
   },
   CategoryImage:{
     type:String
   },
 
-},{timestampsP:true});
+
+},{timestamps:true});
 
 module.exports=mongoose.model("Category",CategorySchema)

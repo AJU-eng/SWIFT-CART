@@ -98,7 +98,7 @@ function SideBarDesign() {
                 <img src={Add} alt="" />
                 <h1 className="text-sm mx-2   text-slate-500">Add Products</h1>
               </div>
-              <div className="flex mx-9 flex-1">
+              <div className="flex mx-9 flex-1" onClick={()=>nav("/admin/Productmanagement")}>
                 <img src={products} alt="" />
                 <h1 className="text-sm mx-2 my-4   text-slate-500">
                   Products Managment

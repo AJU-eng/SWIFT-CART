@@ -5,14 +5,25 @@ import { AiTwotoneDelete } from "react-icons/ai";
 import { FiEdit } from "react-icons/fi";
 import { FaUnlock } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { getCategory } from "../../../redux/features/AdminSlice";
-import date from 'date-and-time'
+import { Link } from "react-router-dom";
+import {
+  blockCategory,
+  getCategory,
+  unblocksCategory,
+} from "../../../redux/features/AdminSlice";
+import date from "date-and-time";
+import EditCategory from "./EditCategory";
 function CateogryManagment() {
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
+  const [id, setId] = useState();
+  const [edit, showEdit] = useState(false);
 
   const categories = useSelector((state) => state.admin.categories);
-  const hanldeClose = () => setShowModal(false);
+  const hanldeClose = () => {
+    setShowModal(false);
+    showEdit(false)
+  };
   useEffect(() => {
     dispatch(getCategory());
   }, [dispatch]);
@@ -20,21 +31,21 @@ function CateogryManagment() {
     <>
       <div className="flex justify-end mt-5">
         <button
-          className="w-auto h-auto bg-blue-400 text-white"
+          className="w-36 rounded-lg font-semibold h-8 bg-blue-400 text-white"
           onClick={() => setShowModal(true)}
         >
           ADD CATEGORY
         </button>
       </div>
-      <div className="mt-20  border rounded-xl shadow-md ">
+      <div className="mt-7  border rounded-xl shadow-md ">
         <table className="w-full">
           <thead className="border border-b-2 h-10  ">
             <tr className="text-sm text-center text-slate-500 font-serif">
               <td className="w-32">ID</td>
               <td className="w-36 ">CATEGORY</td>
               <td className="w-36">SALES</td>
-              <td className="w-36">STOCK</td>
               <td className="w-36">ADDED</td>
+              <td className="w-36">STATUS</td>
               <td className="w-36">ACTION</td>
             </tr>
           </thead>
@@ -45,43 +56,46 @@ function CateogryManagment() {
                   <tr className="border border-b-2 text-center h-12 font-serif">
                     <td>{index + 1}</td>
                     <td>{category.name}</td>
-                    <td>{category.createdAt?date.format(new Date(category.createdAt),"MM DD YYYY"):"no data"}</td>
-                    <td className="flex justify-center  ">{category.Stock}</td>
-                    <td></td>
+                    <td>no data</td>
+
+                    <td>
+                      {category.createdAt
+                        ? date.format(new Date(category.createdAt), "D MMM YY")
+                        : "no data"}
+                    </td>
+                    <td className="px-20 ">
+                      {category.status == "Unblocked" ? (
+                        <div className="w-20 h-7 p-1 border tracking-widest rounded-lg text-sm text-green-900 bg-green-300">
+                          ACTIVE
+                        </div>
+                      ) : (
+                        <div className="w-24 h-7 p-1 border tracking-widest rounded-lg text-sm text-red-500 bg-red-200">
+                          BLOCKED
+                        </div>
+                      )}
+                    </td>
                     <td className="flex justify-center space-x-4 mt-2">
-                      <FaUnlock
-                        onClick={() => {
-                          console.log("block user");
-                          dispatch(BlockUsers(category._id));
-                        }}
-                      />
+                      {category.status === "Unblocked" ? (
+                        <FaUnlock
+                          onClick={() => {
+                            console.log("block user");
+                            dispatch(blockCategory(category._id));
+                          }}
+                        />
+                      ) : (
+                        <BiSolidLockAlt
+                          onClick={() => {
+                            console.log("unblock clicked");
+                            dispatch(unblocksCategory(category._id));
+                          }}
+                        />
+                      )}
 
-                      <BiSolidLockAlt
+                      <FiEdit
                         onClick={() => {
-                          console.log("unblock clicked");
-                          dispatch(UnblockUsers(category._id));
-                        }}
-                      />
-
-                      <FiEdit />
-                      <AiTwotoneDelete
-                        onClick={() => {
-                          console.log("delete user");
-                          confirmAlert({
-                            title: "Confirm to submit",
-                            message: "Are you sure to do this.",
-                            buttons: [
-                              {
-                                label: "Yes",
-                                // onClick: () => dispatch(DeleteUser(user._id))
-                              },
-                              {
-                                label: "No",
-                                onClick: () => alert("Click No"),
-                              },
-                            ],
-                          });
-                          // dispatch(DeleteUser(user._id));
+                          console.log("edit button clicked");
+                          showEdit(true);
+                          setId(category._id);
                         }}
                       />
                     </td>
@@ -91,7 +105,8 @@ function CateogryManagment() {
           </tbody>
         </table>
 
-        <AddCategory visible={showModal} />
+        <AddCategory visible={showModal} onClose={hanldeClose} />
+        <EditCategory visible={edit} id={id} onClose={hanldeClose} />
       </div>
     </>
   );

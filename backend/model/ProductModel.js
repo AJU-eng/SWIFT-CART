@@ -28,6 +28,9 @@ const productSchema = mongoose.Schema({
   stock: {
     type: String,
   },
-});
+  iDelete:{
+    type:Boolean
+  }
+},{timestamps:true});
 
 module.exports = mongoose.model("products", productSchema);

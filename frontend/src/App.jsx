@@ -27,7 +27,7 @@ function App() {
   }, [dispatch]);
   return (
     <>
-      <BrowserRouter>
+      {/* <BrowserRouter>
         <Routes>
           <Route path="/" element={user ? <Home /> : <UnAuthorizedHome />} />
           <Route path="/register" element={<FormAuth />} />
@@ -37,8 +37,8 @@ function App() {
           <Route path="/ProductDetail/:id" element={<ProductsDetailPage />} />
           <Route path="/admin" element={<Main/>}/>
         </Routes>
-      </BrowserRouter>
-      {/* <Main/>    */}
+      </BrowserRouter> */}
+      <Main/>   
       {/* <Authentication/> */}
       {/* <Home/>  */}
 

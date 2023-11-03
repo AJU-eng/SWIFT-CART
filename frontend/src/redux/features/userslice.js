@@ -36,12 +36,19 @@ export const registerUser = createAsyncThunk(
 export const verifyUser = createAsyncThunk(
   "user/verifyOtp",
   async (otp, { rejectWithValue }) => {
-    const resp = await axios.post(
-      "http://localhost:3000/user/verifyOtp",
-      { otp },
-      { headers: { "Content-Type": "application/json" } }
-    );
-    return resp.data;
+    try{
+
+      const resp = await axios.post(
+        "http://localhost:3000/user/verifyOtp",
+        { otp },
+        { headers: { "Content-Type": "application/json" } }
+      );
+      return resp.data;
+    }catch(err)
+    {
+      // console.log(err+"==================err");
+      return rejectWithValue(err)
+    }
   }
 );
 
@@ -64,22 +71,49 @@ export const logged = createAsyncThunk("user/logged", async () => {
   const res = await axios.get("http://localhost:3000/user/checkLogStatus");
   return res.data;
 });
+// export const userLogin = createAsyncThunk(
+//   "user/login",
+//   async ({ email, password }, { rejectWithValue }) => {
+//     try {
+
+//       const res = await axios.post(
+//         "http://localhost:3000/user/login",
+//         { email, password },
+//         {
+//           headers: {
+//             "Content-Type": "application/json",
+//           },
+//         }
+//       );
+//       // console.log(res.data);
+//       return res.data;
+//     }catch(err){
+//       console.log(err);
+//       return rejectWithValue(err)
+//     }
+//   }
+// );
 export const userLogin = createAsyncThunk(
   "user/login",
   async ({ email, password }, { rejectWithValue }) => {
-    const res = await axios.post(
-      "http://localhost:3000/user/login",
-      { email, password },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    console.log(res);
-    return res.data;
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/user/login",
+        { email, password },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return res.data;
+    } catch (err) {
+      console.log(err.response.data+"===========================");
+      return rejectWithValue(err.response.data); // Pass the error message here
+    }
   }
 );
+
 const userSlice = createSlice({
   name: "user",
   initialState: { ...initialUserState },
@@ -97,11 +131,19 @@ const userSlice = createSlice({
     builder.addCase(verifyUser.fulfilled, (state, action) => {
       state.otp_status = action.payload;
     });
+    builder.addCase(verifyUser.rejected,(state,action)=>{
+      state.otp_status=action.payload
+    })
     builder.addCase(userLogin.fulfilled, (state, action) => {
       state.login_status = action.payload;
     });
+    builder.addCase(userLogin.rejected,(state,action)=>{
+      console.log(action.error.message);
+      state.err=action.payload
+    })
     builder.addCase(logouts.fulfilled, (state) => {
       state.login_status = "not logined";
+      state.user=""
     });
     builder.addCase(GetProducts.fulfilled, (state, action) => {
       state.products = action.payload;

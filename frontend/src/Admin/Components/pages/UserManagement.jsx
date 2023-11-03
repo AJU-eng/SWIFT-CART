@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 // import ReactConfirmAlert from "react-confirm-alert";
 import { confirmAlert } from "react-confirm-alert";
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+import date from "date-and-time"
 
 import {
   BlockUsers,
@@ -54,7 +55,9 @@ function UserManagement() {
                       </div>
                     )}
                   </td>
-                  <td>5</td>
+                  <td>{user.createdAt
+                      ? date.format(new Date(user.createdAt), "D MMM YY")
+                      : "no data"}</td>
                   <td className="flex justify-center space-x-4 mt-2">
                     {user.status == "unblocked" ? (
                       <FaUnlock

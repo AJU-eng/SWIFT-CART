@@ -22,9 +22,15 @@ const findProduct = async (req, res) => {
       res.status(500).json({ error: "Internal server error" });
     }
   };
+
+  const deleteProduct=async(req,res)=>{
+    const {id}=req.params
+    const data=await ProductModel.findByIdAndUpdate(id,{iDelete:true})
+    console.log(data);
+  }
   
 
 module.exports={
     getProducts,
-    findProduct
+    findProduct,deleteProduct
 }

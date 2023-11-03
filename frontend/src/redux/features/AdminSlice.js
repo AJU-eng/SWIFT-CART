@@ -1,12 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
+
 const initialDataState = {
   loading: false,
   users: [],
   categories: [],
   updatedCategories: [],
   err: "",
+  category_status: "",
+  SingleCategory:""
 };
 
 export const fetchUsers = createAsyncThunk("admin/FetchUser", () => {
@@ -77,12 +80,31 @@ export const addCategory = createAsyncThunk(
     }
   }
 );
-
-export const AddProductspo=createAsyncThunk("admin/addProducts",async(formData,{rejectWithValue})=>{
-  const res=axios.post("http://localhost:3000/admin/AddProducts",formData)
-  return (await res).data
+export const findCategory=createAsyncThunk("admin/CategoryEdit",async(id)=>{
+  const res=await axios.post(`http://localhost:3000/admin/findCategory`,{id})
+  return res.data
 })
 
+export const AddProductspo = createAsyncThunk(
+  "admin/addProducts",
+  async (formData, { rejectWithValue }) => {
+    const res = axios.post("http://localhost:3000/admin/AddProducts", formData);
+    return (await res).data;
+  }
+);
+export const blockCategory = createAsyncThunk(
+  "admin/blockCategory",
+  async (id) => {
+    const res = await axios.post("http://localhost:3000/admin/blockCategory", {
+      id,
+    });
+    return res.data;
+  }
+);
+export const unblocksCategory=createAsyncThunk("admin/categoryunblock",async(id)=>{
+  const res=await axios.post("http://localhost:3000/admin/unblockCategory",{id})
+  return res.data
+})
 
 const adminSlice = createSlice({
   name: "admin",
@@ -131,6 +153,27 @@ const adminSlice = createSlice({
     builder.addCase(addCategory.fulfilled, (state, action) => {
       state.updatedCategories = [...state.categories, action.payload];
     });
+    builder.addCase(blockCategory.fulfilled, (state, action) => {
+      const blockCategory = state.categories.map((category) => {
+        if (category._id === action.payload._id) {
+          category.status = action.payload.status;
+        }
+        return category;
+      });
+      state.categories = blockCategory;
+    });
+    builder.addCase(unblocksCategory.fulfilled,(state,action)=>{
+      const unblockCateegory=state.categories.map((category)=>{
+        if (category._id===action.payload._id) {
+          category.status=action.payload.status
+        }
+        return category
+      })
+      state.categories=unblockCateegory
+    })
+    builder.addCase(findCategory.fulfilled,(state,action)=>{
+      state.SingleCategory=action.payload
+    })
   },
 });
 

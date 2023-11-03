@@ -50,11 +50,11 @@ const CategoryAdd = async (req, res) => {
   console.log(req.files);
   const image = req.files[0].filename;
   console.log(image);
-  const { name, stock } = req.body;
+  const { name } = req.body;
   const Category = new CategoryModal({
     name: name,
-    Stock: stock,
     CategoryImage: image,
+    status: "unblocked",
   });
   await Category.save();
   if (Category) {
@@ -64,7 +64,7 @@ const CategoryAdd = async (req, res) => {
 
 const AddProducts = async (req, res) => {
   console.log("hello world");
-  const { name, price, category, stock,description } = req.body;
+  const { name, price, category, stock, description } = req.body;
   console.log(req.body);
   console.log(req.files);
   const images = req.files;
@@ -79,9 +79,9 @@ const AddProducts = async (req, res) => {
     price: price,
     Category: category,
     stock: stock,
-    description:description,
+    description: description,
     moreImage: imageArray,
-
+    isDelete: false,
   });
   console.log(hel);
 };
@@ -89,6 +89,27 @@ const AddProducts = async (req, res) => {
 const getCategories = async (req, res) => {
   const catData = await CategoryModal.find();
   res.send(catData);
+};
+
+const BlockCategories = async (req, res) => {
+  const { id } = req.body;
+  const block = await CategoryModal.findByIdAndUpdate(
+    { _id: id },
+    { status: "Blocked" },
+    { new: true }
+  );
+  res.send(block);
+  console.log(block.status);
+};
+const UnblockCategories = async (req, res) => {
+  const { id } = req.body;
+  const unblock = await CategoryModal.findByIdAndUpdate(
+    { _id: id },
+    { status: "Unblocked" },
+    { new: true }
+  );
+  res.send(unblock);
+  console.log("ublock api called");
 };
 
 module.exports = {
@@ -99,4 +120,6 @@ module.exports = {
   CategoryAdd,
   getCategories,
   AddProducts,
+  BlockCategories,
+  UnblockCategories,
 };
