@@ -16,13 +16,14 @@ import coupon from "./coupon.svg";
 import cart from "./shopping-cart.svg";
 import transaction from "./transaction.svg";
 import category from "./cateogry.svg";
+import { NavLink } from "react-router-dom";
 import Add from "./Add.svg";
 import products from "./products.svg";
 
 import smallLogo from "./smallLogo.png";
 import { useNavigate } from "react-router";
 function SideBarDesign() {
-  const nav=useNavigate()
+  const nav = useNavigate();
   const Sidebar_animation = {
     open: {
       width: "16rem",
@@ -63,26 +64,28 @@ function SideBarDesign() {
                   Order Managment
                 </h1>
               </div>
-             
-                <div className="flex mx-9 flex-1" onClick={()=>nav("/user")}> 
+              <NavLink to="user">
+                <div className="flex mx-9 flex-1">
                   <img src={users} alt="" />
                   <h1 className="text-sm mx-2 my-3 text-slate-500">
                     Customers
                   </h1>
                 </div>
-              
+              </NavLink>
               <div className="flex mx-9  flex-1">
                 <img src={coupon} alt="" />
                 <h1 className="text-sm mx-2 my-3  text-slate-500">
                   Coupon code
                 </h1>
               </div>
-              
-              <div className="flex mx-9 flex-1" onClick={()=>nav("/category")}>
-                <img src={category} alt="" />
-                <h1 className="text-sm mx-2 my-3 text-slate-500">Categories</h1>
-              </div>
-               
+              <NavLink to="category">
+                <div className="flex mx-9 flex-1">
+                  <img src={category} alt="" />
+                  <h1 className="text-sm mx-2 my-3 text-slate-500">
+                    Categories
+                  </h1>
+                </div>
+              </NavLink>
               <div className="flex mx-9 flex-1">
                 <img src={transaction} alt="" />
                 <h1 className="text-sm mx-2 my-3 text-slate-500">
@@ -90,20 +93,27 @@ function SideBarDesign() {
                 </h1>
               </div>
             </div>
+
             <div className="font-serif flex flex-col">
               <h1 className="text-xs mx-6 my-5 flex-1 text-slate-500">
                 PRODUCTS
               </h1>
-              <div className="flex mx-9 flex-1" onClick={()=>nav("/admin/addProducts")}>
-                <img src={Add} alt="" />
-                <h1 className="text-sm mx-2   text-slate-500">Add Products</h1>
-              </div>
-              <div className="flex mx-9 flex-1" onClick={()=>nav("/admin/Productmanagement")}>
+              <NavLink to="addProducts">
+                <div className="flex mx-9 flex-1">
+                  <img src={Add} alt="" />
+                  <h1 className="text-sm mx-2   text-slate-500">
+                    Add Products
+                  </h1>
+                </div>
+              </NavLink>
+              <NavLink to="products">
+              <div className="flex mx-9 flex-1">
                 <img src={products} alt="" />
                 <h1 className="text-sm mx-2 my-4   text-slate-500">
                   Products Managment
                 </h1>
               </div>
+              </NavLink>
             </div>
             <div className="font-serif flex flex-col">
               <h1 className="text-xs mx-6 my-5 flex-1 text-slate-500">ADMIN</h1>

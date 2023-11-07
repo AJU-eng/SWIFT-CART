@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { BiSolidLockAlt } from "react-icons/bi";
 import { AiTwotoneDelete } from "react-icons/ai";
 import { FiEdit } from "react-icons/fi";
@@ -6,8 +6,13 @@ import { FaUnlock } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { GetProducts } from "../../../redux/features/userslice";
 import date from "date-and-time";
+import EditProduct from "./EditProduct";
+import { Link, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 function ProductManagement() {
   const dispatch = useDispatch();
+  const [visible,setVisible]=useState(true)
+  const nav=useNavigate()
   const products = useSelector((state) => state.user.products);
   useEffect(() => {
     dispatch(GetProducts());
@@ -57,7 +62,7 @@ function ProductManagement() {
                     )}
                   </td>
                   <td className="flex justify-center space-x-4 mt-2">
-                    <FiEdit />
+                  <FiEdit onClick={()=>nav(`editProducts/${product._id}`)}/>
                     <AiTwotoneDelete
                       onClick={() => {
                         console.log("delete user");
@@ -84,6 +89,7 @@ function ProductManagement() {
             })}
         </tbody>
       </table>
+      {/* <EditProduct visible={visible}/> */}
     </div>
   );
 }
