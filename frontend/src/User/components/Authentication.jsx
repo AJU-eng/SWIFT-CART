@@ -9,6 +9,7 @@ function Authentication() {
   const dispatch = useDispatch();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  const login_err=useSelector((state)=>state.user.err)
   const login_status = useSelector((state) => state.user.login_status);
 
   useEffect(() => {
@@ -20,12 +21,13 @@ function Authentication() {
       nav("/admin")
     }
   },[nav,login_status]);
-
+  
   const loginUser = (e) => {
     e.preventDefault();
-    console.log(email,password);
+    // console.log(email,password);
     dispatch(userLogin({ email, password }));
   };
+  // console.log(login_err+"=======================================err");
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 h-screen w-full">
       <div className="hidden sm:block mt-10">
@@ -40,6 +42,7 @@ function Authentication() {
           <h2 className="text-4xl font-medium text-center py-6 font-serif">
             Welcome Back..!
           </h2>
+           <p className="bg-red-200 w-56 text-red-800 px-2 font-serif">{login_err}</p> 
           <div className="flex flex-col py-2">
             <label htmlFor="">Email</label>
             <input

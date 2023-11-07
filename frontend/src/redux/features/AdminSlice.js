@@ -7,6 +7,9 @@ const initialDataState = {
   categories: [],
   updatedCategories: [],
   err: "",
+  ProductToEdit:"",
+  category_status: "",
+  SingleCategory: "",
 };
 
 export const fetchUsers = createAsyncThunk("admin/FetchUser", () => {
@@ -14,6 +17,12 @@ export const fetchUsers = createAsyncThunk("admin/FetchUser", () => {
     .get("http://localhost:3000/admin/getUser")
     .then((res) => res.data);
 });
+export const findEditProduct=createAsyncThunk("admin/productEdit",async(id)=>{
+  console.log(id);
+  const res=await axios.post(`http://localhost:3000/user/findProduct/${id}`)
+  // console.log((await res).data);
+  return await res.data
+})
 
 export const BlockUsers = createAsyncThunk(
   "admin/BlockUser",
@@ -77,12 +86,55 @@ export const addCategory = createAsyncThunk(
     }
   }
 );
-
-export const AddProductspo=createAsyncThunk("admin/addProducts",async(formData,{rejectWithValue})=>{
-  const res=axios.post("http://localhost:3000/admin/AddProducts",formData)
-  return (await res).data
+export const findCategory = createAsyncThunk(
+  "admin/CategoryEdit",
+  async (id) => {
+    const res = await axios.post(`http://localhost:3000/admin/findCategory`, {
+      id,
+    });
+    return res.data;
+  }
+);
+export const EditCate = createAsyncThunk("admin/editCate", async (formdata) => {
+  console.log(formdata);
+  const res = await axios.post(
+    "http://localhost:3000/admin/editCategory",
+     formdata ,
+    { headers: { "Content-Type": "multipart/form-data" } }
+  );
+  return res.data;
+});
+export const EditProducts=createAsyncThunk("admin/editProduct",async(formData)=>{
+  const data=await axios.patch("http://localhost:3000/admin/editProduct",formData)
+  return data.data
 })
-
+export const AddProductspo = createAsyncThunk(
+  "admin/addProducts",
+  async (formData, { rejectWithValue }) => {
+    
+    const res = axios.post("http://localhost:3000/admin/AddProducts", formData);
+    return (await res).data;
+  }
+);
+export const blockCategory = createAsyncThunk(
+  "admin/blockCategory",
+  async (id) => {
+    const res = await axios.post("http://localhost:3000/admin/blockCategory", {
+      id,
+    });
+    return res.data;
+  }
+);
+export const unblocksCategory = createAsyncThunk(
+  "admin/categoryunblock",
+  async (id) => {
+    const res = await axios.post(
+      "http://localhost:3000/admin/unblockCategory",
+      { id }
+    );
+    return res.data;
+  }
+);
 
 const adminSlice = createSlice({
   name: "admin",
@@ -131,6 +183,32 @@ const adminSlice = createSlice({
     builder.addCase(addCategory.fulfilled, (state, action) => {
       state.updatedCategories = [...state.categories, action.payload];
     });
+    builder.addCase(blockCategory.fulfilled, (state, action) => {
+      const blockCategory = state.categories.map((category) => {
+        if (category._id === action.payload._id) {
+          category.status = action.payload.status;
+        }
+        return category;
+      });
+      state.categories = blockCategory;
+    });
+    builder.addCase(unblocksCategory.fulfilled, (state, action) => {
+      const unblockCateegory = state.categories.map((category) => {
+        if (category._id === action.payload._id) {
+          category.status = action.payload.status;
+        }
+        return category;
+      });
+      state.categories = unblockCateegory;
+    });
+    builder.addCase(findCategory.fulfilled, (state, action) => {
+      state.SingleCategory = action.payload;
+    });
+    builder.addCase(findEditProduct.fulfilled,(state,action)=>{
+      // console.log(JSON.stringify(action.payload)+"=======================reduxstate");
+      state.ProductToEdit=action.payload
+      console.log(JSON.stringify(state.ProductToEdit)+"=============================redux");
+    })
   },
 });
 

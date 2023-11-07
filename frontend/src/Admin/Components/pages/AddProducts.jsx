@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { AiFillCloseCircle } from "react-icons/ai";
 import {
   AddProductspo,
   addCategory,
@@ -11,11 +12,8 @@ function AddProducts() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
-  const [image, setImage] = useState("");
   const [category, setCategory] = useState("");
   const [stock, setStock] = useState("");
-  const [moreImage, setMoreImage] = useState("");
-  const [DImages, setDImages] = useState([]);
   const [selectedImages, setselectedImages] = useState([]);
   const dispatch = useDispatch();
   const Cateogries = useSelector((state) => state.admin.categories);
@@ -28,18 +26,16 @@ function AddProducts() {
     if (fileInput) {
       fileInput.click();
     }
-    console.log(Cateogries);
+    // console.log(Cateogries);
   };
   const handleFileChange = (e) => {
     const selectedFile = e.target.files;
-    const DisplayImages=Array.from(selectedFile).map((file)=>URL.createObjectURL(file))
-    const ImageArray = Array.from(selectedFile)
-   console.log(ImageArray);
-   setDImages(DisplayImages)
+    const ImageArray = Array.from(selectedFile);
+    console.log(ImageArray);
     setselectedImages(ImageArray);
     console.log(selectedImages);
   };
-  
+
   const addProducts = (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -123,8 +119,9 @@ function AddProducts() {
             <div className=" w-96 mx-5  ">
               <div className="w-96">
                 <p className="text-xl mx-9">Cover Image</p>
-                {DImages.length == 0 ? (
+                {selectedImages.length == 0 ? (
                   <div className="w-64  h-36  items-center mx-10 my-10 outline-dashed outline-blue-200 border rounded-lg">
+                  
                     <div className="flex justify-center mt-10">
                       <img
                         src={AddImages}
@@ -144,8 +141,21 @@ function AddProducts() {
                   </div>
                 ) : (
                   <div className="flex justify-center mt-10">
+                    <AiFillCloseCircle 
+                    onClick={() =>
+                      setselectedImages(selectedImages.filter((image)=>image[0]!=image))
+                    }
+                  />
+                   <input
+                        type="file"
+                        accept="image/png,image/jpeg"
+                        id="fileInput"
+                        multiple
+                        className="hidden"
+                        onChange={handleFileChange}
+                      />
                     <img
-                      src={DImages[0]}
+                      src={URL.createObjectURL(selectedImages[0])}
                       // onClick={triggerFileInput}
                       className="h-36 w-auto "
                       alt=""
@@ -163,16 +173,21 @@ function AddProducts() {
 
                 <p className="text-xl mx-9">Views </p>
                 <div className="flex justify-around space-x-4 mx-9 w-96 ">
-                  {DImages.length != 0 ? (
-                    DImages.map((image, index) => {
+                  {selectedImages.length != 0 ? (
+                    selectedImages.map((image, index) => {
                       if (index == 0) return;
                       return (
                         <div
                           key={index}
                           className="flex justify-center mt-10 w-64 h-24 outline-dashed outline-blue-300 object-center "
                         >
+                          <AiFillCloseCircle
+                            onClick={() =>
+                              setselectedImages(selectedImages.filter((e) => e !== image))
+                            }
+                          />
                           <img
-                            src={image}
+                            src={URL.createObjectURL(image)}
                             className="h-auto w-auto   "
                             alt=""
                           />
