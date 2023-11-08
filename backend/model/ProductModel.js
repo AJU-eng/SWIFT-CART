@@ -4,12 +4,7 @@ const productSchema = mongoose.Schema({
   name: {
     type: String,
   },
-  Details: {
-    type: String,
-  },
-  mainImage: {
-    type: String,
-  },
+
   moreImage: [
     {
       type: String,
@@ -29,7 +24,7 @@ const productSchema = mongoose.Schema({
   stock: {
     type: String,
   },
-  iDelete:{
+  isDelete:{
     type:Boolean
   }
 },{timestamps:true});

@@ -1,13 +1,15 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import products from "../../User/components/products";
 
 const initialDataState = {
   loading: false,
   users: [],
   categories: [],
+  Products: [],
   updatedCategories: [],
   err: "",
-  ProductToEdit:"",
+  ProductToEdit: "",
   category_status: "",
   SingleCategory: "",
 };
@@ -17,12 +19,17 @@ export const fetchUsers = createAsyncThunk("admin/FetchUser", () => {
     .get("http://localhost:3000/admin/getUser")
     .then((res) => res.data);
 });
-export const findEditProduct=createAsyncThunk("admin/productEdit",async(id)=>{
-  console.log(id);
-  const res=await axios.post(`http://localhost:3000/user/findProduct/${id}`)
-  // console.log((await res).data);
-  return await res.data
-})
+export const findEditProduct = createAsyncThunk(
+  "admin/productEdit",
+  async (id) => {
+    console.log(id);
+    const res = await axios.post(
+      `http://localhost:3000/user/findProduct/${id}`
+    );
+    // console.log((await res).data);
+    return await res.data;
+  }
+);
 
 export const BlockUsers = createAsyncThunk(
   "admin/BlockUser",
@@ -65,6 +72,10 @@ export const DeleteUser = createAsyncThunk(
     }
   }
 );
+export const GetProductsAdmin = createAsyncThunk("user/products", async () => {
+  const res = await axios.get("http://localhost:3000/user/getProducts");
+  return res.data;
+});
 
 export const getCategory = createAsyncThunk("admin/getCat", async () => {
   const res = await axios.get("http://localhost:3000/admin/getCategories");
@@ -99,19 +110,35 @@ export const EditCate = createAsyncThunk("admin/editCate", async (formdata) => {
   console.log(formdata);
   const res = await axios.post(
     "http://localhost:3000/admin/editCategory",
-     formdata ,
+    formdata,
     { headers: { "Content-Type": "multipart/form-data" } }
   );
   return res.data;
 });
-export const EditProducts=createAsyncThunk("admin/editProduct",async(formData)=>{
-  const data=await axios.patch("http://localhost:3000/admin/editProduct",formData)
-  return data.data
-})
+export const EditProducts = createAsyncThunk(
+  "admin/editProduct",
+  async (formData) => {
+    const data = await axios.patch(
+      "http://localhost:3000/admin/editProduct",
+      formData
+    );
+    return data.data;
+  }
+);
+
+export const DeleteProduct = createAsyncThunk(
+  "admin/deleteProduct",
+  async (id) => {
+    console.log(id);
+    const data = await axios.delete(
+      `http://localhost:3000/admin/deleteProduct/${id}`
+    );
+    return data.data;
+  }
+);
 export const AddProductspo = createAsyncThunk(
   "admin/addProducts",
   async (formData, { rejectWithValue }) => {
-    
     const res = axios.post("http://localhost:3000/admin/AddProducts", formData);
     return (await res).data;
   }
@@ -204,11 +231,22 @@ const adminSlice = createSlice({
     builder.addCase(findCategory.fulfilled, (state, action) => {
       state.SingleCategory = action.payload;
     });
-    builder.addCase(findEditProduct.fulfilled,(state,action)=>{
+    builder.addCase(GetProductsAdmin.fulfilled, (state, action) => {
+      state.Products = action.payload;
+    });
+    builder.addCase(DeleteProduct.fulfilled, (state, action) => {
+      state.Products = state.Products.filter(
+        (product) => product._id !== action.payload._id
+      );
+    });
+    builder.addCase(findEditProduct.fulfilled, (state, action) => {
       // console.log(JSON.stringify(action.payload)+"=======================reduxstate");
-      state.ProductToEdit=action.payload
-      console.log(JSON.stringify(state.ProductToEdit)+"=============================redux");
-    })
+      state.ProductToEdit = action.payload;
+      console.log(
+        JSON.stringify(state.ProductToEdit) +
+          "=============================redux"
+      );
+    });
   },
 });
 

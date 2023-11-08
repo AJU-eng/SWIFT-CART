@@ -95,6 +95,7 @@ function EditProduct() {
     console.log(fetchedImages);
 
     const formData = new FormData();
+    formData.append("id", id.id);
     formData.append("name", name);
     formData.append("price", price);
     formData.append("category", category);
@@ -107,7 +108,7 @@ function EditProduct() {
     console.log(price);
     console.log(stock);
     console.log(description);
-    
+
     dispatch(EditProducts(formData));
   };
   return (

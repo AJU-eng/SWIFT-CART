@@ -127,6 +127,12 @@ function SideBarDesign() {
                   Add Banner
                 </h1>
               </div>
+              <div className="flex mx-9 flex-1">
+                <img src={products} alt="" />
+                <h1 className="text-sm mx-2 my-4   text-slate-500">
+                 Logout
+                </h1>
+              </div>
             </div>
           </div>
         ) : (
