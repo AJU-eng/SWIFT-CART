@@ -4,7 +4,7 @@ const {getUser,userBlock, userUnblock, userDelete, CategoryAdd, getCategories, A
 const adminRouter=express.Router()
 const upload=require("../Middleware/Multer")
 const router = require('./userRouter')
-const { getProducts, editProduct } = require('../controller/ProductContoller')
+const { getProducts, editProduct, deleteProduct } = require('../controller/ProductContoller')
 const { EditCategory, FindCategory } = require('../controller/CategoryController')
 
 adminRouter.get("/getUser",getUser)
@@ -20,5 +20,6 @@ adminRouter.post("/unblockcategory",UnblockCategories)
 adminRouter.post("/editCategory",upload.any(),EditCategory)
 adminRouter.post("/findCategory",FindCategory)
 adminRouter.patch("/editProduct",upload.any(),editProduct)
+adminRouter.delete("/deleteProduct/:id",deleteProduct)
 
 module.exports=adminRouter

@@ -8,14 +8,18 @@ import { GetProducts } from "../../../redux/features/userslice";
 import date from "date-and-time";
 import EditProduct from "./EditProduct";
 import { Link, Navigate } from "react-router-dom";
+import { confirmAlert } from "react-confirm-alert";
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
+
 import { useNavigate } from "react-router-dom";
+import { DeleteProduct, GetProductsAdmin } from "../../../redux/features/AdminSlice";
 function ProductManagement() {
   const dispatch = useDispatch();
   const [visible,setVisible]=useState(true)
   const nav=useNavigate()
-  const products = useSelector((state) => state.user.products);
+  const products = useSelector((state) => state.admin.Products);
   useEffect(() => {
-    dispatch(GetProducts());
+    dispatch(GetProductsAdmin());
   }, [dispatch]);
   console.log(products);
   return (
@@ -72,7 +76,7 @@ function ProductManagement() {
                           buttons: [
                             {
                               label: "Yes",
-                              // onClick: () => dispatch(DeleteUser(user._id))
+                              onClick: () => dispatch(DeleteProduct(product._id))
                             },
                             {
                               label: "No",
