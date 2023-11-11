@@ -10,6 +10,7 @@ import { RiBuilding3Line } from "react-icons/ri";
 import { useMediaQuery } from "react-responsive";
 import { MdMenu } from "react-icons/md";
 import logo from "./logo.png";
+import { HiOutlineLogout } from "react-icons/hi";
 import home from "./smart-home.svg";
 import users from "./users.svg";
 import coupon from "./coupon.svg";
@@ -22,6 +23,8 @@ import products from "./products.svg";
 
 import smallLogo from "./smallLogo.png";
 import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import { AdminLogout } from "../../../redux/features/userslice";
 function SideBarDesign() {
   const nav = useNavigate();
   const Sidebar_animation = {
@@ -39,6 +42,18 @@ function SideBarDesign() {
     },
   };
   const [isOpen, setIsOpen] = useState(true);
+  const dispatch = useDispatch();
+  const handleLogout=()=>{
+    dispatch(AdminLogout())
+    // let navigate=nav("/")
+    if (nav("/")) {
+      console.log("navigated");
+    }
+    else{
+      console.log("nav is not working");
+    }
+    // nav("/")
+  }
   return (
     <div>
       <motion.div
@@ -107,12 +122,12 @@ function SideBarDesign() {
                 </div>
               </NavLink>
               <NavLink to="products">
-              <div className="flex mx-9 flex-1">
-                <img src={products} alt="" />
-                <h1 className="text-sm mx-2 my-4   text-slate-500">
-                  Products Managment
-                </h1>
-              </div>
+                <div className="flex mx-9 flex-1">
+                  <img src={products} alt="" />
+                  <h1 className="text-sm mx-2 my-4   text-slate-500">
+                    Products Managment
+                  </h1>
+                </div>
               </NavLink>
             </div>
             <div className="font-serif flex flex-col">
@@ -127,12 +142,15 @@ function SideBarDesign() {
                   Add Banner
                 </h1>
               </div>
-              <div className="flex mx-9 flex-1">
-                <img src={products} alt="" />
-                <h1 className="text-sm mx-2 my-4   text-slate-500">
-                 Logout
-                </h1>
-              </div>
+             
+                <div
+                  className="flex mx-10 flex-1"
+                  onClick={handleLogout}
+                >
+                  <HiOutlineLogout className="mt-1" size={20} color="gray" />
+                  <h1 className="text-md mx-2    text-slate-500">Logout</h1>
+                </div>
+             
             </div>
           </div>
         ) : (

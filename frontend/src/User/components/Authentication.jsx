@@ -3,7 +3,7 @@ import login from "./logins3.jpg";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { userLogin } from "../../redux/features/userslice";
-
+import {CgPassword} from 'react-icons/cg'
 function Authentication() {
   const nav = useNavigate();
   const dispatch = useDispatch();
@@ -19,6 +19,7 @@ function Authentication() {
     else if(login_status=="admin logined")
     {
       nav("/admin")
+     
     }
   },[nav,login_status]);
   
@@ -66,10 +67,11 @@ function Authentication() {
             Sign in
           </button>
           <div className="flex justify-between">
-            <p className="flex items-center mr-2 ">
-              {" "}
-              <input type="checkbox" className="mr-2" />
-              Remember me
+            <p className="flex items-center mr-2 text-md font-serif " onClick={()=>nav('/forgetPassword')}>
+              
+              {/* <input type="checkbox" className="mr-2" /> */}
+              <CgPassword className="mr-2"/>
+              Forget Password
             </p>
             <p
               className="font-serif"

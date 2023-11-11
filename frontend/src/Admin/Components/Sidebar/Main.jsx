@@ -11,6 +11,7 @@ import ProductManagement from "../pages/ProductManagement";
 import EditCategory from "../pages/EditCategory";
 import EditProduct from "../pages/EditProduct";
 import { Link } from "react-router-dom";
+import Authentication from "../../../User/components/Authentication";
 
 // function Main() {
 //   return (
@@ -38,6 +39,7 @@ function Main() {
       <Routes>
         <Route path="/">
           <Route index element={<Dashboard />} />
+          <Route path="login" element={<Authentication/>}/>
           <Route path="user" element={<UserManagement />} />
           <Route path="category" element={<CateogryManagment />} />
           <Route path="products" element={<ProductManagement/>}/>
@@ -45,6 +47,7 @@ function Main() {
           <Route path="products/editProducts/:id" element={<EditProduct/>}/>
           <Route path="editCategory/:id" element={<EditCategory/>}/>
         </Route>
+
         
       </Routes>
     </RootLayout>

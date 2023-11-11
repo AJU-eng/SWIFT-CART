@@ -1,5 +1,5 @@
 const express=require('express')
-const { generate, verifyOtp,loggedIn,logout, login } = require('../controller/userController')
+const { generate, verifyOtp,loggedIn,logout, login, forgetPasswordOtp, verifyForgetOtp, resetPassword } = require('../controller/userController')
 const { getProducts, findProduct } = require('../controller/ProductContoller')
 
 const router=express.Router()
@@ -12,4 +12,7 @@ router.get('/logout',logout)
 router.post('/login',login)
 router.get("/getProducts",getProducts)
 router.post("/findProduct/:id",findProduct)
+router.post("/forgetPasswordOtp",forgetPasswordOtp)
+router.post("/verifyForgetOtp",verifyForgetOtp)
+router.patch("/resetPassword",resetPassword)
 module.exports=router

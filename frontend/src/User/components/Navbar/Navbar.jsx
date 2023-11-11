@@ -15,7 +15,7 @@ function Navbar() {
           <p>Support</p>
         </div>
 
-        <button onClick={()=>nav('/login')} className="bg-blue-400 mx-14  text-xl rounded-md h-9 text-white  mt-2 w-20">
+        <button onClick={()=>nav('/login')} className="bg-blue-400 mx-14  text-xl rounded-md h-9 text-white font-serif   mt-2 w-20">
           Login
         </button>
       </div>
