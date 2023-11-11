@@ -1,10 +1,14 @@
-// import Banner from "./components/Banner"
-// import Navbar from "./components/Navbar"
 import Main from "./Admin/Components/Sidebar/Main";
 import Home from "./User/Home";
 import FormAuth from "./User/components/Form_auth";
 import Otp from "./User/components/Otp";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useNavigate,
+  Navigate,
+} from "react-router-dom";
 import ProductsDetailPage from "./User/components/ProductsDetailPage";
 import Authentication from "./User/components/Authentication";
 import axios from "axios";
@@ -15,15 +19,21 @@ import { useEffect } from "react";
 import { logged } from "./redux/features/userslice";
 import Category from "./User/components/Category";
 import CateogryManagment from "./Admin/Components/pages/CateogryManagment";
+import ForgetPassword from "./User/components/forgetPassword";
+import ForgetOtp from "./User/components/forgetOtp";
+import { adminLogged } from "./redux/features/AdminSlice";
+import ResetPassword from "./User/components/resetPassword";
 
 axios.defaults.withCredentials = true;
 
 function App() {
   const user = useSelector((state) => state.logged.logged);
+  const admin = useSelector((state) => state.admin.logged);
   const dispatch = useDispatch();
-  
+
   useEffect(() => {
     dispatch(logged());
+    dispatch(adminLogged());
   }, [dispatch]);
   return (
     <>
@@ -35,14 +45,14 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/login" element={<Authentication />} />
           <Route path="/ProductDetail/:id" element={<ProductsDetailPage />} />
-          <Route path="/admin/*" element={<Main />}/>
+          <Route path="/admin/*" element={<Main />} />
+
+          <Route path="/forgetPassword" element={<ForgetPassword />} />
+          <Route path="/otpForgetPassword" element={<ForgetOtp />} />
+          <Route  path="/resetPass" element={<ResetPassword/>}/>
         </Routes>
       </BrowserRouter>
-      {/* <Main/>    */}
-      {/* <Authentication/> */}
-      {/* <Home/>  */}
-
-      {/* <ProductsDetailPage/> */}
+      {/* <ResetPassword/> */}
     </>
   );
 }

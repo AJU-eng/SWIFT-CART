@@ -2,6 +2,7 @@ const validator = require("validator");
 const userModel = require("../model/userModel");
 const CategoryModal = require("../model/CategoryModal");
 const ProductModel = require("../model/ProductModel");
+const jwt=require("jsonwebtoken")
 const getUser = async (req, res) => {
   const hello = await userModel.find();
   res.send(hello);
@@ -37,13 +38,16 @@ const userUnblock = async (req, res) => {
 };
 
 const userDelete = async (req, res) => {
-  const { id } = req.body;
+ 
+  const {id}=req.params
   const deletes = await userModel.findByIdAndDelete(id);
   if (deletes) {
     console.log(deletes);
     res.send(deletes);
   }
 };
+
+
 
 const CategoryAdd = async (req, res) => {
   console.log(req.body);
@@ -111,6 +115,29 @@ const UnblockCategories = async (req, res) => {
   res.send(unblock);
   console.log("ublock api called");
 };
+const adminLogout=async(req,res)=>{
+  res.cookie("admin_token","",{
+    expires:new Date(0)
+  }).status(200).send("admin logout sucessfully")
+}
+
+const adminLoggedIn = async (req, res) => {
+  console.log("logged api called");
+  const token = req.cookies.admin_token;
+
+  if (!token) {
+    return res.json(false);
+  }
+
+  jwt.verify(token, process.env.SECRET_KEY, (err, decoded) => {
+    if (err) {
+      console.error(err);
+      return res.send(false);
+    }
+
+    res.send(true);
+  });
+};
 
 module.exports = {
   getUser,
@@ -122,4 +149,6 @@ module.exports = {
   AddProducts,
   BlockCategories,
   UnblockCategories,
+  adminLogout,
+  adminLoggedIn
 };

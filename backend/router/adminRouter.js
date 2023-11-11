@@ -1,5 +1,5 @@
 const express=require('express')
-const {getUser,userBlock, userUnblock, userDelete, CategoryAdd, getCategories, AddProducts, getCate, BlockCategories, UnblockCategories} = require('../controller/adminController')
+const {getUser,userBlock, userUnblock, userDelete, CategoryAdd, getCategories, AddProducts, getCate, BlockCategories, UnblockCategories, adminLogout, adminLoggedIn} = require('../controller/adminController')
 
 const adminRouter=express.Router()
 const upload=require("../Middleware/Multer")
@@ -10,7 +10,7 @@ const { EditCategory, FindCategory } = require('../controller/CategoryController
 adminRouter.get("/getUser",getUser)
 adminRouter.post("/blockUser",userBlock)
 adminRouter.post("/userUnblock",userUnblock)
-adminRouter.delete("/userDelete",userDelete)
+adminRouter.delete("/userDelete/:id",userDelete)
 adminRouter.post("/categoryAdd",upload.any(), CategoryAdd)
 adminRouter.get("/getCategories",getCategories)
 adminRouter.post("/AddProducts",upload.any(),AddProducts)
@@ -21,5 +21,7 @@ adminRouter.post("/editCategory",upload.any(),EditCategory)
 adminRouter.post("/findCategory",FindCategory)
 adminRouter.patch("/editProduct",upload.any(),editProduct)
 adminRouter.delete("/deleteProduct/:id",deleteProduct)
+adminRouter.get("/logout",adminLogout)
+adminRouter.get("/adminLogged",adminLoggedIn)
 
 module.exports=adminRouter

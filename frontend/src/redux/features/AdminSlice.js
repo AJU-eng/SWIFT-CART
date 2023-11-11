@@ -2,10 +2,12 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import products from "../../User/components/products";
 
+
 const initialDataState = {
   loading: false,
   users: [],
   categories: [],
+  logged:"",
   Products: [],
   updatedCategories: [],
   err: "",
@@ -62,10 +64,12 @@ export const UnblockUsers = createAsyncThunk(
 export const DeleteUser = createAsyncThunk(
   "admin/Delete",
   async (id, { rejectWithValue }) => {
+    console.log(id);
     try {
-      const res = await axios.post("http://localhost:3000/admin/userDelete", {
-        id,
-      });
+      const res = await axios.delete(
+        `http://localhost:3000/admin/userDelete/${id}`,
+        id
+      );
       return res.data;
     } catch (err) {
       return rejectWithValue(err.message);
@@ -136,6 +140,11 @@ export const DeleteProduct = createAsyncThunk(
     return data.data;
   }
 );
+
+export  const adminLogged=createAsyncThunk("admin/logged",async()=>{
+  const adminLog=axios.get("http://localhost:3000/admin/adminLogged")
+  return (await adminLog).data
+})
 export const AddProductspo = createAsyncThunk(
   "admin/addProducts",
   async (formData, { rejectWithValue }) => {
@@ -152,6 +161,7 @@ export const blockCategory = createAsyncThunk(
     return res.data;
   }
 );
+
 export const unblocksCategory = createAsyncThunk(
   "admin/categoryunblock",
   async (id) => {
@@ -247,6 +257,10 @@ const adminSlice = createSlice({
           "=============================redux"
       );
     });
+    builder.addCase(adminLogged.fulfilled,(state,action)=>{
+      state.logged=action.payload
+      console.log(state.logged+"===============logged slice");
+    })
   },
 });
 

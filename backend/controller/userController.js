@@ -57,6 +57,80 @@ const generate = async (req, res) => {
     res.status(400).send("email already exist");
   }
 };
+const forgetPasswordOtp = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (validator.isEmpty(email)) {
+      throw new Error("email required");
+    } else {
+      const data = await userModel.findOne({ email: email });
+      if (!data) {
+        throw new Error("Email not found");
+      } else {
+        const otps = otp.generate(4, {
+          digits: true,
+          lowerCaseAlphabets: false,
+          upperCaseAlphabets: false,
+          specialChars: false,
+        });
+        const otpSend = otpModel.create({
+          otp: otps,
+          email: email,
+        });
+        if (otpSend) {
+          console.log("saved");
+        }
+
+        const sendMail = await Transport.sendMail({
+          from: "swiftcart027@gmail.com",
+          to: email,
+          subject: "Welcome to SwiftCart", // Subject line
+          text: `${otps}`, // plain text body
+          html: `<b>Your otp for email verification is here ${otps}</b>`,
+        });
+        console.log(sendMail);
+        res.status(200).send(email);
+      }
+    }
+  } catch (err) {
+    console.log(err);
+    console.log(err.message);
+    res.status(400).send(err.message);
+  }
+};
+
+const verifyForgetOtp = async (req, res) => {
+  const { OTP, email } = req.body;
+  console.log(OTP, email + "==============");
+  console.log(req.body);
+  const otp_data = await otpModel.findOne({ email: email });
+  console.log(otp_data);
+  try {
+    if (!otp_data) {
+      throw new Error("invalid otp");
+    } else if (OTP == otp_data.otp) {
+      console.log("otp  verified ");
+      res.status(200).send("otp verified");
+    } else {
+      throw new Error("otp invalid");
+    }
+  } catch (err) {
+    res.status(400).send(err.message);
+    console.log(err.message);
+  }
+};
+
+const resetPassword=async(req,res)=>{
+  console.log("reset api called");
+
+  const {password,email}=req.body
+ 
+  const updatePass=await userModel.findOneAndUpdate({email:email},{Password:password},{new:true})
+  console.log(updatePass);
+  res.status(200).send("sucess")
+
+}
 
 const verifyOtp = async (req, res) => {
   console.log(req.body.otp);
@@ -172,4 +246,13 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { generate, verifyOtp, loggedIn, logout, login };
+module.exports = {
+  generate,
+  verifyOtp,
+  loggedIn,
+  logout,
+  login,
+  forgetPasswordOtp,
+  verifyForgetOtp,
+  resetPassword
+};
