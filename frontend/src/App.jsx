@@ -2,6 +2,7 @@ import Main from "./Admin/Components/Sidebar/Main";
 import Home from "./User/Home";
 import FormAuth from "./User/components/Form_auth";
 import Otp from "./User/components/Otp";
+import { SkeletonTheme } from "react-loading-skeleton";
 import {
   BrowserRouter,
   Routes,
@@ -23,6 +24,7 @@ import ForgetPassword from "./User/components/forgetPassword";
 import ForgetOtp from "./User/components/forgetOtp";
 import { adminLogged } from "./redux/features/AdminSlice";
 import ResetPassword from "./User/components/resetPassword";
+import VerificationPage from "./User/components/verification_page";
 
 axios.defaults.withCredentials = true;
 
@@ -37,21 +39,26 @@ function App() {
   }, [dispatch]);
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={user ? <Home /> : <UnAuthorizedHome />} />
-          <Route path="/register" element={<FormAuth />} />
-          <Route path="/otp" element={<Otp />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/login" element={<Authentication />} />
-          <Route path="/ProductDetail/:id" element={<ProductsDetailPage />} />
-          <Route path="/admin/*" element={<Main />} />
+      <SkeletonTheme baseColor="#f0f0f0" highlightColor="#d9d9d9 ">
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={user ? <Home /> : <UnAuthorizedHome />} />
+            <Route path="/register" element={<FormAuth />} />
+            <Route path="/otp" element={<Otp />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/login" element={<Authentication />} />
+            <Route path="/ProductDetail/:id" element={<ProductsDetailPage />} />
 
-          <Route path="/forgetPassword" element={<ForgetPassword />} />
-          <Route path="/otpForgetPassword" element={<ForgetOtp />} />
-          <Route  path="/resetPass" element={<ResetPassword/>}/>
-        </Routes>
-      </BrowserRouter>
+            <Route path="/admin/*" element={<Main />} />
+
+            <Route path="/forgetPassword" element={<ForgetPassword />} />
+            <Route path="/otpForgetPassword" element={<ForgetOtp />} />
+            <Route path="/resetPass" element={<ResetPassword />} />
+            <Route path="/sucesPage" element={<VerificationPage/>}/>
+          </Routes>
+        </BrowserRouter>
+      </SkeletonTheme>
+      {/* <VerificationPage/> */}
       {/* <ResetPassword/> */}
     </>
   );

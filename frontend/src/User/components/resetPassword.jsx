@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { passwordReset } from "../../redux/features/userslice";
+import { useNavigate } from "react-router";
+
 
 function ResetPassword() {
     const email=useSelector(state=>state.user.email)
+    const nav=useNavigate()
     const dispatch=useDispatch()
     const [password,setPassword]=useState("")
     const passUpdate=(e)=>{
@@ -14,7 +17,7 @@ function ResetPassword() {
         password:password
        }
       dispatch(passwordReset(upData))
-       
+    nav('/sucesPage')
     }
   return (
     <div className="flex justify-center bg-slate-50 min-h-screen">

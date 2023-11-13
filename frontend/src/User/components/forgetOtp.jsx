@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "./Otp.css";
 import OtpInput from "otp-input-react";
 import { useDispatch, useSelector } from "react-redux";
 import { verifyForgetOtps, verifyUser } from "../../redux/features/userslice";

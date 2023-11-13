@@ -99,6 +99,11 @@ export const verifyForgetOtps = createAsyncThunk(
     return res.data
   }
 );
+export const resendOtps=createAsyncThunk("user/resend",async(userCredentials)=>{
+  console.log(userCredentials);
+  const res=await axios.post("http://localhost:3000/user/resendOtp",userCredentials)
+  return res.data
+})
 export const logged = createAsyncThunk("user/logged", async () => {
   const res = await axios.get("http://localhost:3000/user/checkLogStatus");
   return res.data;
@@ -188,8 +193,12 @@ const userSlice = createSlice({
     builder.addCase(GetProducts.fulfilled, (state, action) => {
       state.products = action.payload;
     });
+    builder.addCase(findProduct.pending,(state)=>{
+      state.loading=true
+    })
     builder.addCase(findProduct.fulfilled, (state, action) => {
       state.SingleProduct = action.payload;
+      state.loading=false
     });
     builder.addCase(forgetOtp.fulfilled, (state, action) => {
       state.email = action.payload;

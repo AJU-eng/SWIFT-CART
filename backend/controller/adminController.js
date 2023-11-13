@@ -94,6 +94,10 @@ const getCategories = async (req, res) => {
   const catData = await CategoryModal.find();
   res.send(catData);
 };
+const getCategoriesAdd = async (req, res) => {
+  const catData = await CategoryModal.find({status:"Unblocked"});
+  res.send(catData);
+};
 
 const BlockCategories = async (req, res) => {
   const { id } = req.body;
@@ -150,5 +154,6 @@ module.exports = {
   BlockCategories,
   UnblockCategories,
   adminLogout,
-  adminLoggedIn
+  adminLoggedIn,
+  getCategoriesAdd
 };

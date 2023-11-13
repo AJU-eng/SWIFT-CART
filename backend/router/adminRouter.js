@@ -1,5 +1,5 @@
 const express=require('express')
-const {getUser,userBlock, userUnblock, userDelete, CategoryAdd, getCategories, AddProducts, getCate, BlockCategories, UnblockCategories, adminLogout, adminLoggedIn} = require('../controller/adminController')
+const {getUser,userBlock, userUnblock, userDelete, CategoryAdd, getCategories, AddProducts, getCate, BlockCategories, UnblockCategories, adminLogout, adminLoggedIn, getCategoriesAdd} = require('../controller/adminController')
 
 const adminRouter=express.Router()
 const upload=require("../Middleware/Multer")
@@ -23,5 +23,5 @@ adminRouter.patch("/editProduct",upload.any(),editProduct)
 adminRouter.delete("/deleteProduct/:id",deleteProduct)
 adminRouter.get("/logout",adminLogout)
 adminRouter.get("/adminLogged",adminLoggedIn)
-
+adminRouter.get("/getCateProduct",getCategoriesAdd)
 module.exports=adminRouter
