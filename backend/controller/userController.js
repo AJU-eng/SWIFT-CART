@@ -57,6 +57,34 @@ const generate = async (req, res) => {
     res.status(400).send("email already exist");
   }
 };
+const resentOtp = async (req, res) => {
+  console.log(req.body);
+  const { email } = req.body;
+  const otps = otp.generate(4, {
+    digits: true,
+    lowerCaseAlphabets: false,
+    upperCaseAlphabets: false,
+    specialChars: false,
+  });
+  console.log(otps);
+
+  const otpSend = otpModel.create({
+    otp: otps,
+    email: email,
+  });
+  if (otpSend) {
+    console.log("otp saved");
+  }
+
+  const sendMail = await Transport.sendMail({
+    from: "swiftcart027@gmail.com",
+    to: req.body.email,
+    subject: "Welcome to SwiftCart", // Subject line
+    text: `${otps}`, // plain text body
+    html: `<b>Your otp for email verification is here ${otps}</b>`,
+  });
+  console.log(sendMail);
+};
 const forgetPasswordOtp = async (req, res) => {
   try {
     const { email } = req.body;
@@ -121,20 +149,23 @@ const verifyForgetOtp = async (req, res) => {
   }
 };
 
-const resetPassword=async(req,res)=>{
+const resetPassword = async (req, res) => {
   console.log("reset api called");
 
-  const {password,email}=req.body
- 
-  const updatePass=await userModel.findOneAndUpdate({email:email},{Password:password},{new:true})
-  console.log(updatePass);
-  res.status(200).send("sucess")
+  const { password, email } = req.body;
 
-}
+  const updatePass = await userModel.findOneAndUpdate(
+    { email: email },
+    { Password: password },
+    { new: true }
+  );
+  console.log(updatePass);
+  res.status(200).send("sucess");
+};
 
 const verifyOtp = async (req, res) => {
   console.log(req.body.otp);
-  const { OTP, email, name, lname, password } = req.body.otp;
+  const { OTP, email, name, password } = req.body.otp;
   console.log(OTP, email + "==============");
   console.log(req.body);
   const otp_data = await otpModel.findOne({ email: email });
@@ -145,8 +176,7 @@ const verifyOtp = async (req, res) => {
     } else if (OTP == otp_data.otp) {
       console.log("otp  verified ");
       const data = await userModel.create({
-        fname: name,
-        lname,
+        name: name,
         email: email,
         Password: password,
         status: "unblocked",
@@ -254,5 +284,6 @@ module.exports = {
   login,
   forgetPasswordOtp,
   verifyForgetOtp,
-  resetPassword
+  resetPassword,
+  resentOtp,
 };

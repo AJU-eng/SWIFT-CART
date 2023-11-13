@@ -11,7 +11,7 @@ function TopOffers() {
         Top Offers
       </h1>
       <div className="flex justify-around mt-4 flex-wrap">
-      <div className=" w-40 lg:w-56  shadow-lg mt-10">
+      <div className=" w-40 lg:w-56  shadow-lg mt-10 bg-white">
           <div className=" bg-contain">
             <img src={applewatch} alt="" />
           </div>

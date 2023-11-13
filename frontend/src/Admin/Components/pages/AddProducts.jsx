@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AiFillCloseCircle } from "react-icons/ai";
 import {
   AddProductspo,
+  CategoriesProductAdd,
   addCategory,
   getCategory,
 } from "../../../redux/features/AdminSlice";
@@ -16,9 +17,9 @@ function AddProducts() {
   const [stock, setStock] = useState("");
   const [selectedImages, setselectedImages] = useState([]);
   const dispatch = useDispatch();
-  const Cateogries = useSelector((state) => state.admin.categories);
+  const Cateogries = useSelector((state) => state.admin.CategoriesProduct);
   useEffect(() => {
-    dispatch(getCategory());
+    dispatch(CategoriesProductAdd());
   }, [dispatch, getCategory]);
 
   const triggerFileInput = () => {

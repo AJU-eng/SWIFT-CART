@@ -20,7 +20,7 @@ function products() {
   }, [dispatch]);
   // console.log(productsArray);
   return (
-    <div>
+    <div >
       <h1 className="text-center text-2xl lg:text-4xl mt-5 lg:mt-48 text-teal-800 font-semibold font-serif ">
         Products
       </h1>
@@ -42,7 +42,7 @@ function products() {
                   </p>
                   <p className="px-2 font-serif lg:text-xl">{`₹${product.price}`}</p>
                   <div className="flex justify-between  mt-3 lg:mt-5">
-                    <div className="w-1/2 px-2 ">
+                    <div className="w-1/2 px-2 mb-5">
                       <AiOutlineShoppingCart size={25} />
                     </div>
                     <div className="w-1/2 px-6 lg:px-14">

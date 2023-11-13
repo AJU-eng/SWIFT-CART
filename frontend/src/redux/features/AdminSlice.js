@@ -3,13 +3,14 @@ import axios from "axios";
 import products from "../../User/components/products";
 
 
+
 const initialDataState = {
   loading: false,
   users: [],
   categories: [],
   logged:"",
   Products: [],
-  updatedCategories: [],
+  CategoriesProduct:[],
   err: "",
   ProductToEdit: "",
   category_status: "",
@@ -32,7 +33,10 @@ export const findEditProduct = createAsyncThunk(
     return await res.data;
   }
 );
-
+export const CategoriesProductAdd=createAsyncThunk("admin/cateProduct",async()=>{
+  const res=await axios.get("http://localhost:3000/admin/getCateProduct")
+  return res.data
+})
 export const BlockUsers = createAsyncThunk(
   "admin/BlockUser",
   async (id, { rejectWithValue }) => {
@@ -260,6 +264,9 @@ const adminSlice = createSlice({
     builder.addCase(adminLogged.fulfilled,(state,action)=>{
       state.logged=action.payload
       console.log(state.logged+"===============logged slice");
+    })
+    builder.addCase(CategoriesProductAdd.fulfilled,(state,action)=>{
+      state.CategoriesProduct=action.payload
     })
   },
 });
