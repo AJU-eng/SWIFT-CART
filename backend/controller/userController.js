@@ -19,8 +19,26 @@ const Transport = nodemailer.createTransport({
 const generate = async (req, res) => {
   try {
     console.log(req.body.userCredentials);
-    const { email } = req.body.userCredentials;
+    const { name,email,password } = req.body.userCredentials;
+    if (validator.isEmpty(name.trim())) {
+      throw new Error("All feilds are requried")
+    }
+    else if (validator.isEmpty(email.trim())) {
+      throw new Error("All feilds are requried")
+
+    }
+    else if (validator.isEmpty(password.trim())) {
+      throw new Error("All feilds are requried")
+
+    }
+    else if (!validator.isEmail(email.trim())) {
+      throw new Error("Invalid Email")
+    }
+    else if (!validator.isStrongPassword(password)) {
+      throw new Error("Weak Password😞")
+    }
     const useData = await userModel.findOne({ email: email });
+  
     if (useData) {
       throw new Error("email already exist");
     }
@@ -54,7 +72,8 @@ const generate = async (req, res) => {
     res.send(req.body.userCredentials);
     console.log(JSON.stringify(sendMail) + "messagesent");
   } catch (err) {
-    res.status(400).send("email already exist");
+    console.log(err.message);
+    res.status(400).send(err.message);
   }
 };
 const resentOtp = async (req, res) => {
@@ -228,27 +247,36 @@ const logout = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  const { email, password } = req.body;
-  console.log(password);
   console.log(req.body);
-
-  if (email === "admin@gmail.com" && password === "admin123") {
-    console.log("test1 passed");
-
-    const adminToken = jwt.sign({ role: "admin" }, process.env.SECRET_KEY);
-    res
-      .cookie("admin_token", adminToken, {
-        httpOnly: true,
-      })
-      .send("admin logined");
-    console.log("Admin logined");
-    return;
-  }
   try {
+    const { email, password } = req.body;
+    console.log(password);
+    console.log(req.body);
+    if (validator.isEmpty(email.trim())) {
+      throw new Error("All feilds are required");
+    } else if (validator.isEmpty(password.trim())) {
+      throw new Error("All feilds are required");
+    }
+
+    if (email === "admin@gmail.com" && password === "admin123") {
+      console.log("test1 passed");
+
+      const adminToken = jwt.sign({ role: "admin" }, process.env.SECRET_KEY);
+      res
+        .cookie("admin_token", adminToken, {
+          httpOnly: true,
+        })
+        .send("admin logined");
+      console.log("Admin logined");
+      return;
+    }
+
     const data = await userModel.findOne({
       email: email,
     });
-    if (data) {
+    if (!validator.isEmail(email.trim())) {
+      throw new Error("invalid Email");
+    } else if (data) {
       if (data.status === "blocked") {
         throw new Error("User is Blocked");
       } else if (data.Password === password) {

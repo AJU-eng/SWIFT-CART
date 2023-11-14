@@ -1,0 +1,6 @@
+/* Add this to your CSS styles */
+.hover-zoom {
+    transition: transform 0.3s ease-in-out;
+    transform: scale(1.2); /* You can adjust the scale factor based on your preference */
+  }
+  

@@ -31,8 +31,8 @@ export const registerUser = createAsyncThunk(
       );
       return res.data;
     } catch (err) {
-      console.log(err.message + "=======================");
-      return rejectWithValue(err);
+      console.log(err.response.data + "=======================");
+      return rejectWithValue(err.response.data);
     }
   }
 );
@@ -137,11 +137,12 @@ export const AdminLogout=createAsyncThunk("admin/logout",async()=>{
 })
 export const userLogin = createAsyncThunk(
   "user/login",
-  async ({ email, password }, { rejectWithValue }) => {
+  async (hello, { rejectWithValue }) => {
     try {
+      console.log(JSON.stringify(hello)+"redux login state=======");
       const res = await axios.post(
         "http://localhost:3000/user/login",
-        { email, password },
+        hello,
         {
           headers: {
             "Content-Type": "application/json",
@@ -168,7 +169,8 @@ const userSlice = createSlice({
         state.err = "";
       }),
       builder.addCase(registerUser.rejected, (state, action) => {
-        (state.loading = false), (state.err = action.error.message);
+        console.log(action.payload+"======redux state");
+        (state.loading = false), (state.err = action.payload);
       });
     builder.addCase(verifyUser.fulfilled, (state, action) => {
       state.otp_status = action.payload;
@@ -176,11 +178,16 @@ const userSlice = createSlice({
     builder.addCase(verifyUser.rejected, (state, action) => {
       state.otp_status = action.payload;
     });
+    builder.addCase(userLogin.pending,(state)=>{
+      state.loading=true
+    })
     builder.addCase(userLogin.fulfilled, (state, action) => {
       state.login_status = action.payload;
+      state.loading=false
     });
     builder.addCase(userLogin.rejected, (state, action) => {
       console.log(action.error.message);
+      state.loading=false
       state.err = action.payload;
     });
     builder.addCase(logouts.fulfilled, (state) => {
