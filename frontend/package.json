@@ -15,6 +15,7 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
+    "@igorgraziano/react-image-magnifier": "^1.4.0",
     "@reduxjs/toolkit": "^1.9.7",
     "axios": "^1.5.1",
     "date-and-time": "^3.0.3",
@@ -36,6 +37,7 @@
     "react-router": "^6.17.0",
     "react-router-dom": "^6.17.0",
     "react-simple-star-rating": "^5.1.7",
+    "react-spinners": "^0.13.8",
     "redux-logger": "^3.0.6",
     "styled-components": "^6.1.0",
     "tailwind-scrollbar": "^3.0.5"

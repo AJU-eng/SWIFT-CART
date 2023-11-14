@@ -21,7 +21,7 @@ function products() {
   // console.log(productsArray);
   return (
     <div >
-      <h1 className="text-center text-2xl lg:text-4xl mt-5 lg:mt-48 text-teal-800 font-semibold font-serif ">
+      <h1 className="text-center text-2xl lg:text-4xl mt-5 lg:mt-60 text-teal-800 font-semibold font-serif ">
         Products
       </h1>
       <div className="flex justify-around mt-5 flex-wrap lg:flex-wrap">

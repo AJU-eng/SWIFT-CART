@@ -4,20 +4,21 @@ import { useNavigate } from "react-router-dom";
 // import Loader from "react-loader-spinner";
 // import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import { useDispatch, useSelector } from "react-redux";
+import PulseLoader from "react-spinners/PulseLoader";
 import { registerUser } from "../../redux/features/userslice";
 function Form_auth() {
   const [name, setName] = useState("");
-  const [lname,setLname]=useState("")
+
   const [email, setEmail] = useState("");
   const { loading, user, err } = useSelector((state) => state.user);
   const [password, setPassword] = useState("");
+  const [AllError,setAllError]=useState("")
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const nav = useNavigate();
 
   const userCredentials = {
     name,
-    lname,
     email,
     password,
   };
@@ -31,7 +32,7 @@ function Form_auth() {
   const dispatch = useDispatch();
   const submits = (e) => {
     e.preventDefault();
-    if (password === confirmPassword) {
+     if (password === confirmPassword) {
       dispatch(registerUser(userCredentials));
       setError("");
     } else {
@@ -45,29 +46,20 @@ function Form_auth() {
         <div className=" flex flex-col lg:flex-row lg:w-8/12 w-10/12 bg-white rounded-xl mx-auto shadow-lg">
           <div className="lg:w-1/2 w-full brand flex flex-col items-center justify-center p-12 bg-no-repeat bg-cover bg-center"></div>
           <div className=" lg:w-1/2 w-full py-16 px-12">
-            <h2 className="text-3xl pt-3 mb-5 font-serif">Register</h2>
-            {/* {loading && (
-              <Loader
-                type="TailSpin"
-                color="#00BFFF"
-                height={100}
-                width={100}
-              />
-            )} */}
+            <h2 className="text-3xl pt-3 mb-2 font-serif">Register</h2>
+            <p className="font-serif mb-3 text-red-600">{err}</p>
+            {loading && (
+              <PulseLoader size={30} color={"lightblue"} loading={true} />
+            )}
             <form action="" onSubmit={submits}>
-              <div className="grid grid-cols-2 gap-5">
+              <div className="grid  gap-5">
                 <input
                   type="text"
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Firstname"
-                  className="border border-gray-400 py-1 px-2"
+                  className="border border-gray-400 w-full py-1 px-2"
                 />
-                <input
-                  type="text"
-                  placeholder="Secondname"
-                  onChange={(e)=>setLname(e.target.value)}
-                  className="border border-gray-400 py-1 px-2 mx-2"
-                />
+                
               </div>
               <div className="mt-5">
                 <input
@@ -76,11 +68,9 @@ function Form_auth() {
                   placeholder="email"
                   className="border border-gray-400 py-1 px-2 w-full"
                 />
-                {err == "Rejected" && (
-                  <p className="text-red-500 font-serif">
-                    email already registered
-                  </p>
-                )}
+                
+                 
+                
               </div>
               <div className="mt-5">
                 <input
