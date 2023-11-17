@@ -66,7 +66,7 @@ function AddProducts() {
                     type="text"
                     name="name"
                     onChange={(e) => setName(e.target.value)}
-                    className=" mt-2 border-blue-300 border-2"
+                    className=" mt-2 border-blue-300 border"
                   />
                 </div>
                 <div>
@@ -77,7 +77,7 @@ function AddProducts() {
                     type="text"
                     name="price"
                     onChange={(e) => setPrice(e.target.value)}
-                    className=" mt-2 border-blue-300 border-2"
+                    className=" mt-2 border-blue-300 border"
                   />
                 </div>
               </div>
@@ -89,16 +89,17 @@ function AddProducts() {
                   cols="46"
                   rows="10"
                   onChange={(e) => setDescription(e.target.value)}
-                  className=" mt-2 border-blue-300 border-2 "
+                  className=" mt-2 border-blue-300 border "
                 ></textarea>
               </div>
+              <div className="flex">
               <div className="mt-3">
                 <p className="text-lg">Category</p>
                 <select
                   name=""
                   id=""
                   onChange={(e) => setCategory(e.target.value)}
-                  className="border mt-3 border-blue-300 border-2"
+                  className="border mt-3 border-blue-300 "
                 >
                   <option value="">Select your Category</option>
                   {Cateogries.map((category) => (
@@ -108,14 +109,17 @@ function AddProducts() {
                   ))}
                 </select>
               </div>
-              <div className="mt-5">
+              <div className="mt-4 mx-7">
                 <p>Stock</p>
                 <input
                   type="text"
                   onChange={(e) => setStock(e.target.value)}
-                  className=" mt-3 border-blue-300 border-2 border-solid border-2"
+                  className=" mt-3 border-blue-300 border border-solid "
                 />
               </div>
+              </div>
+              
+            
             </div>
             <div className=" w-96 mx-5  ">
               <div className="w-96">
@@ -132,7 +136,7 @@ function AddProducts() {
                       />
                       <input
                         type="file"
-                        accept="image/png,image/jpeg"
+                        accept="image/png,image/jpeg,image/webp"
                         id="fileInput"
                         multiple
                         className="hidden"
@@ -149,7 +153,7 @@ function AddProducts() {
                   />
                    <input
                         type="file"
-                        accept="image/png,image/jpeg"
+                        accept="image/png,image/jpeg,image/webp"
                         id="fileInput"
                         multiple
                         className="hidden"
@@ -163,7 +167,7 @@ function AddProducts() {
                     />
                     <input
                       type="file"
-                      accept="image/png,image/jpeg"
+                      accept="image/png,image/jpeg,image/webp"
                       id="fileInput"
                       multiple
                       className="hidden"
@@ -209,12 +213,13 @@ function AddProducts() {
                     </div>
                   )}
                 </div>
+                
               </div>
             </div>
           </div>
-          <button type="submit" className="bg-blue-500">
-            Add products
-          </button>
+          <button type="submit" className="bg-blue-400 rounded-lg mt-10 w-32 h-10 text-base font-serif font-bold text-white">
+                  Add Products
+                </button>
         </form>
       </div>
     </div>
