@@ -19,26 +19,20 @@ const Transport = nodemailer.createTransport({
 const generate = async (req, res) => {
   try {
     console.log(req.body.userCredentials);
-    const { name,email,password } = req.body.userCredentials;
+    const { name, email, password } = req.body.userCredentials;
     if (validator.isEmpty(name.trim())) {
-      throw new Error("All feilds are requried")
-    }
-    else if (validator.isEmpty(email.trim())) {
-      throw new Error("All feilds are requried")
-
-    }
-    else if (validator.isEmpty(password.trim())) {
-      throw new Error("All feilds are requried")
-
-    }
-    else if (!validator.isEmail(email.trim())) {
-      throw new Error("Invalid Email")
-    }
-    else if (!validator.isStrongPassword(password)) {
-      throw new Error("Weak Password😞")
+      throw new Error("All feilds are requried");
+    } else if (validator.isEmpty(email.trim())) {
+      throw new Error("All feilds are requried");
+    } else if (validator.isEmpty(password.trim())) {
+      throw new Error("All feilds are requried");
+    } else if (!validator.isEmail(email.trim())) {
+      throw new Error("Invalid Email");
+    } else if (!validator.isStrongPassword(password)) {
+      throw new Error("Weak Password😞");
     }
     const useData = await userModel.findOne({ email: email });
-  
+
     if (useData) {
       throw new Error("email already exist");
     }
@@ -304,6 +298,30 @@ const login = async (req, res) => {
   }
 };
 
+const fetchUser = async (req, res) => {
+  try {
+    const { user_id, iat } = jwt.decode(
+      req.cookies.token,
+      process.env.SECRET_KEY
+    );
+
+    const data =await userModel.findById({ _id: user_id });
+    console.log(data);
+    res.send(data);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const editUser=async(req,res)=>{
+  console.log(req.body);
+  const {name,date}=req.body
+  const {user_id,iat}=jwt.decode(req.cookies.token,process.env.SECRET_KEY)
+  const data=await userModel.findByIdAndUpdate({_id:user_id},{name:name,date:date},{new:true})
+  console.log(data);
+  res.send(data)
+}
+
 module.exports = {
   generate,
   verifyOtp,
@@ -314,4 +332,6 @@ module.exports = {
   verifyForgetOtp,
   resetPassword,
   resentOtp,
+  fetchUser,
+  editUser
 };

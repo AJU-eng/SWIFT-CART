@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import rating from "./product images/star.webp";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { findProduct } from "../../redux/features/userslice";
+import { addToCart, findProduct } from "../../redux/features/userslice";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import "./zoom.css";
 import { Rating } from "react-simple-star-rating";
 function ProductsDetailPage() {
   const { id } = useParams();
+  const nav = useNavigate();
   const dispatch = useDispatch();
   const product = useSelector((state) => state.user.SingleProduct);
   const Loading = useSelector((state) => state.user.loading);
@@ -41,27 +42,26 @@ function ProductsDetailPage() {
       {Loading ? (
         <div className="flex">
           <div className=" w-1/2">
-            <div >
+            <div>
               <Skeleton height={450} className="mx-60 mt-7" width={400} />
             </div>
             <div className="flex mx-[17rem] space-x-4 mt-7">
-              <Skeleton height={100} width={100}/>
-              <Skeleton height={100} width={100}/>
-              <Skeleton height={100} width={100}/>
+              <Skeleton height={100} width={100} />
+              <Skeleton height={100} width={100} />
+              <Skeleton height={100} width={100} />
             </div>
           </div>
           <div className="w-1/2 ">
             <div className="mt-7 mx-14">
               <Skeleton height={40} width={300} />
               <Skeleton height={30} className="mt-4" width={300} />
-              <Skeleton height={10} className="mt-4" width={100}/>
+              <Skeleton height={10} className="mt-4" width={100} />
               <div className="mx-10 ">
-              <Skeleton height={10} width={400} count={15}/>
-
+                <Skeleton height={10} width={400} count={15} />
               </div>
             </div>
             <div>
-              <Skeleton height={40} width={100} className="mt-5 mx-7"/>
+              <Skeleton height={40} width={100} className="mt-5 mx-7" />
             </div>
           </div>
         </div>
@@ -150,7 +150,13 @@ function ProductsDetailPage() {
                     </ul>
                   </div>
                 )}
-                <button className="bg-blue-400 rounded-lg mt-10 w-36 h-12 text-lg font-serif font-bold text-white">
+                <button
+                  onClick={() => {
+                    console.log(product.price+"hello guyse");
+                    dispatch(addToCart({ ProductName: product.name, Price: product.price,ProductImage:product.moreImage[0] }));
+                  }}
+                  className="bg-blue-400 rounded-lg mt-10 w-36 h-12 text-lg font-serif font-bold text-white"
+                >
                   Add to Cart
                 </button>
               </>
