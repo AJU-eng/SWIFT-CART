@@ -104,7 +104,7 @@ function CateogryManagment() {
               })}
           </tbody>
         </table>
-
+         
         <AddCategory visible={showModal} onClose={hanldeClose} />
         <EditCategory visible={edit} id={id} onClose={hanldeClose} />
       </div>

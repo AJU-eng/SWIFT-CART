@@ -8,12 +8,16 @@ const initialUserState = {
   loading: false,
   user: "",
   err: "",
+  userData: "",
+  Cart: null,
+  WishList: null,
+  quantity: "",
   otp_status: "",
   login_status: "",
   products: "",
   SingleProduct: [],
   email: "",
-  password_reset:""
+  password_reset: "",
 };
 
 const initialLoggedState = {
@@ -37,11 +41,16 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-export const passwordReset= createAsyncThunk("user/resetPassword",async(upData)=>{
-  console.log(upData);
-  const res=await axios.patch("http://localhost:3000/user/resetPassword",upData)
- 
-})
+export const passwordReset = createAsyncThunk(
+  "user/resetPassword",
+  async (upData) => {
+    console.log(upData);
+    const res = await axios.patch(
+      "http://localhost:3000/user/resetPassword",
+      upData
+    );
+  }
+);
 
 export const verifyUser = createAsyncThunk(
   "user/verifyOtp",
@@ -70,7 +79,10 @@ export const GetProducts = createAsyncThunk("user/products", async () => {
   const res = await axios.get("http://localhost:3000/user/getProducts");
   return res.data;
 });
-
+export const getCart = createAsyncThunk("user/getCart", async () => {
+  const res = await axios.get("http://localhost:3000/user/getCartData");
+  return res.data;
+});
 export const logouts = createAsyncThunk("user/logout", async () => {
   return axios.get("http://localhost:3000/user/logout").then((res) => res.data);
 });
@@ -84,7 +96,7 @@ export const forgetOtp = createAsyncThunk(
       );
       return res.data;
     } catch (err) {
-      return rejectWithValue(err.response.data)
+      return rejectWithValue(err.response.data);
     }
   }
 );
@@ -96,14 +108,20 @@ export const verifyForgetOtps = createAsyncThunk(
       "http://localhost:3000/user/verifyForgetOtp",
       otp_sec
     );
-    return res.data
+    return res.data;
   }
 );
-export const resendOtps=createAsyncThunk("user/resend",async(userCredentials)=>{
-  console.log(userCredentials);
-  const res=await axios.post("http://localhost:3000/user/resendOtp",userCredentials)
-  return res.data
-})
+export const resendOtps = createAsyncThunk(
+  "user/resend",
+  async (userCredentials) => {
+    console.log(userCredentials);
+    const res = await axios.post(
+      "http://localhost:3000/user/resendOtp",
+      userCredentials
+    );
+    return res.data;
+  }
+);
 export const logged = createAsyncThunk("user/logged", async () => {
   const res = await axios.get("http://localhost:3000/user/checkLogStatus");
   return res.data;
@@ -130,25 +148,76 @@ export const logged = createAsyncThunk("user/logged", async () => {
 //     }
 //   }
 // );
-export const AdminLogout=createAsyncThunk("admin/logout",async()=>{
-
-  const logout=await axios.get("http://localhost:3000/admin/logout")
-  return logout.data
-})
+export const AdminLogout = createAsyncThunk("admin/logout", async () => {
+  const logout = await axios.get("http://localhost:3000/admin/logout");
+  return logout.data;
+});
+export const getWishList = createAsyncThunk("user/getwish", async () => {
+  const res = await axios.get("http://localhost:3000/user/getWishlist");
+  return res.data;
+});
+export const deleteWishlist = createAsyncThunk(
+  "user/deleteWish",
+  async (product) => {
+    const res = await axios.post(
+      "http://localhost:3000/user/deleteWish",
+      product
+    );
+    return res.data;
+  }
+);
+export const editUserData = createAsyncThunk(
+  "user/editUser",
+  async (userData) => {
+    const res = await axios.patch(
+      "http://localhost:3000/user/editUser",
+      userData
+    );
+    return res.data;
+  }
+);
+export const addToCart = createAsyncThunk(
+  "user/addToCart",
+  async (Products) => {
+    const data = await axios.post(
+      "http://localhost:3000/user/addToCart",
+      Products,
+      { headers: { "Content-Type": "application/json" } }
+    );
+    return data.data;
+  }
+);
+export const increment = createAsyncThunk(
+  "user/incrementProduct",
+  async (productName) => {
+    const res = await axios.post(
+      "http://localhost:3000/user/incrementProduct",
+      productName
+    );
+    return res.data;
+  }
+);
+export const AddToWish = createAsyncThunk("user/wish", async (productName) => {
+  const res = await axios.post(
+    "http://localhost:3000/user/wishlist",
+    productName
+  );
+  return res.data;
+});
+export const userDetail = createAsyncThunk("user/userDetails", async () => {
+  const res = await axios.get("http://localhost:3000/user/userData");
+  return res.data;
+});
 export const userLogin = createAsyncThunk(
   "user/login",
   async (hello, { rejectWithValue }) => {
     try {
-      console.log(JSON.stringify(hello)+"redux login state=======");
-      const res = await axios.post(
-        "http://localhost:3000/user/login",
-        hello,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      console.log(JSON.stringify(hello) + "redux login state=======");
+      const res = await axios.post("http://localhost:3000/user/login", hello, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       return res.data;
     } catch (err) {
       console.log(err.response.data + "===========================");
@@ -169,7 +238,7 @@ const userSlice = createSlice({
         state.err = "";
       }),
       builder.addCase(registerUser.rejected, (state, action) => {
-        console.log(action.payload+"======redux state");
+        console.log(action.payload + "======redux state");
         (state.loading = false), (state.err = action.payload);
       });
     builder.addCase(verifyUser.fulfilled, (state, action) => {
@@ -178,47 +247,66 @@ const userSlice = createSlice({
     builder.addCase(verifyUser.rejected, (state, action) => {
       state.otp_status = action.payload;
     });
-    builder.addCase(userLogin.pending,(state)=>{
-      state.loading=true
-    })
+    builder.addCase(userLogin.pending, (state) => {
+      state.loading = true;
+    });
     builder.addCase(userLogin.fulfilled, (state, action) => {
       state.login_status = action.payload;
-      state.loading=false
+      state.loading = false;
     });
     builder.addCase(userLogin.rejected, (state, action) => {
       console.log(action.error.message);
-      state.loading=false
+      state.loading = false;
       state.err = action.payload;
+    });
+    builder.addCase(getWishList.fulfilled, (state, action) => {
+      state.WishList = action.payload;
     });
     builder.addCase(logouts.fulfilled, (state) => {
       state.login_status = "not logined";
       state.user = "";
     });
-    builder.addCase(AdminLogout.fulfilled,(state)=>{
-      state.login_status="not logined"
-    })
+    builder.addCase(AdminLogout.fulfilled, (state) => {
+      state.login_status = "not logined";
+    });
     builder.addCase(GetProducts.fulfilled, (state, action) => {
       state.products = action.payload;
     });
-    builder.addCase(findProduct.pending,(state)=>{
-      state.loading=true
-    })
+    builder.addCase(findProduct.pending, (state) => {
+      state.loading = true;
+    });
     builder.addCase(findProduct.fulfilled, (state, action) => {
       state.SingleProduct = action.payload;
-      state.loading=false
+      state.loading = false;
     });
     builder.addCase(forgetOtp.fulfilled, (state, action) => {
       state.email = action.payload;
       console.log(state.email + "===============email");
     });
-    builder.addCase(forgetOtp.rejected,(state,action)=>{
-      state.err=action.payload
-      console.log(state.err+"=========redux err");
-      console.log(state.email+"==========redux sucess");
-    })
-    builder.addCase(verifyForgetOtps.fulfilled,(state,action)=>{
-      state.otp_status=action.payload
-    })
+
+    builder.addCase(forgetOtp.rejected, (state, action) => {
+      state.err = action.payload;
+      console.log(state.err + "=========redux err");
+      console.log(state.email + "==========redux sucess");
+    });
+    builder.addCase(verifyForgetOtps.fulfilled, (state, action) => {
+      state.otp_status = action.payload;
+    });
+    builder.addCase(getCart.fulfilled, (state, action) => {
+      state.Cart = action.payload;
+    });
+    builder.addCase(userDetail.fulfilled, (state, action) => {
+      state.userData = action.payload;
+    });
+    builder.addCase(editUserData.fulfilled, (state, action) => {
+      state.userData = action.payload;
+      console.log(state.userData+"=======redux user state");
+    });
+    //  builder.addCase(deleteWishlist.fulfilled,(state,action)=>{
+    //   state.WishList=state.WishList.filter((product)=>{
+    //     product._id!=action.payload._id
+    //   })
+    //  })
   },
 });
 

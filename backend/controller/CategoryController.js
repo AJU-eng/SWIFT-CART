@@ -9,8 +9,7 @@ const FindCategory=async (req,res)=>{
 }
 
 const EditCategory=async(req,res)=>{
-    console.log(req.body);
-    console.log(req.files);
+  
      const {id,name}=req.body
      const {image}=req.files[0].filename
      const update=await CateogryModel.findOneAndUpdate({_id:id},{name:name,CategoryImage:image},{new:true})

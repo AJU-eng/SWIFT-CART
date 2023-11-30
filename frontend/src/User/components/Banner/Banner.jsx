@@ -4,7 +4,7 @@ function Banner() {
   return (
     <div>
      
-        <img src={banner} className='w-auto h-auto mt-2 ' alt="" />
+        <img src={banner} className='w-auto h-auto  ' alt="" />
     </div>
   )
 }

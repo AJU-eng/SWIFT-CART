@@ -3,7 +3,7 @@ import { AiOutlineShoppingCart } from "react-icons/ai";
 import { AiOutlineHeart } from "react-icons/ai";
 import applewatch from "../components/product images/apple.jpg";
 import { useDispatch, useSelector } from "react-redux";
-import { GetProducts } from "../../redux/features/userslice";
+import { AddToWish, GetProducts } from "../../redux/features/userslice";
 import { Link } from "react-router-dom";
 function products() {
   const dispatch = useDispatch();
@@ -28,11 +28,13 @@ function products() {
         {productsArray &&
           productsArray.map((product) => {
             return (
-              <Link to={`/ProductDetail/${product._id}`}>
+              // <Link to={`/ProductDetail/${product._id}`}>
               <div className=" w-40 lg:w-56  shadow-lg mt-10">
+              <Link to={`/ProductDetail/${product._id}`}>
                 <div className=" bg-contain">
                   <img src={`http://localhost:3000/images/${product.moreImage[0]}`} alt="" />
                 </div>
+                </Link>
                 <div className=" mb-8 h-1/2 ">
                   <p className="lg:tracking-widest  pt-2 px-2 text-lg font-serif">
                     {product.name}
@@ -46,12 +48,14 @@ function products() {
                       <AiOutlineShoppingCart size={25} />
                     </div>
                     <div className="w-1/2 px-6 lg:px-14">
-                      <AiOutlineHeart size={25} />
+                      <AiOutlineHeart size={25} onClick={()=>{
+                        dispatch(AddToWish({name:product.name,price:product.price,image:product.moreImage[0]}))
+                      }} />
                     </div>
                   </div>
                 </div>
               </div>
-              </Link>
+             
             );
           })}
       </div>

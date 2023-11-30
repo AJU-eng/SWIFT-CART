@@ -25,6 +25,9 @@ import ForgetOtp from "./User/components/forgetOtp";
 import { adminLogged } from "./redux/features/AdminSlice";
 import ResetPassword from "./User/components/resetPassword";
 import VerificationPage from "./User/components/verification_page";
+import Navbar from "./User/components/Navbar/Navbar";
+import Cart from "./User/components/Cart";
+import SIdebarRoutes from "./User/components/SIdebarRoutes";
 
 axios.defaults.withCredentials = true;
 
@@ -48,16 +51,17 @@ function App() {
             <Route path="/home" element={<Home />} />
             <Route path="/login" element={<Authentication />} />
             <Route path="/ProductDetail/:id" element={<ProductsDetailPage />} />
-
+            <Route path="/routes/*" element={<SIdebarRoutes/>}/>
             <Route path="/admin/*" element={<Main />} />
-
+            <Route path="/cart" element={<Cart/>}/>
             <Route path="/forgetPassword" element={<ForgetPassword />} />
             <Route path="/otpForgetPassword" element={<ForgetOtp />} />
             <Route path="/resetPass" element={<ResetPassword />} />
-            <Route path="/sucesPage" element={<VerificationPage/>}/>
+            <Route path="/sucesPage" element={<VerificationPage />} />
           </Routes>
         </BrowserRouter>
       </SkeletonTheme>
+   
       {/* <VerificationPage/> */}
       {/* <ResetPassword/> */}
     </>

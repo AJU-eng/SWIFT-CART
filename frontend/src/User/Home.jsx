@@ -5,15 +5,17 @@ import TopOffers from "./components/TopOffers";
 import Category from "./components/Category";
 import Products from "./components/products";
 import AuthenticatedNavbar from "./components/Navbar/AuthenticatedNavbar";
+import Footer from "./components/footer";
 // import './Home.css'
 function Home() {
   return (
-    <div >
-      <AuthenticatedNavbar /> 
+    <div>
+      <AuthenticatedNavbar />
       <Banner />
       <TopOffers />
       <Category />
-      <Products/>
+      <Products />
+      {/* <Footer/> */}
     </div>
   );
 }

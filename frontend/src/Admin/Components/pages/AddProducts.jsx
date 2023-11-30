@@ -93,40 +93,37 @@ function AddProducts() {
                 ></textarea>
               </div>
               <div className="flex">
-              <div className="mt-3">
-                <p className="text-lg">Category</p>
-                <select
-                  name=""
-                  id=""
-                  onChange={(e) => setCategory(e.target.value)}
-                  className="border mt-3 border-blue-300 "
-                >
-                  <option value="">Select your Category</option>
-                  {Cateogries.map((category) => (
-                    <option key={category.id} value={category._id}>
-                      {category.name}
-                    </option>
-                  ))}
-                </select>
+                <div className="mt-3">
+                  <p className="text-lg">Category</p>
+                  <select
+                    name=""
+                    id=""
+                    onChange={(e) => setCategory(e.target.value)}
+                    className="border mt-3 border-blue-300 "
+                  >
+                    <option value="">Select your Category</option>
+                    {Cateogries.map((category) => (
+                      <option key={category.id} value={category._id}>
+                        {category.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="mt-4 mx-7">
+                  <p>Stock</p>
+                  <input
+                    type="text"
+                    onChange={(e) => setStock(e.target.value)}
+                    className=" mt-3 border-blue-300 border border-solid "
+                  />
+                </div>
               </div>
-              <div className="mt-4 mx-7">
-                <p>Stock</p>
-                <input
-                  type="text"
-                  onChange={(e) => setStock(e.target.value)}
-                  className=" mt-3 border-blue-300 border border-solid "
-                />
-              </div>
-              </div>
-              
-            
             </div>
             <div className=" w-96 mx-5  ">
               <div className="w-96">
                 <p className="text-xl mx-9">Cover Image</p>
                 {selectedImages.length == 0 ? (
                   <div className="w-64  h-36  items-center mx-10 my-10 outline-dashed outline-blue-200 border rounded-lg">
-                  
                     <div className="flex justify-center mt-10">
                       <img
                         src={AddImages}
@@ -146,19 +143,21 @@ function AddProducts() {
                   </div>
                 ) : (
                   <div className="flex justify-center mt-10">
-                    <AiFillCloseCircle 
-                    onClick={() =>
-                      setselectedImages(selectedImages.filter((image)=>image[0]!=image))
-                    }
-                  />
-                   <input
-                        type="file"
-                        accept="image/png,image/jpeg,image/webp"
-                        id="fileInput"
-                        multiple
-                        className="hidden"
-                        onChange={handleFileChange}
-                      />
+                    <AiFillCloseCircle
+                      onClick={() =>
+                        setselectedImages(
+                          selectedImages.filter((image) => image[0] != image)
+                        )
+                      }
+                    />
+                    <input
+                      type="file"
+                      accept="image/png,image/jpeg,image/webp"
+                      id="fileInput"
+                      multiple
+                      className="hidden"
+                      onChange={handleFileChange}
+                    />
                     <img
                       src={URL.createObjectURL(selectedImages[0])}
                       // onClick={triggerFileInput}
@@ -188,7 +187,9 @@ function AddProducts() {
                         >
                           <AiFillCloseCircle
                             onClick={() =>
-                              setselectedImages(selectedImages.filter((e) => e !== image))
+                              setselectedImages(
+                                selectedImages.filter((e) => e !== image)
+                              )
                             }
                           />
                           <img
@@ -213,13 +214,15 @@ function AddProducts() {
                     </div>
                   )}
                 </div>
-                
               </div>
             </div>
           </div>
-          <button type="submit" className="bg-blue-400 rounded-lg mt-10 w-32 h-10 text-base font-serif font-bold text-white">
-                  Add Products
-                </button>
+          <button
+            type="submit"
+            className="bg-blue-400 rounded-lg mt-10 w-32 h-10 text-base font-serif font-bold text-white"
+          >
+            Add Products
+          </button>
         </form>
       </div>
     </div>
