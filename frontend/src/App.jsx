@@ -28,6 +28,8 @@ import VerificationPage from "./User/components/verification_page";
 import Navbar from "./User/components/Navbar/Navbar";
 import Cart from "./User/components/Cart";
 import SIdebarRoutes from "./User/components/SIdebarRoutes";
+import Checkout from "./User/components/Checkout";
+import OrderSucessPage from "./User/components/OrderSucessPage";
 
 axios.defaults.withCredentials = true;
 
@@ -53,6 +55,8 @@ function App() {
             <Route path="/ProductDetail/:id" element={<ProductsDetailPage />} />
             <Route path="/routes/*" element={<SIdebarRoutes/>}/>
             <Route path="/admin/*" element={<Main />} />
+            <Route path="/orderSucess" element={<OrderSucessPage/>}/>
+            <Route path="/checkout" element={<Checkout/>}/>
             <Route path="/cart" element={<Cart/>}/>
             <Route path="/forgetPassword" element={<ForgetPassword />} />
             <Route path="/otpForgetPassword" element={<ForgetOtp />} />

@@ -6,8 +6,12 @@ import { addToCart, findProduct } from "../../redux/features/userslice";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import "./zoom.css";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 import { Rating } from "react-simple-star-rating";
 function ProductsDetailPage() {
+  const error = useSelector((state) => state.user.AuthError);
   const { id } = useParams();
   const nav = useNavigate();
   const dispatch = useDispatch();
@@ -152,8 +156,19 @@ function ProductsDetailPage() {
                 )}
                 <button
                   onClick={() => {
-                    console.log(product.price+"hello guyse");
-                    dispatch(addToCart({ ProductName: product.name, Price: product.price,ProductImage:product.moreImage[0] }));
+                    console.log(product.price + "hello guyse");
+                    if (error === "not logined") {
+                      nav("/login");
+                    } else {
+                      dispatch(
+                        addToCart({
+                          ProductName: product.name,
+                          Price: product.price,
+                          ProductImage: product.moreImage[0],
+                        })
+                      );
+                      toast.success("Great Choice ! Item added to Cart");
+                    }
                   }}
                   className="bg-blue-400 rounded-lg mt-10 w-36 h-12 text-lg font-serif font-bold text-white"
                 >
@@ -166,6 +181,7 @@ function ProductsDetailPage() {
           </div>
         </>
       )}
+      <ToastContainer />
     </div>
   );
 }

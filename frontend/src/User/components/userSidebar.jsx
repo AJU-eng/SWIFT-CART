@@ -84,7 +84,7 @@ function UserSideBar() {
                   </h1>
                 </div>
                 </NavLink>
-                <NavLink to="user">
+                <NavLink to="">
                   <div className="flex mx-9 flex-1">
                     <img src={history} className="h-4 mt-3" alt="" />
                     <h1 className="text-lg mx-2 my-3 mt-2 text-slate-500">
@@ -92,10 +92,12 @@ function UserSideBar() {
                     </h1>
                   </div>
                 </NavLink>
+                <NavLink to="Orders">
                 <div className="flex mx-9  flex-1">
                   <img src={Orders} className="h-4 mt-4" alt="" />
                   <h1 className="text-lg mx-2 my-3  text-slate-500">Orders</h1>
                 </div>
+                </NavLink>
                 <NavLink to="category">
                   <div className="flex mx-9 flex-1">
                     <img src={Address} className="h-4 mt-4" alt="" />

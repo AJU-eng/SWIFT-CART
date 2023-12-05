@@ -73,12 +73,14 @@ function SideBarDesign() {
                 <img src={home} alt="" />
                 <h1 className="text-sm mx-2   text-slate-500">Dashboard</h1>
               </div>
+              <NavLink to="orders">
               <div className="flex mx-9 flex-1">
                 <img src={cart} alt="" />
                 <h1 className="text-sm mx-2 my-4   text-slate-500">
                   Order Managment
                 </h1>
               </div>
+              </NavLink>
               <NavLink to="user">
                 <div className="flex mx-9 flex-1">
                   <img src={users} alt="" />
