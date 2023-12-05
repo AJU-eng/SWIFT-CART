@@ -22,7 +22,7 @@ const productSchema = mongoose.Schema({
     type: String,
   },
   stock: {
-    type: String,
+    type: Number,
   },
   isDelete:{
     type:Boolean

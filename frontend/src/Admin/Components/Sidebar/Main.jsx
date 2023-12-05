@@ -12,6 +12,7 @@ import EditCategory from "../pages/EditCategory";
 import EditProduct from "../pages/EditProduct";
 import { Link } from "react-router-dom";
 import Authentication from "../../../User/components/Authentication";
+import OrdersManagment from "../pages/OrderManagement";
 
 // function Main() {
 //   return (
@@ -44,6 +45,7 @@ function Main() {
           <Route path="category" element={<CateogryManagment />} />
           <Route path="products" element={<ProductManagement/>}/>
           <Route path="addProducts" element={<AddProducts/>}/>
+          <Route path="orders" element={<OrdersManagment/>}/>
           <Route path="products/editProducts/:id" element={<EditProduct/>}/>
           <Route path="editCategory/:id" element={<EditCategory/>}/>
         </Route>

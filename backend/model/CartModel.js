@@ -4,7 +4,7 @@ const CartSchema = mongoose.Schema({
   Products: [
     {
       Price: {
-        type: String,
+        type: Number,
       },
       productName: {
         type: String,
@@ -12,7 +12,10 @@ const CartSchema = mongoose.Schema({
       productImage: {
         type: String,
       },
-      
+      quantity:{
+        type:Number,
+        default:1
+      }
     },
   ],
   userId: {

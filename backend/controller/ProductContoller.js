@@ -9,10 +9,10 @@ const findProduct = async (req, res) => {
   console.log("find api called");
   console.log(req.params);
   const { id } = req.params;
-  console.log(id);
+  // console.log(id);
   try {
     const product = await ProductModel.findById(id).populate("Category");
-    console.log(product);
+    // console.log(product);
     if (!product) {
       return res.status(404).json({ error: "Product not found" });
     }

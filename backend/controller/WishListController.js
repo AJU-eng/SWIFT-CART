@@ -60,9 +60,16 @@ const deleteWishlist = async (req, res) => {
     { userId: user_id },
     { $pull: { Products: { name: name } } },{new:true}
   );
-  const info = await CartModel.findOneAndUpdate({userId:user_id},{$push:{Products:{productName:name,Price:price,productImage:image}}})
-  if (info) {
-    console.log("cart added");
+  const cartData=await CartModel.findOne({userId:user_id,"Product.productName":name})
+  if (cartData) {
+    const update=await CartModel.findOneAndUpdate({userId:user_id,"Products.productName":name},{$inc:{"Products.$.quantity":1}})
+  }
+  else{
+
+    const info = await CartModel.findOneAndUpdate({userId:user_id},{$push:{Products:{productName:name,Price:price,productImage:image}}})
+    if (info) {
+      console.log("cart added");
+    }
   }
   console.log(data);
   res.send(data.Products)

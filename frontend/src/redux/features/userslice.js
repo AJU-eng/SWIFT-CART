@@ -9,9 +9,12 @@ const initialUserState = {
   user: "",
   err: "",
   userData: "",
-  Cart: null,
+  Orders: [],
+  AuthError:"",
+  Cart: [],
+  OrderedData:[],
   WishList: null,
-  quantity: "",
+  quantity: 1,
   otp_status: "",
   login_status: "",
   products: "",
@@ -40,7 +43,10 @@ export const registerUser = createAsyncThunk(
     }
   }
 );
-
+export const cancelOrder=createAsyncThunk("user/cancelOrder",async(price)=>{
+  const res=await axios.post("http://localhost:3000/user/caancelOrder",price)
+  return res.data
+})
 export const passwordReset = createAsyncThunk(
   "user/resetPassword",
   async (upData) => {
@@ -166,6 +172,16 @@ export const deleteWishlist = createAsyncThunk(
     return res.data;
   }
 );
+export const deleteCartProduct = createAsyncThunk(
+  "user/deleteCartProduct",
+  async (name) => {
+    const res = await axios.patch(
+      "http://localhost:3000/user/deleteCartProduct",
+      name
+    );
+    return res.data;
+  }
+);
 export const editUserData = createAsyncThunk(
   "user/editUser",
   async (userData) => {
@@ -178,13 +194,18 @@ export const editUserData = createAsyncThunk(
 );
 export const addToCart = createAsyncThunk(
   "user/addToCart",
-  async (Products) => {
-    const data = await axios.post(
-      "http://localhost:3000/user/addToCart",
-      Products,
-      { headers: { "Content-Type": "application/json" } }
-    );
-    return data.data;
+  async (Products,{rejectWithValue}) => {
+    try {
+      
+      const data = await axios.post(
+        "http://localhost:3000/user/addToCart",
+        Products,
+        { headers: { "Content-Type": "application/json" } }
+      );
+      return data.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data)
+    }
   }
 );
 export const increment = createAsyncThunk(
@@ -197,10 +218,36 @@ export const increment = createAsyncThunk(
     return res.data;
   }
 );
-export const AddToWish = createAsyncThunk("user/wish", async (productName) => {
+export const placeOrders = createAsyncThunk(
+  "user/placeOrder",
+  async (OrderDetails) => {
+    const res = await axios.post(
+      "http://localhost:3000/user/placeOrder",
+      OrderDetails
+    );
+    return res.data;
+  }
+);
+export const OrderedDataAction=createAsyncThunk("user/getOrders",async()=>{
+  const res=await axios.get("http://localhost:3000/user/getOrder")
+  return res.data
+})
+export const AddToWish = createAsyncThunk("user/wish", async (productName,{rejectWithValue}) => {
+  try {
+    
+    const res = await axios.post(
+      "http://localhost:3000/user/wishlist",
+      productName
+    );
+    return res.data;
+  } catch (error) {
+    return rejectWithValue(error.response.data)
+  }
+});
+export const makeOrders = createAsyncThunk("user/order", async (products) => {
   const res = await axios.post(
-    "http://localhost:3000/user/wishlist",
-    productName
+    "http://localhost:3000/user/makeOrder",
+    products
   );
   return res.data;
 });
@@ -225,6 +272,10 @@ export const userLogin = createAsyncThunk(
     }
   }
 );
+export const decrementProduct=createAsyncThunk("user/decrement",async(name)=>{
+  const hel=await axios.patch("http://localhost:3000/user/decrement",name)
+  return hel.data
+})
 
 const userSlice = createSlice({
   name: "user",
@@ -300,13 +351,43 @@ const userSlice = createSlice({
     });
     builder.addCase(editUserData.fulfilled, (state, action) => {
       state.userData = action.payload;
-      console.log(state.userData+"=======redux user state");
+      console.log(state.userData + "=======redux user state");
     });
-    //  builder.addCase(deleteWishlist.fulfilled,(state,action)=>{
-    //   state.WishList=state.WishList.filter((product)=>{
-    //     product._id!=action.payload._id
-    //   })
-    //  })
+    builder.addCase(increment.fulfilled, (state, action) => {
+      console.log(action.payload);
+      state.Cart = action.payload;
+      console.log(state.Cart + "===========redux quantity");
+    });
+    builder.addCase(makeOrders.fulfilled, (state, action) => {
+      state.Orders = action.payload;
+    });
+    builder.addCase(placeOrders.fulfilled, (state, action) => {
+      state.Cart = action.payload;
+    });
+    builder.addCase(deleteCartProduct.fulfilled, (state, action) => {
+      // console.log(typeof action.payload);
+      state.Cart=action.payload
+    });
+    builder.addCase(decrementProduct.fulfilled,(state,action)=>{
+      state.Cart=action.payload
+      console.log(state.Cart);
+    })
+     builder.addCase(deleteWishlist.fulfilled,(state,action)=>{
+      state.WishList=action.payload
+     })
+     builder.addCase(OrderedDataAction.fulfilled,(state,action)=>{
+      state.OrderedData=action.payload
+     })
+     builder.addCase(cancelOrder.fulfilled,(state,action)=>{
+      state.OrderedData=action.payload
+     })
+     builder.addCase(addToCart.rejected,(state,action)=>{
+      console.log(action.payload);
+      state.AuthError=action.payload
+     })
+     builder.addCase(AddToWish.rejected,(state,action)=>{
+      state.AuthError=action.payload
+     })
   },
 });
 

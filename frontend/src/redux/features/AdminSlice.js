@@ -9,6 +9,7 @@ const initialDataState = {
   users: [],
   categories: [],
   logged:"",
+  Orders:[],
   Products: [],
   CategoriesProduct:[],
   err: "",
@@ -149,6 +150,11 @@ export  const adminLogged=createAsyncThunk("admin/logged",async()=>{
   const adminLog=axios.get("http://localhost:3000/admin/adminLogged")
   return (await adminLog).data
 })
+
+export const getOrders=createAsyncThunk("admin/getOrdersAdmin",async()=>{
+  const res=await axios.get("http://localhost:3000/admin/getOrder")
+  return res.data
+})
 export const AddProductspo = createAsyncThunk(
   "admin/addProducts",
   async (formData, { rejectWithValue }) => {
@@ -165,7 +171,9 @@ export const blockCategory = createAsyncThunk(
     return res.data;
   }
 );
-
+export const editOrderstatus=createAsyncThunk("admin/editOrderstatus",async(status)=>{
+  const edit=axios.post("http://localhost:3000/admin/editOrderstatus",status)
+})
 export const unblocksCategory = createAsyncThunk(
   "admin/categoryunblock",
   async (id) => {
@@ -267,6 +275,9 @@ const adminSlice = createSlice({
     })
     builder.addCase(CategoriesProductAdd.fulfilled,(state,action)=>{
       state.CategoriesProduct=action.payload
+    })
+    builder.addCase(getOrders.fulfilled,(state,action)=>{
+      state.Orders=action.payload
     })
   },
 });

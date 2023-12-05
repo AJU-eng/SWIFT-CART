@@ -74,8 +74,8 @@ function ProductManagement() {
                     <td>{product.price}</td>
                     <td>
                       {product.stock == 0 ? (
-                        <div className="w-20 h-7 p-1  border tracking-widest rounded-lg text-sm text-green-900 bg-green-300">
-                          out of stock
+                        <div className="w-24  mx-16 h-7 p-1  border tracking-widest rounded-lg text-sm text-red-500 bg-red-200">
+                          stock out
                         </div>
                       ) : (
                         <div className="w-24 h-7 p-1 mx-16  border tracking-widest rounded-lg text-sm text-teal-800 bg-teal-200">
