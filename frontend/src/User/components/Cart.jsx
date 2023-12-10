@@ -30,14 +30,16 @@ function Cart() {
   }, [cartData]);
 
   const proceed = () => {
-    dispatch(
-      makeOrders({
-        products: cartData,
-        totalPrice: totalPrice(),
-        status:"pending"
-      })
-    );
-    nav("/checkout");
+    if (cartData) {
+      dispatch(
+        makeOrders({
+          products: cartData,
+          totalPrice: totalPrice(),
+          status: "pending",
+        })
+      );
+      nav("/checkout");
+    }
   };
 
   const totalPrice = () => {
@@ -153,12 +155,16 @@ function Cart() {
                 <p className="pr-7">{totalPrice()}</p>
               </div>
               <div className="flex justify-center ">
-                <button
-                  onClick={() => proceed()}
-                  className="h-9 w-32 text-white text-md rounded-lg shadow-lg font-serif mt-5 bg-blue-500 "
-                >
-                  Proceed to Buy
-                </button>
+                {cartData.length!==0 ? (
+                  <button
+                    onClick={() => proceed()}
+                    className="h-9 w-32 text-white text-md rounded-lg shadow-lg font-serif mt-5 bg-blue-500 "
+                  >
+                    Proceed to Buy
+                  </button>
+                ) : (
+                  <button className="h-9 w-32 text-white text-md rounded-lg shadow-lg font-serif mt-5 bg-blue-500">no items</button>
+                )}
               </div>
             </div>
           </div>

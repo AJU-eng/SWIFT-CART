@@ -4,10 +4,13 @@ import { MdOutlinePayment } from "react-icons/md";
 import { CiWallet } from "react-icons/ci";
 import iphone from "../components/product images/iphone 6/iphone13/iphone_13.jpg";
 import { useDispatch, useSelector } from "react-redux";
-import { placeOrders } from "../../redux/features/userslice";
+import { onlinePayments, placeOrders } from "../../redux/features/userslice";
+import useRazorpay from "react-razorpay";
 import { useNavigate } from "react-router";
 function Checkout() {
   const [name, setName] = useState("");
+  const [Razorpay] = useRazorpay();
+  const order = useSelector((state) => state.user.online);
   const [email, setEmail] = useState("");
   const [number, setNUmber] = useState("");
   const [state, setState] = useState("");
@@ -15,17 +18,66 @@ function Checkout() {
   const [pincode, setPincode] = useState("");
   const [street, setStreet] = useState("");
   const [paymentMode, setPaymentmode] = useState("");
-  const nav=useNavigate()
+  const [err, setError] = useState("");
+  const nav = useNavigate();
   const dispatch = useDispatch();
-  const products = useSelector((state) => state.user.Orders) || [];
- 
-  if (products) {
-    console.log(products);
-  }
+  let products = useSelector((state) => state.user.Orders);
+
+  const initPayment = (data) => {
+    console.log("amount", data.order.amount);
+    const options = {
+      key: "rzp_test_9uTB8CFJuA8KJ4", // Enter the Key ID generated from the Dashboard
+      amount: data.order.amount / 100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+      currency: "INR",
+      name: "SWIFT CART",
+      description: "Test Transaction",
+      image: "https://example.com/your_logo",
+      order_id: data.order.id, //This is a sample Order ID. Pass the `id` obtained in the response of createOrder().
+      handler: async (response) => {
+        alert("hello world");
+        console.log("response", response);
+        dispatch(
+          placeOrders({
+            Address: {
+              name: name,
+              email: email,
+              number: number,
+              state: state,
+              district: district,
+              pincode: pincode,
+              street: street,
+            },
+            products: products,
+            paymentMode: paymentMode,
+          })
+        );
+        nav("/orderSucess");
+      },
+      prefill: {
+        name: "Piyush Garg",
+        email: "youremail@example.com",
+        contact: "9999999999",
+      },
+      notes: {
+        address: "Razorpay Corporate Office",
+      },
+      theme: {
+        color: "#3399cc",
+      },
+    };
+
+    const rzp1 = new Razorpay(options);
+    rzp1.open();
+  };
+
   return (
     <div className="flex">
       <div className="w-2/3   ">
-        <p className="px-12 pt-5 text-xl font-serif">Billing information</p>
+        <p className="px-12 pt-5 text-xl font-serif">
+          Billing information{" "}
+          <span className="px-10 text-md text-red-500">{err}</span>
+        </p>
+
         <hr className="mx-12 mt-2" />
         <div className="">
           <div className="flex justify-around space-x-5">
@@ -114,7 +166,7 @@ function Checkout() {
               <input
                 onChange={(e) => setPaymentmode(e.target.value)}
                 type="radio"
-                value="netBank"
+                value="NetBanking"
               />
               <MdOutlinePayment size={30} />
             </div>
@@ -167,22 +219,43 @@ function Checkout() {
           <div className="flex justify-center ">
             <button
               onClick={() => {
-                dispatch(
-                  placeOrders({
-                    Address: {
-                      name: name,
-                      email: email,
-                      number: number,
-                      state: state,
-                      district: district,
-                      pincode: pincode,
-                      street: street,
-                    },
-                    
-                    products: products,
-                  })
-                );
-                nav("/orderSucess")
+                if (
+                  name == "" ||
+                  email === "" ||
+                  state === "" ||
+                  number === "" ||
+                  district === "" ||
+                  pincode === "" ||
+                  street === "" ||
+                  paymentMode === ""
+                ) {
+                  setError("All feilds are required");
+                  console.log(err);
+                } else {
+                  if (paymentMode === "COD") {
+                    dispatch(
+                      placeOrders({
+                        Address: {
+                          name: name,
+                          email: email,
+                          number: number,
+                          state: state,
+                          district: district,
+                          pincode: pincode,
+                          street: street,
+                        },
+                        products: products,
+                        paymentMode: paymentMode,
+                      })
+                    );
+                    nav("/orderSucess");
+                  } else if (paymentMode === "NetBanking") {
+                    dispatch(onlinePayments({ amount: products.totalPrice }));
+                    initPayment(order);
+
+                    //  dispatch(onlinePayments({amount:products.totalPrice}))
+                  }
+                }
               }}
               className="h-8  w-[6rem] mt-3 font-serif text-white shadow-md rounded-lg bg-blue-400 text-md"
             >
