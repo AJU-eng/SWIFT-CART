@@ -8,6 +8,7 @@ const initialUserState = {
   loading: false,
   user: "",
   err: "",
+  online:"",
   userData: "",
   Orders: [],
   AuthError:"",
@@ -255,6 +256,10 @@ export const userDetail = createAsyncThunk("user/userDetails", async () => {
   const res = await axios.get("http://localhost:3000/user/userData");
   return res.data;
 });
+export const onlinePayments=createAsyncThunk("user/onlinePay",async(data)=>{
+  const res=await axios.post("http://localhost:3000/user/onlinePayment",data)
+  return res.data
+})
 export const userLogin = createAsyncThunk(
   "user/login",
   async (hello, { rejectWithValue }) => {
@@ -388,6 +393,10 @@ const userSlice = createSlice({
      builder.addCase(AddToWish.rejected,(state,action)=>{
       state.AuthError=action.payload
      })
+    //  builder.addCase()
+    builder.addCase(onlinePayments.fulfilled,(state,action)=>{
+      state.online=action.payload
+    })
   },
 });
 

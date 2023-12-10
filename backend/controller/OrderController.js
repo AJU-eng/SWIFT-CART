@@ -2,16 +2,62 @@ const jwt = require("jsonwebtoken");
 const OrderModel = require("../model/OrderModel");
 const CartModel = require("../model/CartModel");
 const ProductModel = require("../model/ProductModel");
+const razorpay = require("razorpay");
+const crypto = require("crypto");
 require("dotenv").config();
 const makeOrder = async (req, res) => {
   //   console.log(req.body);
   res.send(req.body);
 };
 
+const onlinePayment = async (req, res) => {
+  console.log(req.body);
+  try {
+    const { amount } = req.body;
+    const instance = new razorpay({
+      key_id: process.env.KEY_ID,
+      key_secret: process.env.KEY_SECRET,
+    });
+    const options = {
+      amount: amount*100,
+      currency: "INR",
+      receipt: crypto.randomBytes(10).toString("hex"),
+    };
+    instance.orders.create(options, (err, order) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.status(200).send({ order });
+      }
+    });
+  } catch (error) {
+    console.log(error.message);
+  }
+};
+
+const paymentVerify = (req, res) => {
+  try {
+    const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+      req.body;
+    const sign = razorpay_order_id + "|" + razorpay_payment_id;
+    const expectedSign = crypto
+      .createHmac("sha256", process.env.KEY_SECRET)
+      .update(sign.toString())
+      .digest("hex");
+    if (razorpay_signature === expectedSign) {
+      res.status(200).send("payment Verified");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const PlaceOrder = async (req, res) => {
-    console.log(req.body);
-  console.log(req.body.products);
-  const { Address, products,paymentMode } = req.body;
+  console.log(req.body);
+  console.log(req.body.products.totalPrice);
+  let { Address, products, paymentMode } = req.body;
+  products.paymentMode = paymentMode;
+  console.log(products);
   const { user_id, iat } = jwt.decode(
     req.cookies.token,
     process.env.SECRET_KEY
@@ -46,9 +92,14 @@ const PlaceOrder = async (req, res) => {
     const data = await OrderModel.create({
       Address: Address,
       userId: user_id,
-      products: [{...products,paymentMode}],
+      products: products,
     });
+    const cartDelete = await CartModel.findOneAndDelete(
+      { userId: user_id },
+      { new: true }
+    );
     console.log(data);
+    res.send(cartDelete.Products);
   }
 };
 
@@ -82,10 +133,29 @@ const updateOrderStatus = async (req, res) => {
 
 const cancelOrder = async (req, res) => {
   const { price } = req.body;
-  const status = await OrderModel.findOneAndUpdate({"products.totalPrice":price},{$set:{"products.$.status":"cancelled"}},{new:true})
+  const status = await OrderModel.findOneAndUpdate(
+    { "products.totalPrice": price },
+    { $set: { "products.$.status": "cancelled" } },
+    { new: true }
+  );
   console.log(status);
-  res.send(status.products)
+  res.send(status.products);
   // const status=await OrderModel.findOne({"products.totalPrice":price})
+};
+
+const orderHistory = async (req, res) => {
+  const { user_id, iat } = jwt.decode(
+    req.cookies.token,
+    process.env.SECRET_KEY
+  );
+  console.log(user_id);
+  const data = await OrderModel.findOne({
+    userId: user_id,
+    "products.$.status": "cancelled",
+  });
+
+  console.log(data);
+  res.send(data);
 };
 
 module.exports = {
@@ -94,5 +164,8 @@ module.exports = {
   getOrder,
   getAdminOrders,
   updateOrderStatus,
-  cancelOrder
+  cancelOrder,
+  orderHistory,
+  onlinePayment,
+  paymentVerify,
 };

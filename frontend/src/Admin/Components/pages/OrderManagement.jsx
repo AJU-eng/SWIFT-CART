@@ -22,25 +22,26 @@ function OrdersManagment() {
   return (
     <div className="flex">
       <div className=" px-12  min-h-screen w-2/3">
-        <div className="flex  w-[52rem] justify-center mt-10 rounded-lg shadow-md   bg-white ">
+        <div className="flex  w-[62rem] justify-center mt-10 rounded-lg shadow-md   bg-white ">
           <p className="font-serif ">PRODUCT IMAGE</p>
           <p className="mx-7 font-serif px-10">PRODUCT </p>
           <p className="font-serif  px-2">QUANTITY</p>
           <p className="font-serif px-10">TOTAL PRICE</p>
+          <p className="font-serif px-10">PAYMENT MODE</p>
           <p className="font-serif ">ACTION</p>
         </div>
         {orders.map((item) => {
           return item.products.map((items) => {
             return (
               <div>
-                <div className=" w-[52rem]   mt-1 rounded-lg  bg-white shadow-lg">
+                <div className=" w-[62rem]   mt-1 rounded-lg  bg-white shadow-lg">
                   <div className="flex">
                     <div>
                       {items.products.map((product) => {
                         return (
                           <div>
                             <div className="">
-                              <div className="  px-20    font-serif">
+                              <div className="  px-16    font-serif">
                                 <img
                                   src={`http://localhost:3000/images/${product.productImage}`}
                                   className="h-14 "
@@ -52,12 +53,12 @@ function OrdersManagment() {
                         );
                       })}
                     </div>
-                    <div className="mx-12">
+                    <div className="">
                       {items.products.map((product) => {
                         return (
                           <div className="">
-                            <div className=" px-3  h-[4rem] ">
-                              <p className="text-[1rem] pt-3 font-serif ">
+                            <div className=" px-9  h-[4rem] ">
+                              <p className="text-[1rem] pt-3  font-serif ">
                                 {product.productName}
                               </p>
                               <p className="">{`₹${product.Price}`}</p>
@@ -88,8 +89,15 @@ function OrdersManagment() {
                         </div>
                       </div>
                     </div>
-                    <div className="text-md mt-7  font-serif">
-                      <div>
+                    <div className=" w-44 mx-6">
+                      <div className="  mt-7  w-32 mx-4 bg-white">
+                        <div className="mt-1 px-16  ">
+                          <p className="pt-2  text-lg font-serif  ">{`${items.paymentMode}`}</p>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-md mt-7   font-serif w-36 ">
+                      <div className="px-8">
                         {items.status==="cancelled"?(
                             <div className="h-7 w-20  rounded-lg bg-red-100">
                                 <p className="text-center pt-1 text-red-500 ">cancelled</p>

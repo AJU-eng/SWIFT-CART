@@ -142,6 +142,11 @@ function ProductsDetailPage() {
                 {product.description && (
                   <div className="mx-1 mt-3">
                     <h3 className="text-lg font-serif">About this item</h3>
+                    {product.stock <= 0 && (
+                      <p className="font-serif text-red-600">
+                        Currently unavailable
+                      </p>
+                    )}
                     <ul className="mt-4 mx-10">
                       {product.description.split("\n").map((item, index) => (
                         <li
@@ -154,26 +159,33 @@ function ProductsDetailPage() {
                     </ul>
                   </div>
                 )}
-                <button
-                  onClick={() => {
-                    console.log(product.price + "hello guyse");
-                    if (error === "not logined") {
-                      nav("/login");
-                    } else {
-                      dispatch(
-                        addToCart({
-                          ProductName: product.name,
-                          Price: product.price,
-                          ProductImage: product.moreImage[0],
-                        })
-                      );
-                      toast.success("Great Choice ! Item added to Cart");
-                    }
-                  }}
-                  className="bg-blue-400 rounded-lg mt-10 w-36 h-12 text-lg font-serif font-bold text-white"
-                >
-                  Add to Cart
-                </button>
+                {product.stock > 0 ? (
+                  <button
+                    onClick={() => {
+                      console.log(product.price + "hello guyse");
+                      if (error === "not logined") {
+                        nav("/login");
+                      } else {
+                        dispatch(
+                          addToCart({
+                            ProductName: product.name,
+                            Price: product.price,
+                            ProductImage: product.moreImage[0],
+                          })
+                        );
+                        toast.success("Great Choice ! Item added to Cart");
+                      }
+                    }}
+                    className="bg-blue-400 rounded-lg mt-10 w-36 h-12 text-lg font-serif font-bold text-white"
+                  >
+                    Add to Cart
+                  </button>
+                ) : (
+                  <button className="bg-blue-200 rounded-lg mt-10 w-36 h-12 text-lg font-serif font-bold text-white">
+                    Add to Cart
+                  </button>
+                )}
+                <div></div>
               </>
             ) : (
               <p>Loading...</p>

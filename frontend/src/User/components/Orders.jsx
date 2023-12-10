@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { OrderedDataAction, cancelOrder } from "../../redux/features/userslice";
+import products from "./products";
 
 function Orders() {
   const dispatch = useDispatch();
@@ -53,7 +54,7 @@ function Orders() {
                 <div className="text-lg  font-serif">
                   {item.products.map((order) => {
                     return (
-                      <div className=" px-16  h-[5rem] ">
+                      <div className=" px-16 mx-4  h-[5rem] ">
                         <p className="text-xl pt-3  ">{order.quantity}</p>
                       </div>
                     );
@@ -61,7 +62,7 @@ function Orders() {
                 </div>
 
                 <div className=" flex mt-7  ">
-                  <div className="mt-1 px-5 ">
+                  <div className="mt-1  mx-5 ">
                     <p className="pt-2 text-lg  ">{`₹${item.totalPrice}`}</p>
                   </div>
                 </div>
@@ -76,16 +77,11 @@ function Orders() {
                       <div className="h-8 mt-10 rounded-lg w-[5rem] bg-orange-200 ">
                         <p className="text-center text-md pt-1 text-[0.98rem] text-orange-500 ">Shipped</p>
                       </div>
-                    ) : item.status==="cancelled"?(
-                        <div className="h-8 mt-10 rounded-lg w-[5rem] bg-red-100">
-
-                            <p className="text-center text-md pt-1 text-[0.98rem] text-red-500">Canelled</p>
-                        </div>
-                    ):(
+                    ) : (
                         <div className="h-8 mt-10 rounded-lg w-[5rem] bg-teal-100">
 
-                        <p className="text-center text-md pt-1 text-[0.98rem] text-teal-500">Delivered</p>
-                    </div>  
+                            <p className="text-center text-md pt-1 text-[0.98rem] text-teal-500">Delivered</p>
+                        </div>
                     )}
                   </div>
                 </div>
