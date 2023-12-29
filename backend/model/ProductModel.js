@@ -26,6 +26,9 @@ const productSchema = mongoose.Schema({
   },
   isDelete:{
     type:Boolean
+  },
+  offer:{
+    type:Number
   }
 },{timestamps:true});
 

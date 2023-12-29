@@ -43,6 +43,7 @@ function Main() {
           <Route path="login" element={<Authentication/>}/>
           <Route path="user" element={<UserManagement />} />
           <Route path="category" element={<CateogryManagment />} />
+          <Route path="Dash" element={<Dashboard/>}/>
           <Route path="products" element={<ProductManagement/>}/>
           <Route path="addProducts" element={<AddProducts/>}/>
           <Route path="orders" element={<OrdersManagment/>}/>

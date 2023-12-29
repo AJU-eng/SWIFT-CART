@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { OrderedDataAction, cancelOrder } from "../../redux/features/userslice";
-import products from "./products";
+
 
 function Orders() {
   const dispatch = useDispatch();
@@ -10,6 +10,7 @@ function Orders() {
   useEffect(() => {
     dispatch(OrderedDataAction());
   }, [dispatch]);
+
 
   return (
     <div className="flex">
@@ -77,12 +78,12 @@ function Orders() {
                       <div className="h-8 mt-10 rounded-lg w-[5rem] bg-orange-200 ">
                         <p className="text-center text-md pt-1 text-[0.98rem] text-orange-500 ">Shipped</p>
                       </div>
-                    ) : (
-                        <div className="h-8 mt-10 rounded-lg w-[5rem] bg-teal-100">
+                    ) :item.status==="cancelled"? (
+                        <div className="h-8 mt-10 rounded-lg w-[5rem] bg-red-100">
 
-                            <p className="text-center text-md pt-1 text-[0.98rem] text-teal-500">Delivered</p>
+                            <p className="text-center text-md pt-1 text-[0.98rem] text-red-400">cancelled</p>
                         </div>
-                    )}
+                    ):<div></div>}
                   </div>
                 </div>
               </div>

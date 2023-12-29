@@ -17,6 +17,7 @@ function EditProduct() {
   const [description, setDescription] = useState("");
   const [preCategory, setPreCategory] = useState("");
   const [price, setPrice] = useState("");
+  const [offer, setOffer] = useState("");
   const [category, setCategory] = useState("");
   const [stock, setStock] = useState("");
   const [fetchedImages, setfetchedImages] = useState([]);
@@ -38,6 +39,8 @@ function EditProduct() {
       setPrice(ProductEdit.price);
       setDescription(ProductEdit.description);
       setStock(ProductEdit.stock);
+      setOffer(ProductEdit.offer)
+      setCategory(ProductEdit.Category.name);
       setfetchedImages(ProductEdit.moreImage);
     }
   }, [ProductEdit]);
@@ -100,6 +103,7 @@ function EditProduct() {
     formData.append("price", price);
     formData.append("category", category);
     formData.append("stock", stock);
+    formData.append("offer",offer)
     formData.append("description", description);
     fetchedImages.forEach((image, index) => {
       formData.append(`image${index}`, image);
@@ -156,30 +160,32 @@ function EditProduct() {
                   className=" mt-2 border-blue-300 border-2 "
                 ></textarea>
               </div>
-              <div className="mt-3">
-                <p className="text-lg">Category</p>
-                <select
-                  name=""
-                  id=""
-                  onChange={(e) => setCategory(e.target.value)}
-                  className="border mt-3 border-blue-300 border-2"
-                >
-                  <option value="">Select your Category</option>
-                  {/* {Cateogries.map((category) => (
+              <div className="flex">
+                <div className="mt-3">
+                  <p className="text-lg">Category</p>
+                  <select
+                    name=""
+                    id=""
+                    onChange={(e) => setCategory(e.target.value)}
+                    className="border mt-3 border-blue-300 border-2"
+                  >
+                    <option value="">{category}</option>
+                    {/* {Cateogries.map((category) => (
                     <option key={category.id} value={category._id}>
                       {preCategory}
                     </option>
                   ))} */}
-                </select>
-              </div>
-              <div className="mt-5">
-                <p>Stock</p>
-                <input
-                  type="text"
-                  value={stock}
-                  onChange={(e) => setStock(e.target.value)}
-                  className=" mt-3 border-blue-300 border-2 border-solid border-2"
-                />
+                  </select>
+                </div>
+                <div className="mt-3 mx-10">
+                  <p>Stock</p>
+                  <input
+                    type="text"
+                    value={stock}
+                    onChange={(e) => setStock(e.target.value)}
+                    className=" mt-3 border-blue-300 border-2 border-solid border-2"
+                  />
+                </div>
               </div>
             </div>
             <div className=" w-96 mx-5  ">
@@ -268,11 +274,23 @@ function EditProduct() {
                     </div>
                   )}
                 </div>
+                <div className="mt-8 mx-10">
+                  <p>Offer Price</p>
+                  <input
+                    type="text"
+                    value={offer}
+                    onChange={(e) => setOffer(e.target.value)}
+                    className=" mt-3 border-blue-300 border-2 border-solid border-2"
+                  />
+                </div>
               </div>
             </div>
           </div>
-          <button type="submit" className="bg-blue-500">
-            Edit products
+          <button
+            type="submit"
+            className="bg-blue-400 rounded-lg  w-32 h-10 text-base font-serif font-bold text-white"
+          >
+            Edit Products
           </button>
         </form>
       </div>

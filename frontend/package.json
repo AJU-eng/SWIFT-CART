@@ -18,6 +18,7 @@
     "@igorgraziano/react-image-magnifier": "^1.4.0",
     "@reduxjs/toolkit": "^1.9.7",
     "axios": "^1.5.1",
+    "chart.js": "^4.4.1",
     "date-and-time": "^3.0.3",
     "framer-motion": "^10.16.4",
     "hamburger-react": "^2.5.0",
@@ -26,6 +27,7 @@
     "npm": "^10.2.2",
     "otp-input-react": "^0.3.0",
     "react": "^18.2.0",
+    "react-chartjs-2": "^5.2.0",
     "react-confirm-alert": "^3.0.6",
     "react-dom": "^18.2.0",
     "react-icons": "^4.11.0",
@@ -41,6 +43,7 @@
     "react-simple-star-rating": "^5.1.7",
     "react-spinners": "^0.13.8",
     "react-toastify": "^9.1.3",
+    "recharts": "^2.10.3",
     "redux-logger": "^3.0.6",
     "styled-components": "^6.1.0",
     "tailwind-scrollbar": "^3.0.5"

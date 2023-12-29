@@ -88,17 +88,22 @@ const AddProducts = async (req, res) => {
   console.log(hel);
 };
 
-const getPendingTotal=async(req,res)=>{
-  const data=await OrderModel.aggregate([{$unwind:"$products"}])
-  console.log(data);
-}
-
-const getTotalCustomer = async (req, res) => {
-  const data = await userModel.find({});
- 
-  console.log(data.length);
-  res.status(200).send({ totalCustomers: data.length }); 
-}
+const TotalData = async (req, res) => {
+  const useData = await userModel.find({});
+  const pendingData = await OrderModel.aggregate([
+    { $unwind: "$orders" },
+    { $match: { "orders.status": "pending" } },
+  ]);
+  const ShippedData = await OrderModel.aggregate([
+    { $unwind: "$orders" },
+    { $match: { "orders.status": "Shipped" } },
+  ]);
+  res.status(200).send({
+    TotalUser: useData.length,
+    TotalPendings: pendingData.length,
+    TotalShipped: ShippedData.length,
+  });
+};
 
 const getCategories = async (req, res) => {
   const catData = await CategoryModal.find();
@@ -169,6 +174,5 @@ module.exports = {
   adminLogout,
   adminLoggedIn,
   getCategoriesAdd,
-  getTotalCustomer,
-  getPendingTotal
+  TotalData,
 };

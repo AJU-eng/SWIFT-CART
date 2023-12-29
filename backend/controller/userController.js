@@ -7,19 +7,22 @@ const otpModel = require("../model/otp");
 const userModel = require("../model/userModel");
 const jwt = require("jsonwebtoken");
 
+
 // const { ModuleNode } = require('vite')
 const Transport = nodemailer.createTransport({
   service: "gmail",
   auth: {
-    user: "swiftcart027@gmail.com",
-    pass: "ncur cpdc edbw nhrd",
+    user: process.env.EMAIL,
+    pass:process.env.PASS,
   },
 });
 
 const generate = async (req, res) => {
   try {
-    console.log(req.body.userCredentials);
+    console.log(req.body);
     const { name, email, password } = req.body.userCredentials;
+    // const { name, email, password } = req.body;
+   
     if (validator.isEmpty(name.trim())) {
       throw new Error("All feilds are requried");
     } else if (validator.isEmpty(email.trim())) {
@@ -29,6 +32,7 @@ const generate = async (req, res) => {
     } else if (!validator.isEmail(email.trim())) {
       throw new Error("Invalid Email");
     } else if (!validator.isStrongPassword(password)) {
+      console.log("hello");
       throw new Error("Weak Password😞");
     }
     const useData = await userModel.findOne({ email: email });
@@ -54,8 +58,8 @@ const generate = async (req, res) => {
     }
 
     const sendMail = await Transport.sendMail({
-      from: "swiftcart027@gmail.com",
-      to: req.body.userCredentials.email,
+      from: process.env.EMAIL,
+      to:email,
       subject: "Welcome to SwiftCart", // Subject line
       text: `${otps}`, // plain text body
       html: `<b>Your otp for email verification is here ${otps}</b>`,
@@ -64,7 +68,9 @@ const generate = async (req, res) => {
     // console.log(req.body);
     // console.log(req.body.session);
     res.send(req.body.userCredentials);
-    console.log(JSON.stringify(sendMail) + "messagesent");
+    // console.log(req.body);
+    // res.send(req.body)
+    console.log(sendMail);
   } catch (err) {
     console.log(err.message);
     res.status(400).send(err.message);
@@ -142,11 +148,12 @@ const forgetPasswordOtp = async (req, res) => {
 };
 
 const verifyForgetOtp = async (req, res) => {
+  console.log(req.body);
   const { OTP, email } = req.body;
   console.log(OTP, email + "==============");
   console.log(req.body);
   const otp_data = await otpModel.findOne({ email: email });
-  console.log(otp_data);
+  console.log(otp_data.otp+"otp form database");
   try {
     if (!otp_data) {
       throw new Error("invalid otp");
@@ -177,12 +184,13 @@ const resetPassword = async (req, res) => {
 };
 
 const verifyOtp = async (req, res) => {
-  console.log(req.body.otp);
+  console.log("hello world");
+  console.log(req.body);
   const { OTP, email, name, password } = req.body.otp;
   console.log(OTP, email + "==============");
   console.log(req.body);
   const otp_data = await otpModel.findOne({ email: email });
-  console.log(otp_data);
+  console.log(otp_data+"jfhdjf");
   try {
     if (!otp_data) {
       throw new Error("invalid otp");

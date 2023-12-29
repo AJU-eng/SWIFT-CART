@@ -12,8 +12,9 @@ function OrdersManagment() {
 
   useEffect(() => {
     if (orders) {
+        console.log(orders);
       orders.map((items) => {
-        items.products.map((item) => {
+        items.orders.map((item) => {
           console.log(item.totalPrice);
         });
       });
@@ -31,15 +32,15 @@ function OrdersManagment() {
           <p className="font-serif ">ACTION</p>
         </div>
         {orders.map((item) => {
-          return item.products.map((items) => {
+          return item.orders.map((items) => {
             return (
               <div>
                 <div className=" w-[62rem]   mt-1 rounded-lg  bg-white shadow-lg">
-                  <div className="flex">
+                  <div className="flex justify-around">
                     <div>
                       {items.products.map((product) => {
                         return (
-                          <div>
+                          <div className="">
                             <div className="">
                               <div className="  px-16    font-serif">
                                 <img
@@ -57,7 +58,7 @@ function OrdersManagment() {
                       {items.products.map((product) => {
                         return (
                           <div className="">
-                            <div className=" px-9  h-[4rem] ">
+                            <div className=" px-12   h-[4rem] ">
                               <p className="text-[1rem] pt-3  font-serif ">
                                 {product.productName}
                               </p>
@@ -70,9 +71,9 @@ function OrdersManagment() {
                     <div>
                       {items.products.map((product) => {
                         return (
-                          <div>
+                          <div className="">
                             <div className="text-lg  font-serif">
-                              <div className=" px-14  h-[5rem] ">
+                              <div className=" px-14   h-[5rem] ">
                                 <p className="text-xl pt-3  ">
                                   {product.quantity}
                                 </p>
@@ -82,29 +83,29 @@ function OrdersManagment() {
                         );
                       })}
                     </div>
-                    <div>
+                    <div className="">
                       <div className="  mt-7 space-x-4">
                         <div className="mt-1  ">
                           <p className="pt-2 px-12 text-lg  ">{`₹${items.totalPrice}`}</p>
                         </div>
                       </div>
                     </div>
-                    <div className=" w-44 mx-6">
-                      <div className="  mt-7  w-32 mx-4 bg-white">
-                        <div className="mt-1 px-16  ">
+                    <div className="  ">
+                      <div className="  mt-7  w-32 mx-4 ">
+                        <div className="mt-1 px-11 ">
                           <p className="pt-2  text-lg font-serif  ">{`${items.paymentMode}`}</p>
                         </div>
                       </div>
                     </div>
-                    <div className="text-md mt-7   font-serif w-36 ">
+                    <div className="text-md mt-7   font-serif w-36">
                       <div className="px-8">
                         {items.status==="cancelled"?(
                             <div className="h-7 w-20  rounded-lg bg-red-100">
                                 <p className="text-center pt-1 text-red-500 ">cancelled</p>
                             </div>
-                        ):( <select className="border" onChange={(e)=>dispatch(editOrderstatus({price:items.totalPrice,status:e.target.value}))} name="" id="">
+                        ):( <select className="border mt-2" onChange={(e)=>dispatch(editOrderstatus({price:items.totalPrice,status:e.target.value}))} name="" id="">
                             <option value="In Progress">{items.status}</option>
-                            <option value="Shipped">Shipped</option>
+                            <option value="Shipped" className="bg-slate-500">Shipped</option>
                             <option value="Delivered">Delivered</option>
                         </select>)}
                        

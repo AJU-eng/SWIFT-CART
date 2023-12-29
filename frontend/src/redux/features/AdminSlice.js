@@ -4,10 +4,13 @@ import products from "../../User/components/products";
 
 
 
+
 const initialDataState = {
   loading: false,
   users: [],
   categories: [],
+  TotalData:"",
+  sales:"",
   logged:"",
   Orders:[],
   Products: [],
@@ -174,6 +177,10 @@ export const blockCategory = createAsyncThunk(
 export const editOrderstatus=createAsyncThunk("admin/editOrderstatus",async(status)=>{
   const edit=axios.post("http://localhost:3000/admin/editOrderstatus",status)
 })
+export const getTotalData=createAsyncThunk("admin/getTotals",async()=>{
+  const res=await axios.get("http://localhost:3000/admin/getTotalData")
+  return res.data
+})
 export const unblocksCategory = createAsyncThunk(
   "admin/categoryunblock",
   async (id) => {
@@ -184,6 +191,18 @@ export const unblocksCategory = createAsyncThunk(
     return res.data;
   }
 );
+export const weeklySales=createAsyncThunk("admin/weekly",async()=>{
+  const data=await axios.get("http://localhost:3000/admin/sales")
+  return data.data
+})
+export const monthlySales=createAsyncThunk("admin/monthly",async()=>{
+  const data=await axios.get("http://localhost:3000/admin/montly_sales")
+  return data.data
+})
+export const YearlySales=createAsyncThunk("admin/yearly",async()=>{
+  const res=await axios.get("http://localhost:3000/admin/yearly")
+  return res.data
+})
 
 const adminSlice = createSlice({
   name: "admin",
@@ -278,6 +297,19 @@ const adminSlice = createSlice({
     })
     builder.addCase(getOrders.fulfilled,(state,action)=>{
       state.Orders=action.payload
+    })
+    builder.addCase(getTotalData.fulfilled,(state,action)=>{
+      state.TotalData=action.payload
+    })
+    builder.addCase(weeklySales.fulfilled,(state,action)=>{
+      state.sales=action.payload
+      console.log(action.payload);
+    })
+    builder.addCase(monthlySales.fulfilled,(state,action)=>{
+      state.sales=action.payload
+    })
+    builder.addCase(YearlySales.fulfilled,(state,action)=>{
+      state.sales=action.payload
     })
   },
 });
