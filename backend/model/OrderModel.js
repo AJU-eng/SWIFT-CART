@@ -1,39 +1,17 @@
 const mongoose = require("mongoose");
 
-const OrderSchema = mongoose.Schema({
-  Address: [
-    {
-      name: {
-        type: String,
-      },
-      email: {
-        type: String,
-      },
-      number: {
-        type: String,
-      },
-      state: {
-        type: String,
-      },
-      district: {
-        type: String,
-      },
-      pincode: {
-        type: String,
-      },
-      street: {
-        type: String,
-      },
+const OrderSchema = mongoose.Schema(
+  {
+    userId: {
+      type: mongoose.Types.ObjectId,
     },
-  ],
-  userId: {
-    type: mongoose.Types.ObjectId,
+    orders: [
+      {
+        type: Object,
+      },
+    ],
   },
-  products: [
-    {
-      type:Object
-    },
-  ],
-});
+  
+);
 
 module.exports = mongoose.model("orders", OrderSchema);

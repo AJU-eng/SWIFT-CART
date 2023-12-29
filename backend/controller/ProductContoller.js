@@ -75,7 +75,10 @@ const deleteProduct = async (req, res) => {
 
 const editProduct = async (req, res) => {
   console.log(req.body);
-  const {id,name,stock,description,price}=req.body
+  const {id,name,stock,description,price,offer}=req.body
+  let offers=parseInt(offer)
+  console.log(offers);
+  
   const product=req.body
   console.log(req.files);
   let indexToUpdate=0;
@@ -95,7 +98,7 @@ const editProduct = async (req, res) => {
  }
  console.log(indexToUpdate+"===============i got the index");
    const {id,name,stock,description,price}=req.body
-   const updateObj={name,stock,description,price}
+   const updateObj={name,stock,description,price,offers}
    
      if (indexToUpdate>=0) {
        updateObj[`moreImage.${indexToUpdate}`]=req.files[0].filename
@@ -105,7 +108,8 @@ const editProduct = async (req, res) => {
    
  }
  else{
-  const EditProductsb=await ProductModel.findByIdAndUpdate({_id:id},{name:name,description:description,price:price,stock:stock},{new:true})
+  console.log("hello");
+  const EditProductsb=await ProductModel.findByIdAndUpdate({_id:id},{$set:{name:name,description:description,price:price,stock:stock,offer:offers}},{new:true})
   console.log(EditProductsb);
  }
  

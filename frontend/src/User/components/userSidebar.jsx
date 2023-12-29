@@ -98,7 +98,7 @@ function UserSideBar() {
                   <h1 className="text-lg mx-2 my-3  text-slate-500">Orders</h1>
                 </div>
                 </NavLink>
-                <NavLink to="category">
+                <NavLink to="address">
                   <div className="flex mx-9 flex-1">
                     <img src={Address} className="h-4 mt-4" alt="" />
                     <h1 className="text-lg mx-2 my-3 text-slate-500">

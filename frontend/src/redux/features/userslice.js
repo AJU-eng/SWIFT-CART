@@ -9,6 +9,7 @@ const initialUserState = {
   user: "",
   err: "",
   online:"",
+  Address:"",
   userData: "",
   Orders: [],
   AuthError:"",
@@ -277,6 +278,10 @@ export const userLogin = createAsyncThunk(
     }
   }
 );
+export const getAddress=createAsyncThunk("user/address",async()=>{
+  const data=await axios.get("http://localhost:3000/user/address")
+  return data.data
+})
 export const decrementProduct=createAsyncThunk("user/decrement",async(name)=>{
   const hel=await axios.patch("http://localhost:3000/user/decrement",name)
   return hel.data
@@ -396,6 +401,9 @@ const userSlice = createSlice({
     //  builder.addCase()
     builder.addCase(onlinePayments.fulfilled,(state,action)=>{
       state.online=action.payload
+    })
+    builder.addCase(getAddress.fulfilled,(state,action)=>{
+      state.Address=action.payload
     })
   },
 });

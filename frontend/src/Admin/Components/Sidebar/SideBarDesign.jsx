@@ -69,10 +69,12 @@ function SideBarDesign() {
               <h1 className="text-xs mx-6 my-5 flex-1 text-slate-600">
                 MAIN MENU
               </h1>
+              <NavLink to="Dash">
               <div className="flex mx-9 flex-1">
                 <img src={home} alt="" />
                 <h1 className="text-sm mx-2   text-slate-500">Dashboard</h1>
               </div>
+              </NavLink>
               <NavLink to="orders">
               <div className="flex mx-9 flex-1">
                 <img src={cart} alt="" />
@@ -103,12 +105,12 @@ function SideBarDesign() {
                   </h1>
                 </div>
               </NavLink>
-              <div className="flex mx-9 flex-1">
+              {/* <div className="flex mx-9 flex-1">
                 <img src={transaction} alt="" />
                 <h1 className="text-sm mx-2 my-3 text-slate-500">
                   Transaction
                 </h1>
-              </div>
+              </div> */}
             </div>
 
             <div className="font-serif flex flex-col">
@@ -134,22 +136,22 @@ function SideBarDesign() {
             </div>
             <div className="font-serif flex flex-col">
               <h1 className="text-xs mx-6 my-5 flex-1 text-slate-500">ADMIN</h1>
-              <div className="flex mx-9 flex-1">
+              {/* <div className="flex mx-9 flex-1">
                 <img src={Add} alt="" />
                 <h1 className="text-sm mx-2   text-slate-500">Manage Admins</h1>
-              </div>
+              </div> */}
               <div className="flex mx-9 flex-1">
                 <img src={products} alt="" />
-                <h1 className="text-sm mx-2 my-4   text-slate-500">
+                <h1 className="text-sm mx-2    text-slate-500">
                   Add Banner
                 </h1>
               </div>
              
                 <div
-                  className="flex mx-10 flex-1"
+                  className="flex mx-10 flex-1 my-2"
                   onClick={handleLogout}
                 >
-                  <HiOutlineLogout className="mt-1" size={20} color="gray" />
+                  <HiOutlineLogout className="mt-1 " size={20} color="gray" />
                   <h1 className="text-md mx-2    text-slate-500">Logout</h1>
                 </div>
              

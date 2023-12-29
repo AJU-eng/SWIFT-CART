@@ -16,6 +16,8 @@ function ProductsDetailPage() {
   const nav = useNavigate();
   const dispatch = useDispatch();
   const product = useSelector((state) => state.user.SingleProduct);
+ let price
+  const productPrice=useSelector((state)=>state.user.SingleProduct.offer)
   const Loading = useSelector((state) => state.user.loading);
   // Inside your component function
   const [isImageHovered, setIsImageHovered] = useState(false);
@@ -36,6 +38,12 @@ function ProductsDetailPage() {
     // Update currentImage when product data is available
     if (product && product.moreImage && product.moreImage.length > 0) {
       setCurrentImage(`http://localhost:3000/images/${product.moreImage[0]}`);
+    }
+    if (productPrice) {
+      price=productPrice
+    }
+    else{
+      price=product.price
     }
   }, [product]);
 
@@ -138,7 +146,15 @@ function ProductsDetailPage() {
                   {product.name}
                 </h2>
 
-                <h2 className="mx-1 text-3xl font-serif mt-5">{`₹${product.price}`}</h2>
+                {product.offer ? (
+                  <h2 className="mx-1 text-2xl text-gray-500 line-through font-serif mt-4">{`₹${product.price}`}</h2>
+                ) : (
+                  <h2 className="mx-1 text-3xl font-serif mt-4">{`₹${product.price}`}</h2>
+                )}
+           
+                {product.offer && (
+                  <h2 className="mx-1 text-3xl font-serif mt-2">{`₹${product.offer}`}</h2>
+                )}
                 {product.description && (
                   <div className="mx-1 mt-3">
                     <h3 className="text-lg font-serif">About this item</h3>
@@ -166,13 +182,27 @@ function ProductsDetailPage() {
                       if (error === "not logined") {
                         nav("/login");
                       } else {
-                        dispatch(
-                          addToCart({
-                            ProductName: product.name,
-                            Price: product.price,
-                            ProductImage: product.moreImage[0],
-                          })
-                        );
+                        if (product.offer) {
+                          dispatch(
+                            addToCart({
+                              ProductName: product.name,
+                              Price:product.offer,
+                              ProductImage: product.moreImage[0],
+                              
+                            })
+                          );
+                        }
+                        else{
+                          dispatch(
+                            addToCart({
+                              ProductName: product.name,
+                              Price:product.price,
+                              ProductImage: product.moreImage[0],
+                              
+                            })
+                          );
+                        }
+                       
                         toast.success("Great Choice ! Item added to Cart");
                       }
                     }}
