@@ -40,7 +40,7 @@ function EditProduct() {
       setDescription(ProductEdit.description);
       setStock(ProductEdit.stock);
       setOffer(ProductEdit.offer)
-      setCategory(ProductEdit.Category.name);
+      // setCategory(ProductEdit.Category.name);
       setfetchedImages(ProductEdit.moreImage);
     }
   }, [ProductEdit]);

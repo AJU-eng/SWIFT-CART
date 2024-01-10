@@ -30,7 +30,7 @@ import Cart from "./User/components/Cart";
 import SIdebarRoutes from "./User/components/SIdebarRoutes";
 import Checkout from "./User/components/Checkout";
 import OrderSucessPage from "./User/components/OrderSucessPage";
-
+import OrderDetails from "./User/components/OrderDetails";
 axios.defaults.withCredentials = true;
 
 function App() {
@@ -62,6 +62,7 @@ function App() {
             <Route path="/otpForgetPassword" element={<ForgetOtp />} />
             <Route path="/resetPass" element={<ResetPassword />} />
             <Route path="/sucesPage" element={<VerificationPage />} />
+           
           </Routes>
         </BrowserRouter>
       </SkeletonTheme>

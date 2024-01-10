@@ -1,20 +1,22 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import products from "../../User/components/products";
-
-
-
+import { BiAccessibility } from "react-icons/bi";
 
 const initialDataState = {
   loading: false,
   users: [],
   categories: [],
-  TotalData:"",
-  sales:"",
-  logged:"",
-  Orders:[],
+  returns:"",
+  singleReturn:"",
+  Banner: "",
+  coupon: [],
+  TotalData: "",
+  sales: "",
+  logged: "",
+  Orders: [],
   Products: [],
-  CategoriesProduct:[],
+  CategoriesProduct: [],
   err: "",
   ProductToEdit: "",
   category_status: "",
@@ -37,10 +39,13 @@ export const findEditProduct = createAsyncThunk(
     return await res.data;
   }
 );
-export const CategoriesProductAdd=createAsyncThunk("admin/cateProduct",async()=>{
-  const res=await axios.get("http://localhost:3000/admin/getCateProduct")
-  return res.data
-})
+export const CategoriesProductAdd = createAsyncThunk(
+  "admin/cateProduct",
+  async () => {
+    const res = await axios.get("http://localhost:3000/admin/getCateProduct");
+    return res.data;
+  }
+);
 export const BlockUsers = createAsyncThunk(
   "admin/BlockUser",
   async (id, { rejectWithValue }) => {
@@ -68,6 +73,13 @@ export const UnblockUsers = createAsyncThunk(
     }
   }
 );
+export const getCouponCodesAdmin = createAsyncThunk(
+  "admin/getCoupon",
+  async () => {
+    const res = await axios.get("http://localhost:3000/admin/getCoupon");
+    return res.data;
+  }
+);
 
 export const DeleteUser = createAsyncThunk(
   "admin/Delete",
@@ -84,6 +96,10 @@ export const DeleteUser = createAsyncThunk(
     }
   }
 );
+export const singleReturns=createAsyncThunk("admin/singleReturns",async(data)=>{
+  const res=await axios.post("http://localhost:3000/admin/singleReturn",data)
+  return res.data
+})
 export const GetProductsAdmin = createAsyncThunk("user/products", async () => {
   const res = await axios.get("http://localhost:3000/user/getProducts");
   return res.data;
@@ -149,15 +165,15 @@ export const DeleteProduct = createAsyncThunk(
   }
 );
 
-export  const adminLogged=createAsyncThunk("admin/logged",async()=>{
-  const adminLog=axios.get("http://localhost:3000/admin/adminLogged")
-  return (await adminLog).data
-})
+export const adminLogged = createAsyncThunk("admin/logged", async () => {
+  const adminLog = axios.get("http://localhost:3000/admin/adminLogged");
+  return (await adminLog).data;
+});
 
-export const getOrders=createAsyncThunk("admin/getOrdersAdmin",async()=>{
-  const res=await axios.get("http://localhost:3000/admin/getOrder")
-  return res.data
-})
+export const getOrders = createAsyncThunk("admin/getOrdersAdmin", async () => {
+  const res = await axios.get("http://localhost:3000/admin/getOrder");
+  return res.data;
+});
 export const AddProductspo = createAsyncThunk(
   "admin/addProducts",
   async (formData, { rejectWithValue }) => {
@@ -174,13 +190,20 @@ export const blockCategory = createAsyncThunk(
     return res.data;
   }
 );
-export const editOrderstatus=createAsyncThunk("admin/editOrderstatus",async(status)=>{
-  const edit=axios.post("http://localhost:3000/admin/editOrderstatus",status)
-})
-export const getTotalData=createAsyncThunk("admin/getTotals",async()=>{
-  const res=await axios.get("http://localhost:3000/admin/getTotalData")
-  return res.data
-})
+export const editOrderstatus = createAsyncThunk(
+  "admin/editOrderstatus",
+  async (status) => {
+    const edit = axios.post(
+      "http://localhost:3000/admin/editOrderstatus",
+      status
+    );
+  }
+);
+export const getTotalData = createAsyncThunk("admin/getTotals", async () => {
+  const res = await axios.get("http://localhost:3000/admin/getTotalData");
+  return res.data;
+});
+
 export const unblocksCategory = createAsyncThunk(
   "admin/categoryunblock",
   async (id) => {
@@ -191,19 +214,68 @@ export const unblocksCategory = createAsyncThunk(
     return res.data;
   }
 );
-export const weeklySales=createAsyncThunk("admin/weekly",async()=>{
-  const data=await axios.get("http://localhost:3000/admin/sales")
-  return data.data
+export const weeklySales = createAsyncThunk("admin/weekly", async () => {
+  const data = await axios.get("http://localhost:3000/admin/sales");
+  return data.data;
+});
+export const monthlySales = createAsyncThunk("admin/monthly", async () => {
+  const data = await axios.get("http://localhost:3000/admin/montly_sales");
+  return data.data;
+});
+export const YearlySales = createAsyncThunk("admin/yearly", async () => {
+  const res = await axios.get("http://localhost:3000/admin/yearly");
+  return res.data;
+});
+export const AddBanner = createAsyncThunk("admin/bannerAdd", async (data) => {
+  const res = await axios.post("http://localhost:3000/admin/BannerAdd", data);
+  return res.data;
+});
+export const addCoupon = createAsyncThunk("admin/addCoupon", async (data) => {
+  console.log(data);
+  const res = await axios.post("http://localhost:3000/admin/addCoupon", data);
+  return res.data;
+});
+
+export const BlockCoupon = createAsyncThunk(
+  "admin/couponBlock",
+  async (data) => {
+    const res = await axios.post(
+      "http://localhost:3000/admin/couponBlock",
+      data
+    );
+    return res.data;
+  }
+);
+export const getBanners=createAsyncThunk("admin/getBanner",async()=>{
+  
+    
+    const res=await axios.get( "http://localhost:3000/admin/getBanner")
+    return res.data
+  
 })
-export const monthlySales=createAsyncThunk("admin/monthly",async()=>{
-  const data=await axios.get("http://localhost:3000/admin/montly_sales")
-  return data.data
+export const getReturns=createAsyncThunk("admin/returns",async()=>{
+  const res=await axios.get("http://localhost:3000/admin/getReturn")
+  return res.data
 })
-export const YearlySales=createAsyncThunk("admin/yearly",async()=>{
-  const res=await axios.get("http://localhost:3000/admin/yearly")
+export const unBlockCoupon = createAsyncThunk(
+  "admin/unBlockCoupon",
+  async (data) => {
+    const res = await axios.post(
+      "http://localhost:3000/admin/couponunBlock",
+      data
+    );
+    return res.data;
+  }
+);
+export const deleteBanners=createAsyncThunk("admin/deleteBanner",async(id)=>{
+  const res=await axios.post("http://localhost:3000/admin/deleteBanner",id)
   return res.data
 })
 
+export const approveReturns=createAsyncThunk("admin/approveReturn",async(data)=>{
+   const res=await axios.post("http://localhost:3000/admin/approveReturn",data)
+   
+})
 const adminSlice = createSlice({
   name: "admin",
   initialState: { ...initialDataState },
@@ -288,28 +360,67 @@ const adminSlice = createSlice({
           "=============================redux"
       );
     });
-    builder.addCase(adminLogged.fulfilled,(state,action)=>{
-      state.logged=action.payload
-      console.log(state.logged+"===============logged slice");
-    })
-    builder.addCase(CategoriesProductAdd.fulfilled,(state,action)=>{
-      state.CategoriesProduct=action.payload
-    })
-    builder.addCase(getOrders.fulfilled,(state,action)=>{
-      state.Orders=action.payload
-    })
-    builder.addCase(getTotalData.fulfilled,(state,action)=>{
-      state.TotalData=action.payload
-    })
-    builder.addCase(weeklySales.fulfilled,(state,action)=>{
-      state.sales=action.payload
+    builder.addCase(adminLogged.fulfilled, (state, action) => {
+      state.logged = action.payload;
+      console.log(state.logged + "===============logged slice");
+    });
+    builder.addCase(CategoriesProductAdd.fulfilled, (state, action) => {
+      state.CategoriesProduct = action.payload;
+    });
+    builder.addCase(getOrders.fulfilled, (state, action) => {
+      state.Orders = action.payload;
+    });
+    builder.addCase(getTotalData.fulfilled, (state, action) => {
+      state.TotalData = action.payload;
+    });
+    builder.addCase(weeklySales.fulfilled, (state, action) => {
+      state.sales = action.payload;
       console.log(action.payload);
+    });
+    builder.addCase(monthlySales.fulfilled, (state, action) => {
+      state.sales = action.payload;
+    });
+    builder.addCase(YearlySales.fulfilled, (state, action) => {
+      state.sales = action.payload;
+    });
+    builder.addCase(getCouponCodesAdmin.fulfilled, (state, action) => {
+      state.coupon = action.payload;
+    });
+    builder.addCase(BlockCoupon.fulfilled, (state, action) => {
+      const blockCoupon = state.coupon.map((item) => {
+        if (item._id === action.payload._id) {
+          item.status = action.payload.status;
+        }
+        return item;
+      });
+      console.log(blockCoupon);
+      state.coupon = blockCoupon;
+    });
+    builder.addCase(unBlockCoupon.fulfilled, (state, action) => {
+      const unblock = state.coupon.map((item) => {
+        if (item._id === action.payload._id) {
+          item.status = action.payload.status;
+        }
+        return item;
+      });
+      state.coupon = unblock;
+    });
+    builder.addCase(AddBanner.fulfilled, (state, action) => {
+      state.Banner = action.payload;
+    });
+    builder.addCase(getBanners.fulfilled,(state,action)=>{
+      state.Banner=action.payload
     })
-    builder.addCase(monthlySales.fulfilled,(state,action)=>{
-      state.sales=action.payload
+    builder.addCase(deleteBanners.fulfilled,(state,action)=>{
+      state.Banner=state.Banner.filter((item)=>{
+        item._id!==action.payload._id
+      })
     })
-    builder.addCase(YearlySales.fulfilled,(state,action)=>{
-      state.sales=action.payload
+    builder.addCase(getReturns.fulfilled,(state,action)=>{
+      state.returns=action.payload
+    })
+    builder.addCase(singleReturns.fulfilled,(state,action)=>{
+      state.returns=action.payload
     })
   },
 });

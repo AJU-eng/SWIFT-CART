@@ -30,48 +30,7 @@ const deleteProduct = async (req, res) => {
   console.log(data);
   res.status(200).send(data)
 };
-// const editProduct = async (req, res) => {
-//   console.log(req.body);
-//   const product=req.body
-//   console.log(req.files);
-//   console.log(Array.isArray(req.files));
-//   let indexToUpdate;
-//   console.log(req.files.length);
-//  if( req.files.length==0)
-//  {
 
-//    const numberOfImages = Object.keys(product).filter((key) =>
-//      key.startsWith("image")
-//    ).length;
-//   console.log(numberOfImages);
-//   for (let i = 0; i < numberOfImages; i++) {
-//    const imageKey = `image${i}`;
-//    if (!(imageKey in product)) {
-//      console.log(`Missing image at index ${i}`);
-//      indexToUpdate=i
-//      break
-//    }
-//  }
-//  }
-// console.log(indexToUpdate+"===============i got the index");
-//   // const {id,name,stock,description,price}=req.body
-//   // const updateObj={name,stock,description,price}
-  
-//   //   if (indexToUpdate>=0) {
-//   //     updateObj[`moreImage.${indexToUpdate}`]=req.files[0].filename
-//   //   }
-//   //   else{
-//   //     updateObj.name=name;
-//   //     updateObj.stock=stock,
-//   //     updateObj.description=description;
-//   //     updateObj.price=price
-//   //   }
-//   //   const editProduct=await ProductModel.findByIdAndUpdate({_id:id},{$set:updateObj},{new:true})
-//   //   console.log(editProduct);  
-  
- 
-
-// };
 
 const editProduct = async (req, res) => {
   console.log(req.body);

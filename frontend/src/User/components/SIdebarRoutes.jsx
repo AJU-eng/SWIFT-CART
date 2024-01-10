@@ -5,7 +5,10 @@ import UserProfile from './userProfile';
 import Wishlist from './Wishlist';
 import Orders from './Orders';
 import AddressManagment from './AddressManagment';
-
+import OrderDetails from './OrderDetails';
+// import OrderHistory from './OrderHistroy';
+import ReturnModal from "../components/requestModal"
+import WalletManagent from './WalletManagent';
 function SIdebarRoutes() {
   return (
     <RootLayoutUser>
@@ -16,6 +19,10 @@ function SIdebarRoutes() {
           <Route path='user' element={<UserProfile/>}/>
           <Route path='Orders' element={<Orders/>}/>
           <Route path='address' element={<AddressManagment/>}/>
+          {/* <Route path='orderHistory' element={<OrderHistory/>}/> */}
+          <Route path="/Orders/orderDetail/:id" element={<OrderDetails/>}/>
+          <Route path='return' element={<ReturnModal/>}/>
+          <Route path='wallet' element={<WalletManagent/>}/>
         </Route>
 
         

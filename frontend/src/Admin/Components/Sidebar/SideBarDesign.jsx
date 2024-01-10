@@ -91,17 +91,27 @@ function SideBarDesign() {
                   </h1>
                 </div>
               </NavLink>
+              <NavLink to="coupon">
               <div className="flex mx-9  flex-1">
                 <img src={coupon} alt="" />
                 <h1 className="text-sm mx-2 my-3  text-slate-500">
                   Coupon code
                 </h1>
               </div>
+              </NavLink>
               <NavLink to="category">
                 <div className="flex mx-9 flex-1">
                   <img src={category} alt="" />
                   <h1 className="text-sm mx-2 my-3 text-slate-500">
                     Categories
+                  </h1>
+                </div>
+              </NavLink>
+              <NavLink to="return">
+                <div className="flex mx-9 flex-1">
+                  <img src={category} alt="" />
+                  <h1 className="text-sm mx-2 my-3 text-slate-500">
+                    Return Requests
                   </h1>
                 </div>
               </NavLink>
@@ -140,13 +150,14 @@ function SideBarDesign() {
                 <img src={Add} alt="" />
                 <h1 className="text-sm mx-2   text-slate-500">Manage Admins</h1>
               </div> */}
+              <NavLink to="Banner">
               <div className="flex mx-9 flex-1">
                 <img src={products} alt="" />
                 <h1 className="text-sm mx-2    text-slate-500">
                   Add Banner
                 </h1>
               </div>
-             
+              </NavLink>
                 <div
                   className="flex mx-10 flex-1 my-2"
                   onClick={handleLogout}

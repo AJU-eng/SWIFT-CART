@@ -7,14 +7,20 @@ import { MdExposureZero } from "react-icons/md";
 const initialUserState = {
   loading: false,
   user: "",
+  Wallet:"",
+  Banner: [],
   err: "",
-  online:"",
-  Address:"",
+  singleOrders: "",
+  orrderHistory: [],
+  cartStock: "",
+  online: "",
+  Address: "",
   userData: "",
+  coupon: "",
   Orders: [],
-  AuthError:"",
-  Cart: [],
-  OrderedData:[],
+  AuthError: "",
+  Cart: "",
+  OrderedData: [],
   WishList: null,
   quantity: 1,
   otp_status: "",
@@ -45,10 +51,16 @@ export const registerUser = createAsyncThunk(
     }
   }
 );
-export const cancelOrder=createAsyncThunk("user/cancelOrder",async(price)=>{
-  const res=await axios.post("http://localhost:3000/user/caancelOrder",price)
-  return res.data
-})
+export const cancelOrder = createAsyncThunk(
+  "user/cancelOrder",
+  async (price) => {
+    const res = await axios.post(
+      "http://localhost:3000/user/caancelOrder",
+      price
+    );
+    return res.data;
+  }
+);
 export const passwordReset = createAsyncThunk(
   "user/resetPassword",
   async (upData) => {
@@ -82,7 +94,10 @@ export const findProduct = createAsyncThunk("user/findProduct", async (id) => {
   console.log(res.data);
   return res.data;
 });
-
+export const getBanner = createAsyncThunk("user/getBanner", async () => {
+  const res = await axios.get("http://localhost:3000/admin/getBanner");
+  return res.data;
+});
 export const GetProducts = createAsyncThunk("user/products", async () => {
   const res = await axios.get("http://localhost:3000/user/getProducts");
   return res.data;
@@ -117,6 +132,23 @@ export const verifyForgetOtps = createAsyncThunk(
       otp_sec
     );
     return res.data;
+  }
+);
+export const singleOrder = createAsyncThunk(
+  "user/singleOrder",
+  async (data) => {
+    const res = await axios.post(
+      "http://localhost:3000/user/singleOrder",
+      data
+    );
+    return res.data;
+  }
+);
+
+export const returnOrder = createAsyncThunk(
+  "user/returnOrder",
+  async (data) => {
+    const res = await axios.post("http://localhost:3000/user/return", data);
   }
 );
 export const resendOtps = createAsyncThunk(
@@ -196,9 +228,8 @@ export const editUserData = createAsyncThunk(
 );
 export const addToCart = createAsyncThunk(
   "user/addToCart",
-  async (Products,{rejectWithValue}) => {
+  async (Products, { rejectWithValue }) => {
     try {
-      
       const data = await axios.post(
         "http://localhost:3000/user/addToCart",
         Products,
@@ -206,18 +237,22 @@ export const addToCart = createAsyncThunk(
       );
       return data.data;
     } catch (error) {
-      return rejectWithValue(error.response.data)
+      return rejectWithValue(error.response.data);
     }
   }
 );
 export const increment = createAsyncThunk(
   "user/incrementProduct",
-  async (productName) => {
-    const res = await axios.post(
-      "http://localhost:3000/user/incrementProduct",
-      productName
-    );
-    return res.data;
+  async (productName, { rejectWithValue }) => {
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/user/incrementProduct",
+        productName
+      );
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
   }
 );
 export const placeOrders = createAsyncThunk(
@@ -230,22 +265,27 @@ export const placeOrders = createAsyncThunk(
     return res.data;
   }
 );
-export const OrderedDataAction=createAsyncThunk("user/getOrders",async()=>{
-  const res=await axios.get("http://localhost:3000/user/getOrder")
-  return res.data
-})
-export const AddToWish = createAsyncThunk("user/wish", async (productName,{rejectWithValue}) => {
-  try {
-    
-    const res = await axios.post(
-      "http://localhost:3000/user/wishlist",
-      productName
-    );
+export const OrderedDataAction = createAsyncThunk(
+  "user/getOrders",
+  async () => {
+    const res = await axios.get("http://localhost:3000/user/getOrder");
     return res.data;
-  } catch (error) {
-    return rejectWithValue(error.response.data)
   }
-});
+);
+export const AddToWish = createAsyncThunk(
+  "user/wish",
+  async (productName, { rejectWithValue }) => {
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/user/wishlist",
+        productName
+      );
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
 export const makeOrders = createAsyncThunk("user/order", async (products) => {
   const res = await axios.post(
     "http://localhost:3000/user/makeOrder",
@@ -253,14 +293,25 @@ export const makeOrders = createAsyncThunk("user/order", async (products) => {
   );
   return res.data;
 });
+
+export const getWalletDetails=createAsyncThunk("user/getWalletDetails",async()=>{
+   const res=await axios.get("http://localhost:3000/user/getWallet")
+   return res.data
+})
 export const userDetail = createAsyncThunk("user/userDetails", async () => {
   const res = await axios.get("http://localhost:3000/user/userData");
   return res.data;
 });
-export const onlinePayments=createAsyncThunk("user/onlinePay",async(data)=>{
-  const res=await axios.post("http://localhost:3000/user/onlinePayment",data)
-  return res.data
-})
+export const onlinePayments = createAsyncThunk(
+  "user/onlinePay",
+  async (data) => {
+    const res = await axios.post(
+      "http://localhost:3000/user/onlinePayment",
+      data
+    );
+    return res.data;
+  }
+);
 export const userLogin = createAsyncThunk(
   "user/login",
   async (hello, { rejectWithValue }) => {
@@ -278,15 +329,29 @@ export const userLogin = createAsyncThunk(
     }
   }
 );
-export const getAddress=createAsyncThunk("user/address",async()=>{
-  const data=await axios.get("http://localhost:3000/user/address")
-  return data.data
-})
-export const decrementProduct=createAsyncThunk("user/decrement",async(name)=>{
-  const hel=await axios.patch("http://localhost:3000/user/decrement",name)
-  return hel.data
-})
+export const getAddress = createAsyncThunk("user/address", async () => {
+  const data = await axios.get("http://localhost:3000/user/address");
+  return data.data;
+});
+export const decrementProduct = createAsyncThunk(
+  "user/decrement",
+  async (name) => {
+    const hel = await axios.patch("http://localhost:3000/user/decrement", name);
+    return hel.data;
+  }
+);
+export const getCouponCodes = createAsyncThunk("user/getCoupon", async () => {
+  const res = await axios.get("http://localhost:3000/admin/getCoupon");
+  return res.data;
+});
 
+export const getOrderHistory = createAsyncThunk(
+  "user/orderHistory",
+  async () => {
+    const res = await axios.get("http://localhost:3000/user/orderHistory");
+    return res.data;
+  }
+);
 const userSlice = createSlice({
   name: "user",
   initialState: { ...initialUserState },
@@ -368,6 +433,9 @@ const userSlice = createSlice({
       state.Cart = action.payload;
       console.log(state.Cart + "===========redux quantity");
     });
+    builder.addCase(increment.rejected, (state, action) => {
+      state.cartStock = action.payload;
+    });
     builder.addCase(makeOrders.fulfilled, (state, action) => {
       state.Orders = action.payload;
     });
@@ -376,34 +444,49 @@ const userSlice = createSlice({
     });
     builder.addCase(deleteCartProduct.fulfilled, (state, action) => {
       // console.log(typeof action.payload);
-      state.Cart=action.payload
+      state.Cart = action.payload;
     });
-    builder.addCase(decrementProduct.fulfilled,(state,action)=>{
-      state.Cart=action.payload
+    builder.addCase(decrementProduct.fulfilled, (state, action) => {
+      state.Cart = action.payload;
       console.log(state.Cart);
-    })
-     builder.addCase(deleteWishlist.fulfilled,(state,action)=>{
-      state.WishList=action.payload
-     })
-     builder.addCase(OrderedDataAction.fulfilled,(state,action)=>{
-      state.OrderedData=action.payload
-     })
-     builder.addCase(cancelOrder.fulfilled,(state,action)=>{
-      state.OrderedData=action.payload
-     })
-     builder.addCase(addToCart.rejected,(state,action)=>{
+    });
+    builder.addCase(deleteWishlist.fulfilled, (state, action) => {
+      state.WishList = action.payload;
+    });
+    builder.addCase(OrderedDataAction.fulfilled, (state, action) => {
+      state.OrderedData = action.payload;
+    });
+    builder.addCase(cancelOrder.fulfilled, (state, action) => {
+      state.OrderedData = action.payload;
+    });
+    builder.addCase(addToCart.rejected, (state, action) => {
       console.log(action.payload);
-      state.AuthError=action.payload
-     })
-     builder.addCase(AddToWish.rejected,(state,action)=>{
-      state.AuthError=action.payload
-     })
+      state.AuthError = action.payload;
+    });
+    builder.addCase(AddToWish.rejected, (state, action) => {
+      state.AuthError = action.payload;
+    });
     //  builder.addCase()
-    builder.addCase(onlinePayments.fulfilled,(state,action)=>{
-      state.online=action.payload
-    })
-    builder.addCase(getAddress.fulfilled,(state,action)=>{
-      state.Address=action.payload
+    builder.addCase(onlinePayments.fulfilled, (state, action) => {
+      state.online = action.payload;
+    });
+    builder.addCase(getAddress.fulfilled, (state, action) => {
+      state.Address = action.payload;
+    });
+    builder.addCase(getCouponCodes.fulfilled, (state, action) => {
+      state.coupon = action.payload;
+    });
+    builder.addCase(getOrderHistory.fulfilled, (state, action) => {
+      state.orrderHistory = action.payload;
+    });
+    builder.addCase(getBanner.fulfilled, (state, action) => {
+      state.Banner = action.payload;
+    });
+    builder.addCase(singleOrder.fulfilled, (state, action) => {
+      state.singleOrders = action.payload;
+    });
+    builder.addCase(getWalletDetails.fulfilled,(state,action)=>{
+      state.Wallet=action.payload
     })
   },
 });

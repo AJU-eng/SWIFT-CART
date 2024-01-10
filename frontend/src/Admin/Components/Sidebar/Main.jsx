@@ -13,6 +13,9 @@ import EditProduct from "../pages/EditProduct";
 import { Link } from "react-router-dom";
 import Authentication from "../../../User/components/Authentication";
 import OrdersManagment from "../pages/OrderManagement";
+import CouponManagement from "../pages/CouponManagement";
+import BannerManagement from "../pages/BannerManagement";
+import ReturnManagment from "../pages/ReturnManagment";
 
 // function Main() {
 //   return (
@@ -44,11 +47,14 @@ function Main() {
           <Route path="user" element={<UserManagement />} />
           <Route path="category" element={<CateogryManagment />} />
           <Route path="Dash" element={<Dashboard/>}/>
+          <Route path="coupon" element={<CouponManagement/>}/>
           <Route path="products" element={<ProductManagement/>}/>
           <Route path="addProducts" element={<AddProducts/>}/>
           <Route path="orders" element={<OrdersManagment/>}/>
+          <Route  path="Banner" element={<BannerManagement/>}/>
           <Route path="products/editProducts/:id" element={<EditProduct/>}/>
           <Route path="editCategory/:id" element={<EditCategory/>}/>
+          <Route path="return" element={<ReturnManagment/>}/>
         </Route>
 
         
