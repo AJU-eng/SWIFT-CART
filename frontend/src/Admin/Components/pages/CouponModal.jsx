@@ -7,15 +7,25 @@ function CouponModal({ visible, onClose }) {
   const [code, setCode] = useState("");
   const [value, setValue] = useState("");
   const [expires, setExpires] = useState("");
+  const [minPurchaseAmount, setminPurchaseAmount] = useState(0);
+  const [maxPurchaseAmount, setmaxPurchaseAmount] = useState(0);
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(addCoupon({ couponCode: code, Date: expires, value: value }));
+    dispatch(
+      addCoupon({
+        couponCode: code,
+        Date: expires,
+        value: value,
+        minPurchaseAmount: minPurchaseAmount,
+        maxPurchaseAmount: maxPurchaseAmount,
+      })
+    );
   };
 
   return (
     visible && (
       <div className="fixed inset-0 bg-black bg-opacity-10 backdrop-blur-sm flex justify-center items-center ">
-        <div className="bg-white h-[17rem] w-[20rem] px-3 py-3 rounded-lg">
+        <div className="bg-white  w-[20rem] px-3 py-3 rounded-lg">
           <form action="" onSubmit={handleSubmit}>
             <p className="text-sm text-slate-600 font-medium p-3">
               COUPON CODE
@@ -23,6 +33,22 @@ function CouponModal({ visible, onClose }) {
             <input
               type="text"
               onChange={(e) => setCode(e.target.value)}
+              className="border mx-4"
+            />
+            <p className="text-sm text-slate-600 font-medium p-3">
+              MIN PURCHASE AMOUNT
+            </p>
+            <input
+              type="number"
+              onChange={(e) => setminPurchaseAmount(e.target.value)}
+              className="border mx-4"
+            />
+            <p className="text-sm text-slate-600 font-medium p-3">
+              MAX PURCHASE AMOUNT
+            </p>
+            <input
+              type="number"
+              onChange={(e) => setmaxPurchaseAmount(e.target.value)}
               className="border mx-4"
             />
             <p className="text-sm font-medium text-slate-600 p-3">

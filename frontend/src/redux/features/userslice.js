@@ -342,6 +342,7 @@ export const decrementProduct = createAsyncThunk(
 );
 export const getCouponCodes = createAsyncThunk("user/getCoupon", async () => {
   const res = await axios.get("http://localhost:3000/admin/getCoupon");
+  console.log(res.data);
   return res.data;
 });
 
@@ -474,7 +475,9 @@ const userSlice = createSlice({
       state.Address = action.payload;
     });
     builder.addCase(getCouponCodes.fulfilled, (state, action) => {
+      console.log(action.payload);
       state.coupon = action.payload;
+      // console.log(state.coupon);
     });
     builder.addCase(getOrderHistory.fulfilled, (state, action) => {
       state.orrderHistory = action.payload;
