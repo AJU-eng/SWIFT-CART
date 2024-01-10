@@ -11,7 +11,7 @@ import {
   makeOrders,
 } from "../../redux/features/userslice";
 import { useNavigate } from "react-router";
-import { getCouponCodesAdmin } from "../../redux/features/AdminSlice";
+import { getCouponCodes } from "../../redux/features/userslice";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 function Cart() {
@@ -21,13 +21,16 @@ function Cart() {
   const quantity = useSelector((state) => state.user.quantity);
   const Orders = useSelector((state) => state.user.Orders);
   const stock = useSelector((state) => state.cartStock);
+  const [discount, setDiscount] = useState(0);
+  const [displayedTotal, setDisplayedTotal] = useState(0);
+  const [couponError, setCouponError] = useState("");
   const [code, setCode] = useState("");
   const CouponCode = useSelector((state) => state.user.coupon);
   const nav = useNavigate();
 
   useEffect(() => {
     dispatch(getCart());
-    dispatch(getCouponCodesAdmin());
+    dispatch(getCouponCodes());
   }, [dispatch]);
 
   useEffect(() => {
@@ -37,22 +40,27 @@ function Cart() {
     if (CouponCode) {
       console.log(CouponCode);
     }
-   
-  }, [cartData]);
-if (stock) {
-  console.log(stock);
-}
+    updateDisplayedTotal();
+  }, [cartData, discount]);
+  if (stock) {
+    console.log(stock);
+  }
   const proceed = () => {
     if (cartData) {
       dispatch(
         makeOrders({
           products: cartData,
-          totalPrice: totalPrice(),
+          totalPrice: displayedTotal,
           status: "pending",
         })
       );
       nav("/checkout");
     }
+  };
+
+  const updateDisplayedTotal = () => {
+    const calculatedTotal = totalPrice();
+    setDisplayedTotal(calculatedTotal);
   };
 
   const totalPrice = () => {
@@ -63,19 +71,22 @@ if (stock) {
       }
     }
     // setTotal(sum)
-    return sum;
+    return sum - discount;
   };
 
-  let totals = totalPrice();
+  // let totals = totalPrice();
 
   const couponFunction = (code) => {
     // const total=totalPrice()
-    if (code) {
-      const data = CouponCode.find((i) => i.code === code);
-      console.log(totals - data.value);
-      totals = totals - data.value;
+    // console.log(CouponCode.minPurchaseAmount);
+    if (totalPrice() < CouponCode[0].minPurchaseAmount) {
+      console.log(totalPrice());
+      setCouponError(`Min Purchase Amount is ${CouponCode[0].minPurchaseAmount}`);
+    } else if (totalPrice() > CouponCode[0].maxPurchaseAmount) {
+      setCouponError(`Max Purchase Amount is ${CouponCode[0].maxPurchaseAmount}`);
     } else {
-      return totals;
+      const data = CouponCode.find((i) => i.code === code);
+      setDiscount(data.value);
     }
   };
   return (
@@ -177,7 +188,7 @@ if (stock) {
             <div className="mt-2">
               <div className="flex justify-around font-serif">
                 <p>Price({`${cartData && cartData.length} items`})</p>
-                <p>{totals}</p>
+                <p>{displayedTotal}</p>
               </div>
 
               <div className="flex justify-around">
@@ -209,7 +220,7 @@ if (stock) {
               </div>
             </div>
           </div>
-          {/* <div className="mt-5 bg-white rounded-md shadow-md h-36 mx-32 w-56 ">
+          <div className="mt-5 bg-white rounded-md shadow-md  mx-32 w-56 ">
             <p className="px-5 py-3 font-serif">Coupon Code</p>
             <input
               type="text"
@@ -218,14 +229,17 @@ if (stock) {
               placeholder="Enter  Code here..."
             />
             <br />
+            <p className="text-sm text-center pt-3 text-red-600">
+              {couponError}
+            </p>
             <button
               onClick={() => couponFunction(code)}
-              className="text-sm bg-blue-400 mt-6 mx-14 w-32 h-7 font-serif text-white rounded-md"
+              className="text-sm bg-blue-400 mt-6 mx-14 w-32 h-7 mb-5 font-serif text-white rounded-md"
             >
               {" "}
               Apply Coupon
             </button>
-          </div> */}
+          </div>
         </div>
       </div>
     </>

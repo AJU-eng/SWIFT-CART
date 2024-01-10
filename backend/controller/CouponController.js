@@ -1,12 +1,14 @@
 const CouponModel = require("../model/CouponModel");
 
 const AddCoupon = async (req, res) => {
-  const { couponCode, Date,value } = req.body;
+  const { couponCode, Date,value,minPurchaseAmount,maxPurchaseAmount } = req.body;
   console.log(couponCode);
   console.log(Date);
 
   const data = await CouponModel.create({
     code: couponCode,
+    minPurchaseAmount:minPurchaseAmount,
+    maxPurchaseAmount:maxPurchaseAmount,
     expirationDate: Date,
     value:parseInt(value),
     status:"Active"

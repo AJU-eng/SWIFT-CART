@@ -6,6 +6,7 @@ import iphone from "../components/product images/iphone 6/iphone13/iphone_13.jpg
 import { useDispatch, useSelector } from "react-redux";
 import {
   getAddress,
+  getWalletDetails,
   onlinePayments,
   placeOrders,
 } from "../../redux/features/userslice";
@@ -15,6 +16,8 @@ function Checkout() {
   const [Razorpay] = useRazorpay();
   const order = useSelector((state) => state.user.online);
   const [paymentMode, setPaymentmode] = useState("");
+  const walletBalance=useSelector((state)=>state.user.Wallet.Balance)
+  const [empty,setEmpty]=useState("")
   const nav = useNavigate();
   const dispatch = useDispatch();
   const products = useSelector((state) => state.user.Orders);
@@ -22,6 +25,7 @@ function Checkout() {
   const [addressEmail, setMail] = useState("");
   useEffect(() => {
     dispatch(getAddress());
+    dispatch(getWalletDetails())
   }, [dispatch]);
 
   useEffect(() => {
@@ -215,6 +219,7 @@ function Checkout() {
             </div>
           </div>
         </div>
+        <h1 className="flex justify-center mr-20 pt-5 text-red-600">{empty}</h1>
       </div>
       <div className="w-1/2 flex justify-center mt-10">
         <div className="w-80 h-72 bg-white shadow-md">
@@ -269,14 +274,20 @@ function Checkout() {
 
                   //  dispatch(onlinePayments({amount:products.totalPrice}))
                 } else {
-                  dispatch(
-                    placeOrders({
-                      products: products,
-                      paymentMode: paymentMode,
-                      AdressMail: addressEmail,
-                    })
-                  );
-                  nav("/orderSucess")
+                  if (walletBalance<products.totalPrice) {
+                    setEmpty("Insufficent Wallet Balance")
+                  }
+                  else{
+
+                    dispatch(
+                      placeOrders({
+                        products: products,
+                        paymentMode: paymentMode,
+                        AdressMail: addressEmail,
+                      })
+                    );
+                    nav("/orderSucess")
+                  }
                 }
               }}
               className="h-8  w-[6rem] mt-3 font-serif text-white shadow-md rounded-lg bg-blue-400 text-md"

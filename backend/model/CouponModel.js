@@ -8,6 +8,12 @@ const CouponSchema=mongoose.Schema({
     expirationDate:{
         type:Date
     },
+    minPurchaseAmount:{
+        type:Number
+    },
+    maxPurchaseAmount:{
+        type:Number
+    },
     value:{
      type:Number
     },
