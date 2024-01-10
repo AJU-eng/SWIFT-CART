@@ -3,9 +3,11 @@ const { generate, verifyOtp,loggedIn,logout, login, forgetPasswordOtp, verifyFor
 const { getProducts, findProduct } = require('../controller/ProductContoller')
 const { AddtoCart, getCartData, IncrementProduct, deleteCart, deleteCartData, DecrementProduct } = require('../controller/CartController')
 const { AddToList, getWishList, deleteWishlist } = require('../controller/WishListController')
-const { makeOrder, PlaceOrder, getOrder, cancelOrder, orderHistory, onlinePayment, salesReport } = require('../controller/OrderController')
+const { makeOrder, PlaceOrder, getOrder, cancelOrder, orderHistory, onlinePayment, salesReport, singleOrder } = require('../controller/OrderController')
 const auth=require("../Middleware/auth")
 const { addAddress, getAddresses } = require('../controller/AddressController')
+const { returnRequest } = require('../controller/returnController')
+const getWallet = require('../controller/WalletController')
 
 const router=express.Router()
 
@@ -39,5 +41,7 @@ router.patch("/editUser",auth,editUser)
 router.post("/forgetPasswordOtp",forgetPasswordOtp)
 router.post("/verifyForgetOtp",verifyForgetOtp)
 router.patch("/resetPassword",resetPassword)
-
+router.post("/singleOrder",singleOrder)
+router.post("/return",returnRequest)
+router.get("/getWallet",auth,getWallet)
 module.exports=router

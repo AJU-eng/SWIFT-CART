@@ -8,6 +8,10 @@ const AddressModel = require("../model/AddressModel");
 const userModel = require("../model/userModel");
 const easyinvoice = require("easyinvoice");
 const nodemailer = require("nodemailer");
+const pdfmake=require("pdfmake")
+const fs = require('fs');
+const WalletModel = require("../model/WalletModel");
+
 require("dotenv").config();
 const makeOrder = async (req, res) => {
   //   console.log(req.body);
@@ -58,19 +62,36 @@ const paymentVerify = (req, res) => {
 
 const PlaceOrder = async (req, res) => {
   const items = req.body.products.products;
-  // console.log();
-
+  console.log(req.body);
+  
   // // console.log(req.body.products.totalPrice);
-  let { products, paymentMode, AdressMail } = req.body;
-  products.paymentMode = paymentMode;
-  // console.log(products);
-  const dates = new Date();
-  let dateOnly = dates.toISOString().split("T")[0];
-  // console.log(dateOnly);
   const { user_id, iat } = jwt.decode(
     req.cookies.token,
     process.env.SECRET_KEY
   );
+  let { products, paymentMode, AdressMail } = req.body;
+  products.paymentMode = paymentMode;
+  if (paymentMode==="wallet") {
+    const date=new Date()
+    const _id=new Date().getTime()
+    let obj={
+      amount:req.body.products.totalPrice,
+      type:"debit",
+      Description:"product ordered",
+      Date:date,
+      id:_id
+    }
+    const dataAvailable=await WalletModel.findOne({userId:user_id})
+    if (dataAvailable) {
+      // const price=parseFloat()
+      const data=await WalletModel.findOneAndUpdate({userId:user_id},{$push:{wallet:obj},$inc:{Balance:-req.body.products.totalPrice}})
+      console.log(data);
+    }
+  }
+  // console.log(products);
+  const dates = new Date();
+  let dateOnly = dates.toISOString().split("T")[0];
+  // console.log(dateOnly);
   const specific = await ProductModel.findOne({ name: products.productName });
   // console.log(specific);
   products.products.map(async (product) => {
@@ -97,6 +118,8 @@ const PlaceOrder = async (req, res) => {
     });
     products.OrderedAt = dateOnly;
     products.Address = obj1;
+    const id=new Date().getTime()
+    products.OrderId=id
     const updateData = await OrderModel.findOneAndUpdate(
       { userId: user_id },
       { $push: { orders: products } },
@@ -246,6 +269,8 @@ const PlaceOrder = async (req, res) => {
     });
     products.Address = obj;
     products.OrderedAt = dateOnly;
+    const id=new Date().getTime()
+    products.OrderId=id
     // console.log(products.Address);
     const data = await OrderModel.create({
       userId: user_id,
@@ -435,13 +460,13 @@ const orderHistory = async (req, res) => {
     process.env.SECRET_KEY
   );
   console.log(user_id);
-  const data = await OrderModel.findOne({
-    userId: user_id,
-    "orders.$.status": "cancelled",
-  });
+  const pendingData = await OrderModel.aggregate([
+    { $unwind: "$orders" },
+    { $match: { "orders.status": "Delivered" } },
+  ]);
 
-  console.log(data);
-  res.send(data);
+  console.log(pendingData.length);
+  res.send(pendingData);
 };
 
 ///Sales report
@@ -558,6 +583,47 @@ const data=await OrderModel.aggregate([
 res.send(data)
 console.log(data);
 }
+
+const report=async(req,res)=>{
+  const {date}=req.body
+ const data=await OrderModel.aggregate([
+    { $unwind: "$orders" },
+    { $match: { "orders.OrderedAt": `${date}` } },
+  ]);
+  console.log(data);
+  function createPdfDefinition(data) {
+    // Modify this function to create a PDF structure based on your data
+    const content = data.map(order => ({
+      text: JSON.stringify(order, null, 2),
+      style: 'defaultStyle',
+    }));
+  
+    return {
+      content,
+      styles: {
+        defaultStyle: { fontSize: 12 },
+      },
+    };
+  }
+  const pdfDefinition = createPdfDefinition(data);
+  const pdfDocument = pdfmake.createPdfKitDocument(pdfDefinition);
+  const pdfFileName = 'orders_report.pdf';
+  await new Promise((resolve, reject) => {
+    pdfDocument.pipe(require('fs').createWriteStream(pdfFileName));
+    pdfDocument.end();
+    pdfDocument.on('finish', resolve);
+    pdfDocument.on('error', reject);
+  });
+  console.log(`PDF saved to ${pdfFileName}`);
+}
+
+const singleOrder=async(req,res)=>{
+  console.log(req.body);
+  const {_id}=req.body
+  const data=await OrderModel.aggregate([{$unwind:"$orders"},{$match:{"orders.OrderId":parseInt(_id)}}])
+  res.send(data)
+  console.log(data);
+}
 module.exports = {
   makeOrder,
   PlaceOrder,
@@ -570,5 +636,7 @@ module.exports = {
   paymentVerify,
   salesReport,
   monthly_sales,
-  yearlySales
+  yearlySales,
+  report,
+  singleOrder
 };

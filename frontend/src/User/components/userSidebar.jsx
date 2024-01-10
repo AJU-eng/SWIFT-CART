@@ -15,6 +15,10 @@ import profile from "../components/assets/Profile.svg";
 import WishList from "../components/assets/WishList.svg";
 import Orders from "../components/assets/Orders.svg";
 import history from "../components/assets/Orderhistory.svg";
+import { IoWalletOutline } from "react-icons/io5";
+import { MdOutlineLocalOffer } from "react-icons/md";
+
+
 import Address from "../components/assets/Address.svg";
 // import category from "./cateogry.svg";
 import { NavLink } from "react-router-dom";
@@ -84,11 +88,11 @@ function UserSideBar() {
                   </h1>
                 </div>
                 </NavLink>
-                <NavLink to="">
+                <NavLink to="wallet">
                   <div className="flex mx-9 flex-1">
-                    <img src={history} className="h-4 mt-3" alt="" />
+                    <IoWalletOutline size={21} className="mt-3" color="#475569"/>
                     <h1 className="text-lg mx-2 my-3 mt-2 text-slate-500">
-                      Order history
+                     Wallet
                     </h1>
                   </div>
                 </NavLink>
@@ -96,6 +100,12 @@ function UserSideBar() {
                 <div className="flex mx-9  flex-1">
                   <img src={Orders} className="h-4 mt-4" alt="" />
                   <h1 className="text-lg mx-2 my-3  text-slate-500">Orders</h1>
+                </div>
+                </NavLink>
+                <NavLink to="Orders">
+                <div className="flex mx-9  flex-1">
+                 <MdOutlineLocalOffer size={21} className="mt-4" color="#475569"/>
+                  <h1 className="text-lg mx-2 my-3  text-slate-500">Coupons</h1>
                 </div>
                 </NavLink>
                 <NavLink to="address">

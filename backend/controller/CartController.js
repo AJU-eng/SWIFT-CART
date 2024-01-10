@@ -72,7 +72,7 @@ const getCartData = async (req, res) => {
 
   const data = await CartModel.findOne({ userId: user_id });
   if (data) {
-    console.log(data.Products);
+    // console.log(data.Products);
     res.status(200).send(data.Products);
   }
 };
@@ -80,7 +80,7 @@ const getCartData = async (req, res) => {
 //Increment cart quantity
 const IncrementProduct = async (req, res) => {
   const { name } = req.body;
-
+try {
   const { user_id, iat } = jwt.decode(
     req.cookies.token,
     process.env.SECRET_KEY
@@ -103,14 +103,21 @@ const IncrementProduct = async (req, res) => {
         { new: true }
       );
 
-      console.log(data);
+      // console.log(data);
       res.send(data.Products);
     } else {
-      res.send(product.Products);
+      console.log(product.Products);
+      // res.send(product.Products);
+      throw new Error("stock limit reached")
     }
   } else {
     res.status(404).send("Product not found");
   }
+} catch (error) {
+  console.log(error.message);
+  res.status(404).send("stock limit reached")
+}
+
 };
 
 const DecrementProduct = async (req, res) => {

@@ -40,7 +40,7 @@ function ProductManagement() {
       <div className="mt-10  border rounded-xl shadow-md ">
         <div></div>
         <table className="w-full">
-          <thead className="border border-b-2 h-10  ">
+          <thead className=" h-10  ">
             <tr className="text-sm text-center text-slate-500 font-serif">
               <td className="w-32">IMAGE</td>
               <td className="w-36 ">PRODUCT NAME</td>

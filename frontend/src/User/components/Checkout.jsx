@@ -19,7 +19,7 @@ function Checkout() {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.user.Orders);
   const Addres = useSelector((state) => state.user.Address);
-  const [addressEmail,setMail]=useState("")
+  const [addressEmail, setMail] = useState("");
   useEffect(() => {
     dispatch(getAddress());
   }, [dispatch]);
@@ -28,13 +28,16 @@ function Checkout() {
     if (Addres) {
       console.log(Addres);
     }
-  }, [Addres]);
+    // if (!products) {
+    //   nav("/cart")
+    // }
+  }, [Addres, products]);
 
   const initPayment = (data) => {
     console.log("amount", data.order.amount);
     const options = {
       key: "rzp_test_9uTB8CFJuA8KJ4", // Enter the Key ID generated from the Dashboard
-      amount: data.order.amount/100 , // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+      amount: data.order.amount / 100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
       currency: "INR",
       name: "SWIFT CART",
       description: "Test Transaction",
@@ -46,7 +49,7 @@ function Checkout() {
           placeOrders({
             products: products,
             paymentMode: paymentMode,
-            AdressMail:addressEmail
+            AdressMail: addressEmail,
           })
         );
         nav("/orderSucess");
@@ -69,30 +72,32 @@ function Checkout() {
   };
 
   return (
- 
-      <div className="flex">
-        <div className="w-2/3   ">
-        <p className="px-12 pt-5 text-xl font-serif">
-          Billing information{" "}
-          
-        </p>
+    <div className="flex">
+      <div className="w-2/3   ">
+        <p className="px-12 pt-5 text-xl font-serif">Billing information </p>
 
         <hr className="mx-12 mt-2" />
         <div className="flex justify-around mt-3">
-          {Addres && Addres.Address.map((address)=>{
-            return (
-              <div className="w-60 px-5 font-serif bg-slate-200 ">
-                <input type="radio" name="address" value={address.email} onChange={(e)=>setMail(e.target.value)} />
-                <p>{address.name}</p>
-                <p>{address.email}</p>
-                <p>{address.number}</p>
-                <p>{address.state}</p>
-                <p>{address.district}</p>
-                <p>{address.pincode}</p>
-                <p className="mb-3">{address.street}</p>
-              </div>
-            )
-          })}
+          {Addres &&
+            Addres.Address.map((address) => {
+              return (
+                <div className="w-60 px-5 font-serif bg-white rounded-md shadow-md ">
+                  <input
+                    type="radio"
+                    name="address"
+                    value={address.email}
+                    onChange={(e) => setMail(e.target.value)}
+                  />
+                  <p>{address.name}</p>
+                  <p>{address.email}</p>
+                  <p>{address.number}</p>
+                  <p>{address.state}</p>
+                  <p>{address.district}</p>
+                  <p>{address.pincode}</p>
+                  <p className="mb-3">{address.street}</p>
+                </div>
+              );
+            })}
         </div>
         {/* <div className="">
           <div className="flex justify-around space-x-5">
@@ -169,99 +174,119 @@ function Checkout() {
         <div>
           <p className="px-14 pt-8 font-serif">Payment Method</p>
           <div className="flex">
-            <div className="flex mx-32 mt-5 space-x-1">
-              <input
-                onChange={(e) => setPaymentmode(e.target.value)}
-                type="radio"
-                value="COD"
-              />
-              <GiCash size={30} />
+            <div>
+              <div className="flex mx-32 mt-5 space-x-1">
+                <input
+                  onChange={(e) => setPaymentmode(e.target.value)}
+                  type="radio"
+                  value="COD"
+                />
+                <GiCash size={30} />
+              </div>
+              <p className="flex justify-center text-sm font-serif pt-2">
+                Cash On Delivery
+              </p>
             </div>
-            <div className="flex  mt-5 space-x-2">
-              <input
-                onChange={(e) => setPaymentmode(e.target.value)}
-                type="radio"
-                value="NetBanking"
-              />
-              <MdOutlinePayment size={30} />
+            <div>
+              <div className="flex  mt-5 space-x-2">
+                <input
+                  onChange={(e) => setPaymentmode(e.target.value)}
+                  type="radio"
+                  value="NetBanking"
+                />
+                <MdOutlinePayment size={30} />
+              </div>
+              <p className="flex justify-center text-sm font-serif pt-2">
+                Online Payment
+              </p>
             </div>
-            <div className="flex mx-24 mt-5 space-x-2">
-              <input
-                value="wallet"
-                onChange={(e) => setPaymentmode(e.target.value)}
-                type="radio"
-              />
-              <CiWallet size={30} />
+            <div className="">
+              <div className="flex mx-24 mt-5 space-x-2">
+                <input
+                  value="wallet"
+                  onChange={(e) => setPaymentmode(e.target.value)}
+                  type="radio"
+                />
+                <CiWallet size={30} />
+              </div>
+              <p className="flex justify-center text-sm font-serif pt-2">
+                Wallet
+              </p>
             </div>
           </div>
         </div>
       </div>
-        <div className="w-1/2 flex justify-center mt-10">
-          <div className="w-80 h-72 bg-white shadow-md">
-            <p className="font-serif text-center text-lg pt-3">Order Summary</p>
+      <div className="w-1/2 flex justify-center mt-10">
+        <div className="w-80 h-72 bg-white shadow-md">
+          <p className="font-serif text-center text-lg pt-3">Order Summary</p>
 
-            {products.products &&
-              products.products.map((productr) => {
-                return (
-                  <div className="flex">
-                    <div className="flex mx-3 mt-4">
-                      <img
-                        src={`http://localhost:3000/images/${productr.productImage}`}
-                        className="h-10"
-                        alt=""
-                      />
-                      <p className="pt-1 px-2 font-serif">
-                        {productr.productName}{" "}
-                        <span>({productr.quantity})</span>
-                      </p>
-                    </div>
-                    <div className="mt-4 mx-8">
-                      <p>{productr.Price * productr.quantity}</p>
-                    </div>
+          {products.products &&
+            products.products.map((productr) => {
+              return (
+                <div className="flex">
+                  <div className="flex mx-3 mt-4">
+                    <img
+                      src={`http://localhost:3000/images/${productr.productImage}`}
+                      className="h-10"
+                      alt=""
+                    />
+                    <p className="pt-1 px-2 font-serif">
+                      {productr.productName} <span>({productr.quantity})</span>
+                    </p>
                   </div>
-                );
-              })}
+                  <div className="mt-4 mx-8">
+                    <p>{productr.Price * productr.quantity}</p>
+                  </div>
+                </div>
+              );
+            })}
 
-            <div className="flex justify-around mx-5">
-              <p>Shipping</p>
-              <p className="px-2">Free</p>
-            </div>
+          <div className="flex justify-around mx-5">
+            <p className="font-serif px-6">Shipping</p>
+            <p className="px-2 pr-10 font-serif">Free</p>
+          </div>
 
-            <hr className="mt-3" />
-            <div className="flex justify-around mt-3">
-              <p className="px-5 font-serif">Total Price</p>
-              <p className=" font-serif">{products.totalPrice}</p>
-            </div>
-            <div className="flex justify-center ">
-              <button
-                onClick={() => {
-              
-                    if (paymentMode === "COD") {
-                      dispatch(
-                        placeOrders({
-                          products: products,
-                          paymentMode: paymentMode,
-                          AdressMail:addressEmail
-                        })
-                      );
-                      nav("/orderSucess");
-                    } else if (paymentMode === "NetBanking") {
-                      dispatch(onlinePayments({ amount: products.totalPrice }));
-                      initPayment(order);
+          <hr className="mt-3" />
+          <div className="flex justify-around mt-3">
+            <p className="px-11 font-serif">Total Price</p>
+            <p className=" font-serif pr-14">{products.totalPrice}</p>
+          </div>
+          <div className="flex justify-center ">
+            <button
+              onClick={() => {
+                if (paymentMode === "COD") {
+                  dispatch(
+                    placeOrders({
+                      products: products,
+                      paymentMode: paymentMode,
+                      AdressMail: addressEmail,
+                    })
+                  );
+                  nav("/orderSucess");
+                } else if (paymentMode === "NetBanking") {
+                  dispatch(onlinePayments({ amount: products.totalPrice }));
+                  initPayment(order);
 
-                      //  dispatch(onlinePayments({amount:products.totalPrice}))
-                    }
-                  
-                }}
-                className="h-8  w-[6rem] mt-3 font-serif text-white shadow-md rounded-lg bg-blue-400 text-md"
-              >
-                place order
-              </button>
-            </div>
+                  //  dispatch(onlinePayments({amount:products.totalPrice}))
+                } else {
+                  dispatch(
+                    placeOrders({
+                      products: products,
+                      paymentMode: paymentMode,
+                      AdressMail: addressEmail,
+                    })
+                  );
+                  nav("/orderSucess")
+                }
+              }}
+              className="h-8  w-[6rem] mt-3 font-serif text-white shadow-md rounded-lg bg-blue-400 text-md"
+            >
+              place order
+            </button>
           </div>
         </div>
       </div>
-
+    </div>
   );
 }
 
