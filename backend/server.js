@@ -15,7 +15,7 @@ app.use(cors({
 }))
 app.use(cookie())
 app.use(express.urlencoded({extended:true}))
-app.use("/images",express.static(path.join(__dirname,"public/products")));
+app.use("/api/images",express.static(path.join(__dirname,"public/products")));
 app.use(express.json())
 app.use(session({
     secret:'ajau',
