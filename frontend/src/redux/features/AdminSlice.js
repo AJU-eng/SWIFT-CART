@@ -26,7 +26,7 @@ const initialDataState = {
 
 export const fetchUsers = createAsyncThunk("admin/FetchUser", () => {
   return axios
-    .get("http://localhost:3000/admin/getUser")
+    .get(`${URL}admin/getUser`)
     .then((res) => res.data);
 });
 export const findEditProduct = createAsyncThunk(
@@ -34,7 +34,7 @@ export const findEditProduct = createAsyncThunk(
   async (id) => {
     console.log(id);
     const res = await axios.post(
-      `http://localhost:3000/user/findProduct/${id}`
+      `${URL}user/findProduct/${id}`
     );
     // console.log((await res).data);
     return await res.data;
@@ -43,7 +43,7 @@ export const findEditProduct = createAsyncThunk(
 export const CategoriesProductAdd = createAsyncThunk(
   "admin/cateProduct",
   async () => {
-    const res = await axios.get("http://localhost:3000/admin/getCateProduct");
+    const res = await axios.get(`${URL}admin/getCateProduct`);
     return res.data;
   }
 );
@@ -52,7 +52,7 @@ export const BlockUsers = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/admin/blockUser",
+        `${URL}admin/blockUser`,
         { id }
       );
       return response.data;
@@ -65,7 +65,7 @@ export const UnblockUsers = createAsyncThunk(
   "admin/Unblock",
   async (id, { rejectWithValue }) => {
     try {
-      const res = await axios.post("http://localhost:3000/admin/userUnblock", {
+      const res = await axios.post(`${URL}admin/userUnblock`, {
         id,
       });
       return res.data;
@@ -77,7 +77,7 @@ export const UnblockUsers = createAsyncThunk(
 export const getCouponCodesAdmin = createAsyncThunk(
   "admin/getCoupon",
   async () => {
-    const res = await axios.get("http://localhost:3000/admin/getCoupon");
+    const res = await axios.get(`${URL}admin/getCoupon`);
     return res.data;
   }
 );
@@ -88,7 +88,7 @@ export const DeleteUser = createAsyncThunk(
     console.log(id);
     try {
       const res = await axios.delete(
-        `http://localhost:3000/admin/userDelete/${id}`,
+        `${URL}admin/userDelete/${id}`,
         id
       );
       return res.data;
@@ -98,16 +98,16 @@ export const DeleteUser = createAsyncThunk(
   }
 );
 export const singleReturns=createAsyncThunk("admin/singleReturns",async(data)=>{
-  const res=await axios.post("http://localhost:3000/admin/singleReturn",data)
+  const res=await axios.post(`${URL}admin/singleReturn`,data)
   return res.data
 })
 export const GetProductsAdmin = createAsyncThunk("user/products", async () => {
-  const res = await axios.get("http://localhost:3000/user/getProducts");
+  const res = await axios.get(`${URL}user/getProducts`);
   return res.data;
 });
 
 export const getCategory = createAsyncThunk("admin/getCat", async () => {
-  const res = await axios.get("http://localhost:3000/admin/getCategories");
+  const res = await axios.get(`${URL}admin/getCategories`);
   return res.data;
 });
 
@@ -116,7 +116,7 @@ export const addCategory = createAsyncThunk(
   async (formData, { rejectWithValue }) => {
     try {
       const res = await axios.post(
-        "http://localhost:3000/admin/categoryAdd",
+        `${URL}admin/categoryAdd`,
         formData,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
@@ -129,7 +129,7 @@ export const addCategory = createAsyncThunk(
 export const findCategory = createAsyncThunk(
   "admin/CategoryEdit",
   async (id) => {
-    const res = await axios.post(`http://localhost:3000/admin/findCategory`, {
+    const res = await axios.post(`${URL}admin/findCategory`, {
       id,
     });
     return res.data;
@@ -138,7 +138,7 @@ export const findCategory = createAsyncThunk(
 export const EditCate = createAsyncThunk("admin/editCate", async (formdata) => {
   console.log(formdata);
   const res = await axios.post(
-    "http://localhost:3000/admin/editCategory",
+    `${URL}admin/editCategory`,
     formdata,
     { headers: { "Content-Type": "multipart/form-data" } }
   );
@@ -148,7 +148,7 @@ export const EditProducts = createAsyncThunk(
   "admin/editProduct",
   async (formData) => {
     const data = await axios.patch(
-      "http://localhost:3000/admin/editProduct",
+      `${URL}admin/editProduct`,
       formData
     );
     return data.data;
@@ -160,32 +160,32 @@ export const DeleteProduct = createAsyncThunk(
   async (id) => {
     console.log(id);
     const data = await axios.delete(
-      `http://localhost:3000/admin/deleteProduct/${id}`
+      `${URL}admin/deleteProduct/${id}`
     );
     return data.data;
   }
 );
 
 export const adminLogged = createAsyncThunk("admin/logged", async () => {
-  const adminLog = axios.get("http://localhost:3000/admin/adminLogged");
+  const adminLog = axios.get(`${URL}admin/adminLogged`);
   return (await adminLog).data;
 });
 
 export const getOrders = createAsyncThunk("admin/getOrdersAdmin", async () => {
-  const res = await axios.get("http://localhost:3000/admin/getOrder");
+  const res = await axios.get(`${URL}admin/getOrder`);
   return res.data;
 });
 export const AddProductspo = createAsyncThunk(
   "admin/addProducts",
   async (formData, { rejectWithValue }) => {
-    const res = axios.post("http://localhost:3000/admin/AddProducts", formData);
+    const res = axios.post(`${URL}admin/AddProducts`, formData);
     return (await res).data;
   }
 );
 export const blockCategory = createAsyncThunk(
   "admin/blockCategory",
   async (id) => {
-    const res = await axios.post("http://localhost:3000/admin/blockCategory", {
+    const res = await axios.post(`${URL}admin/blockCategory`, {
       id,
     });
     return res.data;
@@ -195,13 +195,13 @@ export const editOrderstatus = createAsyncThunk(
   "admin/editOrderstatus",
   async (status) => {
     const edit = axios.post(
-      "http://localhost:3000/admin/editOrderstatus",
+      `${URL}admin/editOrderstatus`,
       status
     );
   }
 );
 export const getTotalData = createAsyncThunk("admin/getTotals", async () => {
-  const res = await axios.get("http://localhost:3000/admin/getTotalData");
+  const res = await axios.get(`${URL}admin/getTotalData`);
   return res.data;
 });
 
@@ -209,31 +209,31 @@ export const unblocksCategory = createAsyncThunk(
   "admin/categoryunblock",
   async (id) => {
     const res = await axios.post(
-      "http://localhost:3000/admin/unblockCategory",
+      `${URL}admin/unblockCategory`,
       { id }
     );
     return res.data;
   }
 );
 export const weeklySales = createAsyncThunk("admin/weekly", async () => {
-  const data = await axios.get("http://localhost:3000/admin/sales");
+  const data = await axios.get(`${URL}admin/sales`);
   return data.data;
 });
 export const monthlySales = createAsyncThunk("admin/monthly", async () => {
-  const data = await axios.get("http://localhost:3000/admin/montly_sales");
+  const data = await axios.get(`${URL}admin/montly_sales`);
   return data.data;
 });
 export const YearlySales = createAsyncThunk("admin/yearly", async () => {
-  const res = await axios.get("http://localhost:3000/admin/yearly");
+  const res = await axios.get(`${URL}admin/yearly`);
   return res.data;
 });
 export const AddBanner = createAsyncThunk("admin/bannerAdd", async (data) => {
-  const res = await axios.post("http://localhost:3000/admin/BannerAdd", data);
+  const res = await axios.post(`${URL}admin/BannerAdd`, data);
   return res.data;
 });
 export const addCoupon = createAsyncThunk("admin/addCoupon", async (data) => {
   console.log(data);
-  const res = await axios.post("http://localhost:3000/admin/addCoupon", data);
+  const res = await axios.post(`${URL}admin/addCoupon`, data);
   return res.data;
 });
 
@@ -241,7 +241,7 @@ export const BlockCoupon = createAsyncThunk(
   "admin/couponBlock",
   async (data) => {
     const res = await axios.post(
-      "http://localhost:3000/admin/couponBlock",
+      `${URL}admin/couponBlock`,
       data
     );
     return res.data;
@@ -250,26 +250,26 @@ export const BlockCoupon = createAsyncThunk(
 export const getBanners=createAsyncThunk("admin/getBanner",async()=>{
   
     
-    const res=await axios.get( "http://localhost:3000/admin/getBanner")
+    const res=await axios.get( `${URL}admin/getBanner`)
     return res.data
   
 })
 export const getReturns=createAsyncThunk("admin/returns",async()=>{
-  const res=await axios.get("http://localhost:3000/admin/getReturn")
+  const res=await axios.get(`${URL}admin/getReturn`)
   return res.data
 })
 export const unBlockCoupon = createAsyncThunk(
   "admin/unBlockCoupon",
   async (data) => {
     const res = await axios.post(
-      "http://localhost:3000/admin/couponunBlock",
+     ` ${URL}admin/couponunBlock`,
       data
     );
     return res.data;
   }
 );
 export const deleteBanners=createAsyncThunk("admin/deleteBanner",async(id)=>{
-  const res=await axios.post("http://localhost:3000/admin/deleteBanner",id)
+  const res=await axios.post(`${URL}admin/deleteBanner`,id)
   return res.data
 })
 
@@ -279,7 +279,7 @@ export const downloadReport=createAsyncThunk("admin/report",async(data)=>{
 })
 
 export const approveReturns=createAsyncThunk("admin/approveReturn",async(data)=>{
-   const res=await axios.post("http://localhost:3000/admin/approveReturn",data)
+   const res=await axios.post(`${URL}admin/approveReturn`,data)
    
 })
 const adminSlice = createSlice({

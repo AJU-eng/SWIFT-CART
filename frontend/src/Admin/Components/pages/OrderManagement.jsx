@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { editOrderstatus, getOrders } from "../../../redux/features/AdminSlice";
-
+import { URL } from "../../../redux/features/api";
 function OrdersManagment() {
   const dispatch = useDispatch();
   const orders = useSelector((state) => state.admin.Orders);
@@ -44,7 +44,7 @@ function OrdersManagment() {
                             <div className="">
                               <div className="  px-16    font-serif">
                                 <img
-                                  src={`http://localhost:3000/images/${product.productImage}`}
+                                  src={`${URL}images/${product.productImage}`}
                                   className="h-14 "
                                   alt=""
                                 />

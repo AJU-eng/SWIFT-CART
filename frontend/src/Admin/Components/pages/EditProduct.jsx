@@ -11,7 +11,7 @@ import {
 import AddImages from "./add-button.png";
 import { json, useParams } from "react-router";
 import { findProduct } from "../../../redux/features/userslice";
-
+import { URL } from "../../../redux/features/api";
 function EditProduct() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -222,7 +222,7 @@ function EditProduct() {
                     />
 
                     <img
-                      src={`http://localhost:3000/images/${ProductEdit.moreImage[0]}`}
+                      src={`${URL}images/${ProductEdit.moreImage[0]}`}
                       onClick={triggerFileInput}
                       className="h-36 w-auto "
                       alt=""
@@ -253,7 +253,7 @@ function EditProduct() {
                             onClick={() => handleEditImage(index)}
                           />
                           <img
-                            src={`http://localhost:3000/images/${ProductEdit.moreImage[index]}`}
+                            src={`${URL}images/${ProductEdit.moreImage[index]}`}
                             className="h-auto w-auto   "
                             alt=""
                           />

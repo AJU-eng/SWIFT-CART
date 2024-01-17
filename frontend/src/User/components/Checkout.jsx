@@ -14,6 +14,7 @@ import {
 import useRazorpay from "react-razorpay";
 import { useNavigate } from "react-router";
 import AuthenticatedNavbar from "./Navbar/AuthenticatedNavbar";
+import { URL } from "../../redux/features/api";
 function Checkout() {
   const [Razorpay] = useRazorpay();
   const [name, setName] = useState("");
@@ -388,7 +389,7 @@ function Checkout() {
                 <div className="flex">
                   <div className="flex mx-3 mt-4">
                     <img
-                      src={`http://localhost:3000/images/${productr.productImage}`}
+                      src={`${URL}images/${productr.productImage}`}
                       className="h-10"
                       alt=""
                     />

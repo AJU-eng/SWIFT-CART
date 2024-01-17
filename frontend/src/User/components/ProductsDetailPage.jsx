@@ -8,7 +8,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import "./zoom.css";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { URL } from "../../redux/features/api";
 import { Rating } from "react-simple-star-rating";
 function ProductsDetailPage() {
   const error = useSelector((state) => state.user.AuthError);
@@ -37,7 +37,7 @@ function ProductsDetailPage() {
   useEffect(() => {
     // Update currentImage when product data is available
     if (product && product.moreImage && product.moreImage.length > 0) {
-      setCurrentImage(`http://localhost:3000/images/${product.moreImage[0]}`);
+      setCurrentImage(`${URL}/images/${product.moreImage[0]}`);
     }
     if (productPrice) {
       price=productPrice
@@ -97,12 +97,12 @@ function ProductsDetailPage() {
                   className="bg-white shadow-lg w-24 h-10"
                   onClick={() =>
                     setCurrentImage(
-                      `http://localhost:3000/images/${product.moreImage[1]}`
+                      `${URL}images/${product.moreImage[1]}`
                     )
                   }
                 >
                   <img
-                    src={`http://localhost:3000/images/${product.moreImage[1]}`}
+                    src={`${URL}images/${product.moreImage[1]}`}
                     alt=""
                   />
                 </div>
@@ -112,12 +112,12 @@ function ProductsDetailPage() {
                   className="bg-white shadow-lg w-24 h-10 "
                   onClick={() =>
                     setCurrentImage(
-                      `http://localhost:3000/images/${product.moreImage[2]}`
+                      `${URL}images/${product.moreImage[2]}`
                     )
                   }
                 >
                   <img
-                    src={`http://localhost:3000/images/${product.moreImage[2]}`}
+                    src={`${URL}images/${product.moreImage[2]}`}
                     alt=""
                   />
                 </div>
@@ -127,12 +127,12 @@ function ProductsDetailPage() {
                   className="bg-white shadow-lg w-24 h-10"
                   onClick={() =>
                     setCurrentImage(
-                      `http://localhost:3000/images/${product.moreImage[3]}`
+                      `${URL}images/${product.moreImage[3]}`
                     )
                   }
                 >
                   <img
-                    src={`http://localhost:3000/images/${product.moreImage[3]}`}
+                    src={`${URL}images/${product.moreImage[3]}`}
                     alt=""
                   />
                 </div>
