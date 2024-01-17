@@ -6,7 +6,7 @@ import applewatch from "../components/product images/apple.jpg";
 // import './Offer.css'
 function TopOffers() {
   return (
-    <div className="h-80 ">
+    <div className="">
       <h1 className="text-center text-2xl lg:text-4xl mt-5 lg:mt-16 text-teal-800 font-semibold font-serif ">
         Top Offers
       </h1>

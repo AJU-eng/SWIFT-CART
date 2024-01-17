@@ -22,8 +22,8 @@ app.use(session({
     resave:false,
     saveUninitialized:true
 }))
-app.use('/user',router)
-app.use('/admin',adminRouter)
+app.use('/api/user',router)
+app.use('/api/admin',adminRouter)
 
 monngoose.connect(process.env.MONGO_URI).then(()=>app.listen(3000,()=>console.log("server started")))
 

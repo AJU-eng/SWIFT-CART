@@ -42,6 +42,11 @@ function App() {
     dispatch(logged());
     dispatch(adminLogged());
   }, [dispatch]);
+
+  const ProtectRoute=({element})=>{
+    // const user=useSelector((state)=>state.logged.user)
+    return user ? element :<Navigate to="/login"/>
+  }
   return (
     <>
       <SkeletonTheme baseColor="#f0f0f0" highlightColor="#d9d9d9 ">
@@ -50,14 +55,15 @@ function App() {
             <Route path="/" element={user ? <Home /> : <UnAuthorizedHome />} />
             <Route path="/register" element={<FormAuth />} />
             <Route path="/otp" element={<Otp />} />
+            {/* <Route path="/home" element={<ProtectRoute element={<Home />} />} /> */}
             <Route path="/home" element={<Home />} />
             <Route path="/login" element={<Authentication />} />
             <Route path="/ProductDetail/:id" element={<ProductsDetailPage />} />
-            <Route path="/routes/*" element={<SIdebarRoutes/>}/>
+            <Route path="/routes/*"  element={<SIdebarRoutes/>}/>
             <Route path="/admin/*" element={<Main />} />
-            <Route path="/orderSucess" element={<OrderSucessPage/>}/>
+            <Route path="/orderSucess"  element={<OrderSucessPage/>}/>
             <Route path="/checkout" element={<Checkout/>}/>
-            <Route path="/cart" element={<Cart/>}/>
+            <Route path="/cart"  element={<Cart/>}/>
             <Route path="/forgetPassword" element={<ForgetPassword />} />
             <Route path="/otpForgetPassword" element={<ForgetOtp />} />
             <Route path="/resetPass" element={<ResetPassword />} />

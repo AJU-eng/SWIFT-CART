@@ -9,6 +9,7 @@ import OrderDetails from './OrderDetails';
 // import OrderHistory from './OrderHistroy';
 import ReturnModal from "../components/requestModal"
 import WalletManagent from './WalletManagent';
+import AddressModal from './AddressModal';
 function SIdebarRoutes() {
   return (
     <RootLayoutUser>
@@ -23,6 +24,7 @@ function SIdebarRoutes() {
           <Route path="/Orders/orderDetail/:id" element={<OrderDetails/>}/>
           <Route path='return' element={<ReturnModal/>}/>
           <Route path='wallet' element={<WalletManagent/>}/>
+          <Route path='AddressModal' element={<AddressModal/>}/>
         </Route>
 
         

@@ -34,7 +34,7 @@ function AuthenticatedNavbar() {
             </p>
 
             {visible && (
-              <div className="bg-white absolute mt-1  w-28 text-[1.1rem] space-y-2 rounded-md shadow-md z-20 ">
+              <div className="bg-white absolute mt-1  w-28 text-[1.1rem] space-y-2 rounded-md shadow-md z-50 ">
                 <div className="flex justify-center mt-3 ">
                   <CgProfile size={23} className="mt-1" />
 

@@ -56,7 +56,7 @@ function Form_auth() {
                 <input
                   type="text"
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="Firstname"
+                  placeholder="Full name"
                   className="border border-gray-400 w-full py-1 px-2"
                 />
                 

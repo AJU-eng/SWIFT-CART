@@ -8,8 +8,9 @@ const AddressModel = require("../model/AddressModel");
 const userModel = require("../model/userModel");
 const easyinvoice = require("easyinvoice");
 const nodemailer = require("nodemailer");
-const pdfmake=require("pdfmake")
-const fs = require('fs');
+const pdfmake = require("pdfmake");
+const createCsvWriter = require("csv-writer").createObjectCsvWriter;
+const fs = require("fs");
 const WalletModel = require("../model/WalletModel");
 
 require("dotenv").config();
@@ -63,7 +64,7 @@ const paymentVerify = (req, res) => {
 const PlaceOrder = async (req, res) => {
   const items = req.body.products.products;
   console.log(req.body);
-  
+
   // // console.log(req.body.products.totalPrice);
   const { user_id, iat } = jwt.decode(
     req.cookies.token,
@@ -71,20 +72,26 @@ const PlaceOrder = async (req, res) => {
   );
   let { products, paymentMode, AdressMail } = req.body;
   products.paymentMode = paymentMode;
-  if (paymentMode==="wallet") {
-    const date=new Date()
-    const _id=new Date().getTime()
-    let obj={
-      amount:req.body.products.totalPrice,
-      type:"debit",
-      Description:"product ordered",
-      Date:date,
-      id:_id
-    }
-    const dataAvailable=await WalletModel.findOne({userId:user_id})
+  if (paymentMode === "wallet") {
+    const date = new Date();
+    const _id = new Date().getTime();
+    let obj = {
+      amount: req.body.products.totalPrice,
+      type: "debit",
+      Description: "product ordered",
+      Date: date,
+      id: _id,
+    };
+    const dataAvailable = await WalletModel.findOne({ userId: user_id });
     if (dataAvailable) {
       // const price=parseFloat()
-      const data=await WalletModel.findOneAndUpdate({userId:user_id},{$push:{wallet:obj},$inc:{Balance:-req.body.products.totalPrice}})
+      const data = await WalletModel.findOneAndUpdate(
+        { userId: user_id },
+        {
+          $push: { wallet: obj },
+          $inc: { Balance: -req.body.products.totalPrice },
+        }
+      );
       console.log(data);
     }
   }
@@ -118,8 +125,8 @@ const PlaceOrder = async (req, res) => {
     });
     products.OrderedAt = dateOnly;
     products.Address = obj1;
-    const id=new Date().getTime()
-    products.OrderId=id
+    const id = new Date().getTime();
+    products.OrderId = id;
     const updateData = await OrderModel.findOneAndUpdate(
       { userId: user_id },
       { $push: { orders: products } },
@@ -269,8 +276,8 @@ const PlaceOrder = async (req, res) => {
     });
     products.Address = obj;
     products.OrderedAt = dateOnly;
-    const id=new Date().getTime()
-    products.OrderId=id
+    const id = new Date().getTime();
+    products.OrderId = id;
     // console.log(products.Address);
     const data = await OrderModel.create({
       userId: user_id,
@@ -514,116 +521,100 @@ const monthly_sales = async (req, res) => {
   // Start of the current month
   var startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
 
-  const data= await OrderModel.aggregate([
+  const data = await OrderModel.aggregate([
     {
-        $unwind: "$orders"
+      $unwind: "$orders",
     },
     {
-        $unwind: "$orders.products"
+      $unwind: "$orders.products",
     },
     {
-        $match: {
-            "orders.OrderedAt": { $gte: startOfMonth.toISOString() }
-        }
+      $match: {
+        "orders.OrderedAt": { $gte: startOfMonth.toISOString() },
+      },
     },
     {
-        $group: {
-            _id: "$orders.products.productName",
-            totalSales: {
-                $sum: "$orders.products.Price"
-            }
-        }
+      $group: {
+        _id: "$orders.products.productName",
+        totalSales: {
+          $sum: "$orders.products.Price",
+        },
+      },
     },
     {
-        $project: {
-            product: "$_id",
-            totalSales: 1,
-            _id: 0
-        }
-    }
-]);
+      $project: {
+        product: "$_id",
+        totalSales: 1,
+        _id: 0,
+      },
+    },
+  ]);
 
-  res.send(data)
+  res.send(data);
   console.log(data);
 };
-const yearlySales=async(req,res)=>{
+const yearlySales = async (req, res) => {
   var today = new Date();
 
-// Start of the current year
-var startOfYear = new Date(today.getFullYear(), 0, 1);
+  // Start of the current year
+  var startOfYear = new Date(today.getFullYear(), 0, 1);
 
-const data=await OrderModel.aggregate([
+  const data = await OrderModel.aggregate([
     {
-        $unwind: "$orders"
+      $unwind: "$orders",
     },
     {
-        $unwind: "$orders.products"
+      $unwind: "$orders.products",
     },
     {
-        $match: {
-            "orders.OrderedAt": { $gte: startOfYear.toISOString() }
-        }
+      $match: {
+        "orders.OrderedAt": { $gte: startOfYear.toISOString() },
+      },
     },
     {
-        $group: {
-            _id: "$orders.products.productName",
-            totalSales: {
-                $sum: "$orders.products.Price"
-            }
-        }
+      $group: {
+        _id: "$orders.products.productName",
+        totalSales: {
+          $sum: "$orders.products.Price",
+        },
+      },
     },
     {
-        $project: {
-            product: "$_id",
-            totalSales: 1,
-            _id: 0
-        }
-    }
-]);
-res.send(data)
-console.log(data);
-}
+      $project: {
+        product: "$_id",
+        totalSales: 1,
+        _id: 0,
+      },
+    },
+  ]);
+  res.send(data);
+  console.log(data);
+};
 
-const report=async(req,res)=>{
-  const {date}=req.body
- const data=await OrderModel.aggregate([
+const report = async (req, res) => {
+  const { date } = req.body;
+  const data = await OrderModel.aggregate([
     { $unwind: "$orders" },
     { $match: { "orders.OrderedAt": `${date}` } },
   ]);
+  // const data = await OrderModel.aggregate([
+  //   { $unwind: "$orders" },
+  //   { $match: { "orders.OrderedAt": { $gte: new Date(date), $lt: new Date(date + "T23:59:59.999Z") } } },
+  // ]);
   console.log(data);
-  function createPdfDefinition(data) {
-    // Modify this function to create a PDF structure based on your data
-    const content = data.map(order => ({
-      text: JSON.stringify(order, null, 2),
-      style: 'defaultStyle',
-    }));
-  
-    return {
-      content,
-      styles: {
-        defaultStyle: { fontSize: 12 },
-      },
-    };
-  }
-  const pdfDefinition = createPdfDefinition(data);
-  const pdfDocument = pdfmake.createPdfKitDocument(pdfDefinition);
-  const pdfFileName = 'orders_report.pdf';
-  await new Promise((resolve, reject) => {
-    pdfDocument.pipe(require('fs').createWriteStream(pdfFileName));
-    pdfDocument.end();
-    pdfDocument.on('finish', resolve);
-    pdfDocument.on('error', reject);
-  });
-  console.log(`PDF saved to ${pdfFileName}`);
-}
+  res.send(data);
+};
 
-const singleOrder=async(req,res)=>{
+const singleOrder = async (req, res) => {
   console.log(req.body);
-  const {_id}=req.body
-  const data=await OrderModel.aggregate([{$unwind:"$orders"},{$match:{"orders.OrderId":parseInt(_id)}}])
-  res.send(data)
+  const { _id } = req.body;
+  const data = await OrderModel.aggregate([
+    { $unwind: "$orders" },
+    { $match: { "orders.OrderId": parseInt(_id) } },
+  ]);
+  res.send(data);
   console.log(data);
-}
+};
 module.exports = {
   makeOrder,
   PlaceOrder,
@@ -638,5 +629,5 @@ module.exports = {
   monthly_sales,
   yearlySales,
   report,
-  singleOrder
+  singleOrder,
 };

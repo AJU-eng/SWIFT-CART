@@ -5,6 +5,7 @@ import { CiWallet } from "react-icons/ci";
 import iphone from "../components/product images/iphone 6/iphone13/iphone_13.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  AddAddress,
   getAddress,
   getWalletDetails,
   onlinePayments,
@@ -12,12 +13,21 @@ import {
 } from "../../redux/features/userslice";
 import useRazorpay from "react-razorpay";
 import { useNavigate } from "react-router";
+import AuthenticatedNavbar from "./Navbar/AuthenticatedNavbar";
 function Checkout() {
   const [Razorpay] = useRazorpay();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [number, setNumber] = useState("");
+  const [state, setState] = useState("");
+  const [district, setDistrict] = useState("");
+  const [pincode, setPincode] = useState("");
+  const [street, setStreet] = useState("");
+  // const [name,setName]=useState("")
   const order = useSelector((state) => state.user.online);
   const [paymentMode, setPaymentmode] = useState("");
-  const walletBalance=useSelector((state)=>state.user.Wallet.Balance)
-  const [empty,setEmpty]=useState("")
+  const walletBalance = useSelector((state) => state.user.Wallet.Balance);
+  const [empty, setEmpty] = useState("");
   const nav = useNavigate();
   const dispatch = useDispatch();
   const products = useSelector((state) => state.user.Orders);
@@ -25,7 +35,7 @@ function Checkout() {
   const [addressEmail, setMail] = useState("");
   useEffect(() => {
     dispatch(getAddress());
-    dispatch(getWalletDetails())
+    dispatch(getWalletDetails());
   }, [dispatch]);
 
   useEffect(() => {
@@ -76,105 +86,249 @@ function Checkout() {
   };
 
   return (
+    // <AuthenticatedNavbar/>
+    <>
+    <AuthenticatedNavbar/>
     <div className="flex">
       <div className="w-2/3   ">
         <p className="px-12 pt-5 text-xl font-serif">Billing information </p>
 
         <hr className="mx-12 mt-2" />
-        <div className="flex justify-around mt-3">
-          {Addres &&
-            Addres.Address.map((address) => {
-              return (
-                <div className="w-60 px-5 font-serif bg-white rounded-md shadow-md ">
-                  <input
-                    type="radio"
-                    name="address"
-                    value={address.email}
-                    onChange={(e) => setMail(e.target.value)}
-                  />
-                  <p>{address.name}</p>
-                  <p>{address.email}</p>
-                  <p>{address.number}</p>
-                  <p>{address.state}</p>
-                  <p>{address.district}</p>
-                  <p>{address.pincode}</p>
-                  <p className="mb-3">{address.street}</p>
-                </div>
-              );
-            })}
-        </div>
-        {/* <div className="">
-          <div className="flex justify-around space-x-5">
-            <div>
-              <p className="mx-5 px-7 pt-4 font-serif"> User name</p>
-              <input
-                type="text"
-                onChange={(e) => setName(e.target.value)}
-                className="border mx-12 mt-2"
-              />
+        <div>
+          {Addres ? (
+            <div className="flex justify-around mt-3">
+              {Addres &&
+                Addres.Address.map((address) => {
+                  return (
+                    <div className="w-60 px-5 font-serif bg-white rounded-md shadow-md ">
+                      <input
+                        type="radio"
+                        name="address"
+                        value={address.email}
+                        onChange={(e) => setMail(e.target.value)}
+                      />
+                      <p>{address.name}</p>
+                      <p>{address.email}</p>
+                      <p>{address.number}</p>
+                      <p>{address.state}</p>
+                      <p>{address.district}</p>
+                      <p>{address.pincode}</p>
+                      <p className="mb-3">{address.street}</p>
+                    </div>
+                  );
+                })}
             </div>
-            <div>
-              <p className=" pt-4 font-serif"> Email</p>
-              <input
-                type="email"
-                onChange={(e) => setEmail(e.target.value)}
-                className="border  mt-2"
-              />
-            </div>
-            <div className="mx-10">
-              <p className=" pt-4 font-serif"> Phone number</p>
-              <input
-                type="text"
-                onChange={(e) => setNUmber(e.target.value)}
-                className="border  mt-2"
-              />
-            </div>
-          </div>
-          <div className="flex">
-            <div className="mx-3">
-              <p className="mx-5 px-7 pt-4 font-serif"> State</p>
-              <input
-                type="text"
-                onChange={(e) => setState(e.target.value)}
-                className="border  mx-12 mt-2"
-              />
-            </div>
-            <div className="mx-10">
-              <p className=" pt-4 font-serif"> District</p>
-              <input
-                type="text"
-                onChange={(e) => setDistrict(e.target.value)}
-                className="border   mt-2"
-              />
-            </div>
+          ) : (
             <div className="">
-              <p className="px-2 pt-4 font-serif"> Pincode</p>
-              <input
-                type="text"
-                onChange={(e) => setPincode(e.target.value)}
-                className="border  mx-2 mt-2"
-              />
+              <div className="flex justify-around space-x-5">
+                <div>
+                  <p className="mx-5 px-7 pt-4 font-serif"> User name</p>
+                  <input
+                    type="text"
+                    onChange={(e) => setName(e.target.value)}
+                    className="border mx-12 mt-2"
+                  />
+                </div>
+                <div>
+                  <p className=" pt-4 font-serif"> Email</p>
+                  <input
+                    type="email"
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="border  mt-2"
+                  />
+                </div>
+                <div className="mx-10">
+                  <p className=" pt-4 font-serif"> Phone number</p>
+                  <input
+                    type="text"
+                    onChange={(e) => setNumber(e.target.value)}
+                    className="border  mt-2"
+                  />
+                </div>
+              </div>
+              <div className="flex">
+                <div className="mx-3">
+                  <p className="mx-5 px-7 pt-4 font-serif"> State</p>
+                  <input
+                    type="text"
+                    onChange={(e) => setState(e.target.value)}
+                    className="border  mx-12 mt-2"
+                  />
+                </div>
+                <div className="mx-10">
+                  <p className=" pt-4 font-serif"> District</p>
+                  <input
+                    type="text"
+                    onChange={(e) => setDistrict(e.target.value)}
+                    className="border   mt-2"
+                  />
+                </div>
+                <div className="">
+                  <p className="px-2 pt-4 font-serif"> Pincode</p>
+                  <input
+                    type="text"
+                    onChange={(e) => setPincode(e.target.value)}
+                    className="border  mx-2 mt-2"
+                  />
+                </div>
+              </div>
+              <div className="flex">
+                <div className="mx-12">
+                  <p className="px-2 pt-4 font-serif"> Street</p>
+                  <input
+                    type="text"
+                    onChange={(e) => setStreet(e.target.value)}
+                    className="border  mx-2 mt-2"
+                  />
+                </div>
+                <div className="mx-10">
+                  <p className="px-2 pt-4 font-serif">
+                    {" "}
+                    Apartment,floor{" "}
+                    <span className="text-slate-400">(Optional)</span>
+                  </p>
+                  <input type="text" className="border  mx-2 mt-2" />
+                </div>
+              </div>
+              <button
+                className="bg-blue-400 text-white w-32 mx-10 mt-10 font-serif shadow-md rounded-md"
+                onClick={() => {
+                  dispatch(
+                    AddAddress({
+                      name: name,
+                      email: email,
+                      number: number,
+                      state: state,
+                      district: district,
+                      pincode: pincode,
+                      street: street,
+                    })
+                  );
+                }}
+              >
+                Submit Address
+              </button>
             </div>
+          )}
+        </div>
+        {/* {Addres ? (
+          <div className="flex justify-around mt-3">
+            {Addres &&
+              Addres.Address.map((address) => {
+                return (
+                  <div className="w-60 px-5 font-serif bg-white rounded-md shadow-md ">
+                    <input
+                      type="radio"
+                      name="address"
+                      value={address.email}
+                      onChange={(e) => setMail(e.target.value)}
+                    />
+                    <p>{address.name}</p>
+                    <p>{address.email}</p>
+                    <p>{address.number}</p>
+                    <p>{address.state}</p>
+                    <p>{address.district}</p>
+                    <p>{address.pincode}</p>
+                    <p className="mb-3">{address.street}</p>
+                  </div>
+                );
+              })}
           </div>
-          <div className="flex">
-            <div className="mx-12">
-              <p className="px-2 pt-4 font-serif"> Street</p>
-              <input
-                type="text"
-                onChange={(e) => setStreet(e.target.value)}
-                className="border  mx-2 mt-2"
-              />
+        ) : (
+          <div className="">
+            <div className="flex justify-around space-x-5">
+              <div>
+                <p className="mx-5 px-7 pt-4 font-serif"> User name</p>
+                <input
+                  type="text"
+                  onChange={(e) => setName(e.target.value)}
+                  className="border mx-12 mt-2"
+                />
+              </div>
+              <div>
+                <p className=" pt-4 font-serif"> Email</p>
+                <input
+                  type="email"
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="border  mt-2"
+                />
+              </div>
+              <div className="mx-10">
+                <p className=" pt-4 font-serif"> Phone number</p>
+                <input
+                  type="text"
+                  onChange={(e) => setNumber(e.target.value)}
+                  className="border  mt-2"
+                />
+              </div>
             </div>
-            <div className="mx-10">
-              <p className="px-2 pt-4 font-serif">
-                {" "}
-                Apartment,floor{" "}
-                <span className="text-slate-400">(Optional)</span>
-              </p>
-              <input type="text" className="border  mx-2 mt-2" />
+            <div className="flex">
+              <div className="mx-3">
+                <p className="mx-5 px-7 pt-4 font-serif"> State</p>
+                <input
+                  type="text"
+                  onChange={(e) => setState(e.target.value)}
+                  className="border  mx-12 mt-2"
+                />
+              </div>
+              <div className="mx-10">
+                <p className=" pt-4 font-serif"> District</p>
+                <input
+                  type="text"
+                  onChange={(e) => setDistrict(e.target.value)}
+                  className="border   mt-2"
+                />
+              </div>
+              <div className="">
+                <p className="px-2 pt-4 font-serif"> Pincode</p>
+                <input
+                  type="text"
+                  onChange={(e) => setPincode(e.target.value)}
+                  className="border  mx-2 mt-2"
+                />
+              </div>
             </div>
+            <div className="flex">
+              <div className="mx-12">
+                <p className="px-2 pt-4 font-serif"> Street</p>
+                <input
+                  type="text"
+                  onChange={(e) => setStreet(e.target.value)}
+                  className="border  mx-2 mt-2"
+                />
+              </div>
+              <div className="mx-10">
+                <p className="px-2 pt-4 font-serif">
+                  {" "}
+                  Apartment,floor{" "}
+                  <span className="text-slate-400">(Optional)</span>
+                </p>
+                <input type="text" className="border  mx-2 mt-2" />
+              </div>
+            </div>
+            <button
+              className="bg-blue-400 text-white w-32 mx-10 mt-10 font-serif shadow-md rounded-md"
+              onClick={() => {
+                
+
+                dispatch(
+                  AddAddress({
+                    name: name,
+                    email: email,
+                    number: number,
+                    state: state,
+                    district: district,
+                    pincode: pincode,
+                    street: street,
+                  })
+                );
+              }}
+            >
+              Submit Address
+            </button>
           </div>
-        </div> */}
+        )} */}
+
         <div>
           <p className="px-14 pt-8 font-serif">Payment Method</p>
           <div className="flex">
@@ -184,6 +338,7 @@ function Checkout() {
                   onChange={(e) => setPaymentmode(e.target.value)}
                   type="radio"
                   value="COD"
+                  name="NAME"
                 />
                 <GiCash size={30} />
               </div>
@@ -194,6 +349,7 @@ function Checkout() {
             <div>
               <div className="flex  mt-5 space-x-2">
                 <input
+                  name="NAME"
                   onChange={(e) => setPaymentmode(e.target.value)}
                   type="radio"
                   value="NetBanking"
@@ -208,6 +364,7 @@ function Checkout() {
               <div className="flex mx-24 mt-5 space-x-2">
                 <input
                   value="wallet"
+                  name="NAME"
                   onChange={(e) => setPaymentmode(e.target.value)}
                   type="radio"
                 />
@@ -274,11 +431,11 @@ function Checkout() {
 
                   //  dispatch(onlinePayments({amount:products.totalPrice}))
                 } else {
-                  if (walletBalance<products.totalPrice) {
-                    setEmpty("Insufficent Wallet Balance")
-                  }
-                  else{
-
+                  if (!walletBalance) {
+                    setEmpty("Insufficent Balance");
+                  } else if (walletBalance < products.totalPrice) {
+                    setEmpty("Insufficent Wallet Balance");
+                  } else {
                     dispatch(
                       placeOrders({
                         products: products,
@@ -286,7 +443,7 @@ function Checkout() {
                         AdressMail: addressEmail,
                       })
                     );
-                    nav("/orderSucess")
+                    nav("/orderSucess");
                   }
                 }
               }}
@@ -298,6 +455,7 @@ function Checkout() {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

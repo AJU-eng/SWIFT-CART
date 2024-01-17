@@ -16,6 +16,7 @@ import OrdersManagment from "../pages/OrderManagement";
 import CouponManagement from "../pages/CouponManagement";
 import BannerManagement from "../pages/BannerManagement";
 import ReturnManagment from "../pages/ReturnManagment";
+// import ReportModal from "../pages/reportModal";
 
 // function Main() {
 //   return (
@@ -55,6 +56,7 @@ function Main() {
           <Route path="products/editProducts/:id" element={<EditProduct/>}/>
           <Route path="editCategory/:id" element={<EditCategory/>}/>
           <Route path="return" element={<ReturnManagment/>}/>
+          {/* <Route path="reportModal" element={<ReportModal/>}/> */}
         </Route>
 
         

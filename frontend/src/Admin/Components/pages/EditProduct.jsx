@@ -40,7 +40,7 @@ function EditProduct() {
       setDescription(ProductEdit.description);
       setStock(ProductEdit.stock);
       setOffer(ProductEdit.offer)
-      // setCategory(ProductEdit.Category.name);
+      setCategory(ProductEdit.Category.name);
       setfetchedImages(ProductEdit.moreImage);
     }
   }, [ProductEdit]);
@@ -170,11 +170,11 @@ function EditProduct() {
                     className="border mt-3 border-blue-300 border-2"
                   >
                     <option value="">{category}</option>
-                    {/* {Cateogries.map((category) => (
+                    {Cateogries.map((category) => (
                     <option key={category.id} value={category._id}>
                       {preCategory}
                     </option>
-                  ))} */}
+                  ))}
                   </select>
                 </div>
                 <div className="mt-3 mx-10">

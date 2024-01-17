@@ -12,9 +12,11 @@ const addAddress = async (req, res) => {
   if (address) {
     const data = await AddressModel.findOneAndUpdate(
       { userId: user_id },
-      { $push: { Address: req.body } }
+      { $push: { Address: req.body } },
+      { new: true }
     );
     console.log(data);
+    res.send(data);
   } else {
     const data = await AddressModel.create({
       Address: {
@@ -29,16 +31,58 @@ const addAddress = async (req, res) => {
       userId: user_id,
     });
     console.log(data._id);
+    res.send(data);
   }
 };
 
-const getAddresses=async(req,res)=>{
-    const {user_id,iat}=jwt.decode(req.cookies.token,process.env.SECRET_KEY)
-    const data=await AddressModel.findOne({userId:user_id})
-    res.status(200).send(data)
-}
+const getAddresses = async (req, res) => {
+  const { user_id, iat } = jwt.decode(
+    req.cookies.token,
+    process.env.SECRET_KEY
+  );
+  const data = await AddressModel.findOne({ userId: user_id });
+  res.status(200).send(data);
+};
+const deleteAddress = async (req, res) => {
+  console.log("delete api called");
+  const { email } = req.body;
+  const { user_id, iat } = jwt.decode(
+    req.cookies.token,
+    process.env.SECRET_KEY
+  );
+  const data = await AddressModel.findOneAndUpdate(
+    { userId: user_id },
+    { $pull: { Address: { email: email } } },
+    { new: true }
+  );
+  res.send(data);
+  console.log(data);
+};
+
+const findAddress = async (req, res) => {
+  const { user_id, iat } = jwt.decode(
+    req.cookies.token,
+    process.env.SECRET_KEY
+  );
+  const { email } = req.body;
+  console.log(email);
+  const data = await AddressModel.findOne({ userId: user_id });
+  // res.send(data)
+  // console.log(data);
+  // data.Address.forEach((element) => {
+  //   // console.log(element);
+  //   if (element.email===email) {
+  //     console.log(element+"=======");
+  //   }
+  // });
+ const filteredData=data.Address.filter((item)=>item.email===email)
+  res.send(filteredData)
+};
+
 
 module.exports = {
   addAddress,
-  getAddresses
+  getAddresses,
+  deleteAddress,
+  findAddress,
 };

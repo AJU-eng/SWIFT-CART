@@ -23,6 +23,8 @@
     "framer-motion": "^10.16.4",
     "hamburger-react": "^2.5.0",
     "install": "^0.13.0",
+    "jspdf": "^2.5.1",
+    "jspdf-autotable": "^3.8.1",
     "lucide-react": "^0.288.0",
     "npm": "^10.2.2",
     "otp-input-react": "^0.3.0",

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   YearlySales,
+  downloadReport,
+  getOrders,
   getTotalData,
   monthlySales,
   weeklySales,
@@ -9,11 +11,17 @@ import {
 // import {LineChart,XAxis,Tooltip,CartesianGrid,Line,YAxis} from "recharts"
 import { Bar } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
-
+// import ReportModal from "./reportModal";
+import {jsPDF} from "jspdf"
+import autotable from "jspdf-autotable"
 function Dashboard() {
   const dispatch = useDispatch();
   const data = useSelector((state) => state.admin.sales);
+  const [visible,setVisible]=useState(false)
+  
 
+
+    
   // const data = [{name: 'Page A', uv: 400, pv: 2400, amt: 2400}];
   const [chartData, setChartData] = useState({
     labels: [],
@@ -28,14 +36,13 @@ function Dashboard() {
     ],
   });
 
-  const handlechange=()=>{
-
-  }
+ 
 
   const TotalDatas = useSelector((state) => state.admin.TotalData);
   useEffect(() => {
     dispatch(getTotalData());
     dispatch(weeklySales());
+    dispatch(getOrders())
   }, [dispatch]);
 
   useEffect(() => {
@@ -56,11 +63,14 @@ function Dashboard() {
         ],
       });
     }
-  }, [TotalDatas,data]);
+  }, [TotalDatas, data]);
   return (
     <div>
       {/* <p>DashBoard</p> */}
       <div>
+        <div className="flex justify-end mr-10 ">
+          <button className="bg-blue-400 w-32 pb-1 text-center text-white rounded-md pt-1" onClick={()=>setVisible(true)}>Download CSV</button>
+        </div>
         <div className="flex justify-around">
           <div className="w-60 h-36 bg-white rounded-lg shadow-lg mt-7">
             <p className="text-center font-serif text-slate-600 text-lg pt-3">
@@ -89,15 +99,27 @@ function Dashboard() {
         </div>
       </div>
       <div className="flex justify-end mr-14 mt-12">
-      <select name="" className="font-serif border text-lg pb-1 text-center border-slate-500 text-slate-600 w-28 px-3" onChange={(e)=>e.target.value ==="weekly"? dispatch(weeklySales()):e.target.value==="monthly"?dispatch(monthlySales()):dispatch(YearlySales())} id="">
-        <option value="weekly">weekly</option>
-        <option value="monthly">monthly</option>
-        <option value="">yearly</option>
-      </select>
+        <select
+          name=""
+          className="font-serif border text-lg pb-1 text-center border-slate-500 text-slate-600 w-28 px-3"
+          onChange={(e) =>
+            e.target.value === "weekly"
+              ? dispatch(weeklySales())
+              : e.target.value === "monthly"
+              ? dispatch(monthlySales())
+              : dispatch(YearlySales())
+          }
+          id=""
+        >
+          <option value="weekly">weekly</option>
+          <option value="monthly">monthly</option>
+          <option value="">yearly</option>
+        </select>
       </div>
       <div className="w-full h-80 mt-3 mx-10">
         <Bar data={chartData} />
       </div>
+      {/* <ReportModal visible={visible}/> */}
     </div>
   );
 }
