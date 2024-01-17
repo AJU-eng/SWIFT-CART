@@ -10,7 +10,7 @@ const session=require('express-session');
 const router = require("./router/userRouter");
 const adminRouter = require("./router/adminRouter");
 app.use(cors({
-    origin:"http://localhost:5173",
+    origin:"http://13.200.178.233",
     credentials:true
 }))
 app.use(cookie())
