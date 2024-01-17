@@ -10,7 +10,7 @@ import EditProduct from "./EditProduct";
 import { Link, Navigate } from "react-router-dom";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
-
+import { URL } from "../../../redux/features/api";
 import { useNavigate } from "react-router-dom";
 import {
   DeleteProduct,
@@ -57,7 +57,7 @@ function ProductManagement() {
                   <tr className="border border-b-2 text-center h-12 font-serif">
                     <td>
                       <img
-                        src={`http://localhost:3000/images/${product.moreImage[0]}`}
+                        src={`${URL}images/${product.moreImage[0]}`}
                         alt=""
                         className="h-12 mx-11"
                       />

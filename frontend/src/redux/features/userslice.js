@@ -3,7 +3,7 @@ import axios, { Axios } from "axios";
 import build from "otp-input-react";
 import { AiFillZhihuCircle } from "react-icons/ai";
 import { MdExposureZero } from "react-icons/md";
-
+import { URL } from "./api";
 const initialUserState = {
   loading: false,
   user: "",
@@ -41,7 +41,7 @@ export const registerUser = createAsyncThunk(
   async (userCredentials, { rejectWithValue }) => {
     try {
       const res = await axios.post(
-        "http://localhost:3000/user/generateOtp",
+        `${URL}user/generateOtp`,
         { userCredentials },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -56,7 +56,7 @@ export const cancelOrder = createAsyncThunk(
   "user/cancelOrder",
   async (price) => {
     const res = await axios.post(
-      "http://localhost:3000/user/caancelOrder",
+      `${URL}user/caancelOrder`,
       price
     );
     return res.data;
@@ -67,14 +67,14 @@ export const passwordReset = createAsyncThunk(
   async (upData) => {
     console.log(upData);
     const res = await axios.patch(
-      "http://localhost:3000/user/resetPassword",
+      `${URL}user/resetPassword`,
       upData
     );
   }
 );
 
 export const deleteAddress=createAsyncThunk("user/delelteAddress",async(data)=>{
-  const res=await axios.post("http://localhost:3000/user/deleteAddress",data)
+  const res=await axios.post(`${URL}user/deleteAddress`,data)
   return res.data
 })
 
@@ -83,7 +83,7 @@ export const verifyUser = createAsyncThunk(
   async (otp, { rejectWithValue }) => {
     try {
       const resp = await axios.post(
-        "http://localhost:3000/user/verifyOtp",
+        `${URL}user/verifyOtp`,
         { otp },
         { headers: { "Content-Type": "application/json" } }
       );
@@ -96,31 +96,31 @@ export const verifyUser = createAsyncThunk(
 );
 
 export const findProduct = createAsyncThunk("user/findProduct", async (id) => {
-  const res = await axios.post(`http://localhost:3000/user/findProduct/${id}`);
+  const res = await axios.post(`${URL}user/findProduct/${id}`);
   console.log(res.data);
   return res.data;
 });
 export const getBanner = createAsyncThunk("user/getBanner", async () => {
-  const res = await axios.get("http://localhost:3000/admin/getBanner");
+  const res = await axios.get(`${URL}admin/getBanner`);
   return res.data;
 });
 export const GetProducts = createAsyncThunk("user/products", async () => {
-  const res = await axios.get("http://localhost:3000/user/getProducts");
+  const res = await axios.get(`${URL}user/getProducts`);
   return res.data;
 });
 export const getCart = createAsyncThunk("user/getCart", async () => {
-  const res = await axios.get("http://localhost:3000/user/getCartData");
+  const res = await axios.get(`${URL}user/getCartData`);
   return res.data;
 });
 export const logouts = createAsyncThunk("user/logout", async () => {
-  return axios.get("http://localhost:3000/user/logout").then((res) => res.data);
+  return axios.get(`${URL}user/logout`).then((res) => res.data);
 });
 export const forgetOtp = createAsyncThunk(
   "user/forgetOtp",
   async (email, { rejectWithValue }) => {
     try {
       const res = await axios.post(
-        "http://localhost:3000/user/forgetPasswordOtp",
+        `${URL}user/forgetPasswordOtp`,
         { email }
       );
       return res.data;
@@ -134,7 +134,7 @@ export const verifyForgetOtps = createAsyncThunk(
   async (otp_sec) => {
     console.log(otp_sec);
     const res = await axios.post(
-      "http://localhost:3000/user/verifyForgetOtp",
+      `${URL}user/verifyForgetOtp`,
       otp_sec
     );
     return res.data;
@@ -144,7 +144,7 @@ export const singleOrder = createAsyncThunk(
   "user/singleOrder",
   async (data) => {
     const res = await axios.post(
-      "http://localhost:3000/user/singleOrder",
+      `${URL}user/singleOrder`,
       data
     );
     return res.data;
@@ -154,7 +154,7 @@ export const singleOrder = createAsyncThunk(
 export const returnOrder = createAsyncThunk(
   "user/returnOrder",
   async (data) => {
-    const res = await axios.post("http://localhost:3000/user/return", data);
+    const res = await axios.post(`${URL}user/return`, data);
   }
 );
 export const resendOtps = createAsyncThunk(
@@ -162,14 +162,14 @@ export const resendOtps = createAsyncThunk(
   async (userCredentials) => {
     console.log(userCredentials);
     const res = await axios.post(
-      "http://localhost:3000/user/resendOtp",
+      `${URL}user/resendOtp`,
       userCredentials
     );
     return res.data;
   }
 );
 export const logged = createAsyncThunk("user/logged", async () => {
-  const res = await axios.get("http://localhost:3000/user/checkLogStatus");
+  const res = await axios.get(`${URL}user/checkLogStatus`);
   return res.data;
 });
 // export const userLogin = createAsyncThunk(
@@ -178,7 +178,7 @@ export const logged = createAsyncThunk("user/logged", async () => {
 //     try {
 
 //       const res = await axios.post(
-//         "http://localhost:3000/user/login",
+//         `${URL}user/login",
 //         { email, password },
 //         {
 //           headers: {
@@ -195,18 +195,18 @@ export const logged = createAsyncThunk("user/logged", async () => {
 //   }
 // );
 export const AdminLogout = createAsyncThunk("admin/logout", async () => {
-  const logout = await axios.get("http://localhost:3000/admin/logout");
+  const logout = await axios.get(`${URL}admin/logout`);
   return logout.data;
 });
 export const getWishList = createAsyncThunk("user/getwish", async () => {
-  const res = await axios.get("http://localhost:3000/user/getWishlist");
+  const res = await axios.get(`${URL}user/getWishlist`);
   return res.data;
 });
 export const deleteWishlist = createAsyncThunk(
   "user/deleteWish",
   async (product) => {
     const res = await axios.post(
-      "http://localhost:3000/user/deleteWish",
+      `${URL}user/deleteWish`,
       product
     );
     return res.data;
@@ -216,7 +216,7 @@ export const deleteCartProduct = createAsyncThunk(
   "user/deleteCartProduct",
   async (name) => {
     const res = await axios.patch(
-      "http://localhost:3000/user/deleteCartProduct",
+      `${URL}user/deleteCartProduct`,
       name
     );
     return res.data;
@@ -224,14 +224,14 @@ export const deleteCartProduct = createAsyncThunk(
 );
 
 export const AddAddress=createAsyncThunk("user/addAddress",async(data)=>{
-  const res=await axios.post("http://localhost:3000/user/addAddress",data)
+  const res=await axios.post(`${URL}user/addAddress`,data)
   return res.data
 })
 export const editUserData = createAsyncThunk(
   "user/editUser",
   async (userData) => {
     const res = await axios.patch(
-      "http://localhost:3000/user/editUser",
+      `${URL}user/editUser`,
       userData
     );
     return res.data;
@@ -242,7 +242,7 @@ export const addToCart = createAsyncThunk(
   async (Products, { rejectWithValue }) => {
     try {
       const data = await axios.post(
-        "http://localhost:3000/user/addToCart",
+        `${URL}user/addToCart`,
         Products,
         { headers: { "Content-Type": "application/json" } }
       );
@@ -257,7 +257,7 @@ export const increment = createAsyncThunk(
   async (productName, { rejectWithValue }) => {
     try {
       const res = await axios.post(
-        "http://localhost:3000/user/incrementProduct",
+        `${URL}user/incrementProduct`,
         productName
       );
       return res.data;
@@ -270,7 +270,7 @@ export const placeOrders = createAsyncThunk(
   "user/placeOrder",
   async (OrderDetails) => {
     const res = await axios.post(
-      "http://localhost:3000/user/placeOrder",
+      `${URL}user/placeOrder`,
       OrderDetails
     );
     return res.data;
@@ -279,7 +279,7 @@ export const placeOrders = createAsyncThunk(
 export const OrderedDataAction = createAsyncThunk(
   "user/getOrders",
   async () => {
-    const res = await axios.get("http://localhost:3000/user/getOrder");
+    const res = await axios.get(`${URL}user/getOrder`);
     return res.data;
   }
 );
@@ -288,7 +288,7 @@ export const AddToWish = createAsyncThunk(
   async (productName, { rejectWithValue }) => {
     try {
       const res = await axios.post(
-        "http://localhost:3000/user/wishlist",
+        `${URL}user/wishlist`,
         productName
       );
       return res.data;
@@ -299,25 +299,25 @@ export const AddToWish = createAsyncThunk(
 );
 export const makeOrders = createAsyncThunk("user/order", async (products) => {
   const res = await axios.post(
-    "http://localhost:3000/user/makeOrder",
+    `${URL}user/makeOrder`,
     products
   );
   return res.data;
 });
 
 export const getWalletDetails=createAsyncThunk("user/getWalletDetails",async()=>{
-   const res=await axios.get("http://localhost:3000/user/getWallet")
+   const res=await axios.get(`${URL}user/getWallet`)
    return res.data
 })
 export const userDetail = createAsyncThunk("user/userDetails", async () => {
-  const res = await axios.get("http://localhost:3000/user/userData");
+  const res = await axios.get(`${URL}user/userData`);
   return res.data;
 });
 export const onlinePayments = createAsyncThunk(
   "user/onlinePay",
   async (data) => {
     const res = await axios.post(
-      "http://localhost:3000/user/onlinePayment",
+      `${URL}user/onlinePayment`,
       data
     );
     return res.data;
@@ -328,7 +328,7 @@ export const userLogin = createAsyncThunk(
   async (hello, { rejectWithValue }) => {
     try {
       console.log(JSON.stringify(hello) + "redux login state=======");
-      const res = await axios.post("http://localhost:3000/user/login", hello, {
+      const res = await axios.post(`${URL}user/login`, hello, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -342,22 +342,22 @@ export const userLogin = createAsyncThunk(
 );
 
 export const findAddress=createAsyncThunk("user/findAddres",async(data)=>{
-  const res=await axios.post("http://localhost:3000/user/findAdd",data)
+  const res=await axios.post(`${URL}user/findAdd`,data)
   return res.data
 })
 export const getAddress = createAsyncThunk("user/address", async () => {
-  const data = await axios.get("http://localhost:3000/user/address");
+  const data = await axios.get(`${URL}user/address`);
   return data.data;
 });
 export const decrementProduct = createAsyncThunk(
   "user/decrement",
   async (name) => {
-    const hel = await axios.patch("http://localhost:3000/user/decrement", name);
+    const hel = await axios.patch(`${URL}user/decrement`, name);
     return hel.data;
   }
 );
 export const getCouponCodes = createAsyncThunk("user/getCoupon", async () => {
-  const res = await axios.get("http://localhost:3000/admin/getCoupon");
+  const res = await axios.get(`${URL}admin/getCoupon`);
   console.log(res.data);
   return res.data;
 });
@@ -365,7 +365,7 @@ export const getCouponCodes = createAsyncThunk("user/getCoupon", async () => {
 export const getOrderHistory = createAsyncThunk(
   "user/orderHistory",
   async () => {
-    const res = await axios.get("http://localhost:3000/user/orderHistory");
+    const res = await axios.get(`${URL}user/orderHistory`);
     return res.data;
   }
 );

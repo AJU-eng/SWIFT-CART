@@ -19,7 +19,7 @@ function Wishlist() {
                 <div className="bg-slate-100 h-[7rem]">
                   <div className="bg-contain">
                     <img
-                      src={`http://localhost:3000/images/${product.image}`}
+                      src={`${URL}images/${product.image}`}
                       alt=""
                     />
                   </div>

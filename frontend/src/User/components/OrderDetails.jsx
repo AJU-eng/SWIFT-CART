@@ -5,6 +5,7 @@ import { useParams } from "react-router";
 import phone from "./product images/iphone 14/iphone_14.jpg";
 import ReturnModal from "../components/requestModal";
 import { FaLessThanEqual } from "react-icons/fa";
+import { URL } from "../../redux/features/api";
 function OrderDetails() {
   let [obj, setObj] = useState("");
   const { id } = useParams();
@@ -46,7 +47,7 @@ function OrderDetails() {
                   <div className="flex">
                     <div className="mx-10">
                       <img
-                        src={`http://localhost:3000/images/${order.productImage}`}
+                        src={`${URL}images/${order.productImage}`}
                         className="h-20"
                         alt=""
                       />

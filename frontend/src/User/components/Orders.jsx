@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { OrderedDataAction, cancelOrder } from "../../redux/features/userslice";
 import { Navigate, useNavigate } from "react-router";
-
+import { URL } from "../../redux/features/api";
 function Orders() {
   const dispatch = useDispatch();
   const orders = useSelector((state) => state.user.OrderedData);
@@ -39,7 +39,7 @@ function Orders() {
                     return (
                       <div className="h-20   flex   font-serif">
                         <img
-                          src={`http://localhost:3000/images/${order.productImage}`}
+                          src={`${URL}images/${order.productImage}`}
                           className="h-20 "
                           alt=""
                         />

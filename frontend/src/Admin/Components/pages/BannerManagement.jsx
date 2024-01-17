@@ -7,7 +7,7 @@ import Slider from "react-slick"
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { AiFillCloseCircle } from "react-icons/ai";
-
+import { URL } from "../../../redux/features/api";
 function BannerManagement() {
   const refs = useRef();
   const [preview, setPreview] = useState();
@@ -104,7 +104,7 @@ function BannerManagement() {
                   dispatch(deleteBanners({_id:Banner._id}))
                 }}/>
                 <img
-                  src={`http://localhost:3000/images/${Banner.Image}`}
+                  src={`${URL}images/${Banner.Image}`}
                   alt=""
                 />
               </div>

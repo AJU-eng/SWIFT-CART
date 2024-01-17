@@ -11,6 +11,7 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { URL } from "../../redux/features/api";
 
 function products() {
   const dispatch = useDispatch();
@@ -42,7 +43,7 @@ function products() {
                 <Link to={`/ProductDetail/${product._id}`}>
                   <div className=" bg-contain">
                     <img
-                      src={`http://localhost:3000/images/${product.moreImage[0]}`}
+                      src={`${URL}images/${product.moreImage[0]}`}
                       alt=""
                     />
                   </div>

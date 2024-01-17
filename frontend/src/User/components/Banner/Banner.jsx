@@ -5,7 +5,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useDispatch, useSelector } from "react-redux";
 import { getBanner } from "../../../redux/features/userslice";
-
+import { URL } from "../../../redux/features/api";
 function Banner() {
   const settings = {
     dots: true,
@@ -35,7 +35,7 @@ function Banner() {
             return (
               <div className="h-[42rem]">
                 <img
-                  src={`http://localhost:3000/images/${banner.Image}`}
+                  src={`${URL}images/${banner.Image}`}
                   className="h-[38rem] w-full"
                   alt=""
                 />

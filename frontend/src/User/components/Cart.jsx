@@ -14,6 +14,7 @@ import { useNavigate } from "react-router";
 import { getCouponCodes } from "../../redux/features/userslice";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { URL } from "../../redux/features/api";
 function Cart() {
   const dispatch = useDispatch();
   // let [total,setTotal]=useState("")
@@ -109,7 +110,7 @@ function Cart() {
                   <div className="flex ">
                     <div>
                       <img
-                        src={`http://localhost:3000/images/${product.productImage}`}
+                        src={`${URL}images/${product.productImage}`}
                         className="h-20 mt-2 mx-5 "
                         alt=""
                       />
