@@ -13,6 +13,7 @@ const initialUserState = {
   singleOrders: "",
   orrderHistory: [],
   cartStock: "",
+  singleAddress:"",
   online: "",
   Address: "",
   userData: "",
@@ -71,6 +72,11 @@ export const passwordReset = createAsyncThunk(
     );
   }
 );
+
+export const deleteAddress=createAsyncThunk("user/delelteAddress",async(data)=>{
+  const res=await axios.post("http://localhost:3000/user/deleteAddress",data)
+  return res.data
+})
 
 export const verifyUser = createAsyncThunk(
   "user/verifyOtp",
@@ -216,6 +222,11 @@ export const deleteCartProduct = createAsyncThunk(
     return res.data;
   }
 );
+
+export const AddAddress=createAsyncThunk("user/addAddress",async(data)=>{
+  const res=await axios.post("http://localhost:3000/user/addAddress",data)
+  return res.data
+})
 export const editUserData = createAsyncThunk(
   "user/editUser",
   async (userData) => {
@@ -329,6 +340,11 @@ export const userLogin = createAsyncThunk(
     }
   }
 );
+
+export const findAddress=createAsyncThunk("user/findAddres",async(data)=>{
+  const res=await axios.post("http://localhost:3000/user/findAdd",data)
+  return res.data
+})
 export const getAddress = createAsyncThunk("user/address", async () => {
   const data = await axios.get("http://localhost:3000/user/address");
   return data.data;
@@ -490,6 +506,15 @@ const userSlice = createSlice({
     });
     builder.addCase(getWalletDetails.fulfilled,(state,action)=>{
       state.Wallet=action.payload
+    })
+    builder.addCase(AddAddress.fulfilled,(state,action)=>{
+      state.Address=action.payload
+    })
+    builder.addCase(deleteAddress.fulfilled,(state,action)=>{
+     state.Address=action.payload
+    })
+    builder.addCase(findAddress.fulfilled,(state,action)=>{
+      state.singleAddress=action.payload
     })
   },
 });

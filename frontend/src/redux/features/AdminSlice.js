@@ -8,6 +8,7 @@ const initialDataState = {
   users: [],
   categories: [],
   returns:"",
+  csvfile:"",
   singleReturn:"",
   Banner: "",
   coupon: [],
@@ -272,6 +273,11 @@ export const deleteBanners=createAsyncThunk("admin/deleteBanner",async(id)=>{
   return res.data
 })
 
+export const downloadReport=createAsyncThunk("admin/report",async(data)=>{
+    const res=await axios.post("http://localhost:300/admin/report",data)
+    return res.data
+})
+
 export const approveReturns=createAsyncThunk("admin/approveReturn",async(data)=>{
    const res=await axios.post("http://localhost:3000/admin/approveReturn",data)
    
@@ -352,6 +358,9 @@ const adminSlice = createSlice({
         (product) => product._id !== action.payload._id
       );
     });
+    builder.addCase(downloadReport.fulfilled,(state,action)=>{
+        state.csvfile=action.payload
+    })
     builder.addCase(findEditProduct.fulfilled, (state, action) => {
       // console.log(JSON.stringify(action.payload)+"=======================reduxstate");
       state.ProductToEdit = action.payload;

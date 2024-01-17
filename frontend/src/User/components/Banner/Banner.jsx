@@ -28,12 +28,12 @@ function Banner() {
     }
   });
   return (
-    <div>
+    <div className="">
       <Slider {...settings}>
         {Banners.length !== 0 &&
           Banners.map((banner) => {
             return (
-              <div className="h-[35rem]">
+              <div className="h-[42rem]">
                 <img
                   src={`http://localhost:3000/images/${banner.Image}`}
                   className="h-[38rem] w-full"

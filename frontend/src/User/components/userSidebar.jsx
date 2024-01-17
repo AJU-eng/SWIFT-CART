@@ -102,12 +102,12 @@ function UserSideBar() {
                   <h1 className="text-lg mx-2 my-3  text-slate-500">Orders</h1>
                 </div>
                 </NavLink>
-                <NavLink to="Orders">
+                {/* <NavLink to="Orders">
                 <div className="flex mx-9  flex-1">
                  <MdOutlineLocalOffer size={21} className="mt-4" color="#475569"/>
                   <h1 className="text-lg mx-2 my-3  text-slate-500">Coupons</h1>
                 </div>
-                </NavLink>
+                </NavLink> */}
                 <NavLink to="address">
                   <div className="flex mx-9 flex-1">
                     <img src={Address} className="h-4 mt-4" alt="" />
