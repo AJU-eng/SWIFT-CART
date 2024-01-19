@@ -41,12 +41,12 @@ function App() {
   useEffect(() => {
     dispatch(logged());
     dispatch(adminLogged());
-  }, [dispatch]);
+  }, [dispatch,user]);
 
-  const ProtectRoute=({element})=>{
-    // const user=useSelector((state)=>state.logged.user)
-    return user ? element :<Navigate to="/login"/>
-  }
+  // const ProtectRoute=({element})=>{
+  //   // const user=useSelector((state)=>state.logged.user)
+  //   return user ? element :<Navigate to="/login"/>
+  // }
   return (
     <>
       <SkeletonTheme baseColor="#f0f0f0" highlightColor="#d9d9d9 ">

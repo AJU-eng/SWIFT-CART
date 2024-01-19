@@ -75,14 +75,28 @@ const findAddress = async (req, res) => {
   //     console.log(element+"=======");
   //   }
   // });
- const filteredData=data.Address.filter((item)=>item.email===email)
-  res.send(filteredData)
+  const filteredData = data.Address.filter((item) => item.email === email);
+  res.send(filteredData);
 };
 
+const EditAddress = async (req, res) => {
+  const { name, email, number, district, state, pincode, street,id } = req.body;
+  const { user_id, iat } = jwt.decode(
+    req.cookies.token,
+    process.env.SECRET_KEY
+  );
+
+  const data = await AddressModel.findOneAndUpdate({
+    "Address._id":id
+  });
+  console.log(data);
+  res.send(data)
+};
 
 module.exports = {
   addAddress,
   getAddresses,
   deleteAddress,
   findAddress,
+  EditAddress,
 };

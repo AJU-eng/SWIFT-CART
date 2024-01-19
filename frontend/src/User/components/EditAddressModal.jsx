@@ -23,9 +23,16 @@ function EditAddressModal({ visible, onClose, email }) {
   useEffect(()=>{
     if (address) {
       // console.log(data);
-      setData(address)
+      // setData(address)
+      setName(address.name)
+      setEmail(address.email)
+      setNumber(address.number)
+      setState(address.state)
+      setDistrict(address.district)
+      setPincode(address.pincode)
+      setStreet(address.street)
     }
-  },[address,data])
+  },[address])
   return (
     visible && (
       <div>
@@ -37,7 +44,7 @@ function EditAddressModal({ visible, onClose, email }) {
                 <p className="mx-5 px-7 pt-4 font-serif"> User name</p>
                 <input
                   type="text"
-                  value={data.name}
+                  value={name}
                     onChange={(e) => setName(e.target.value)}
                   className="border mx-12 mt-2"
                 />
@@ -46,7 +53,7 @@ function EditAddressModal({ visible, onClose, email }) {
                 <p className=" pt-4 font-serif"> Email</p>
                 <input
                   type="email"
-                  value={data.email}
+                  value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   className="border  mt-2"
                 />
@@ -55,7 +62,7 @@ function EditAddressModal({ visible, onClose, email }) {
                 <p className=" pt-4 font-serif"> Phone number</p>
                 <input
                   type="text"
-                  value={data.number}
+                  value={number}
                     onChange={(e) => setNumber(e.target.value)}
                   className="border  mt-2"
                 />
@@ -66,7 +73,7 @@ function EditAddressModal({ visible, onClose, email }) {
                 <p className="mx-5 px-7 pt-4 font-serif"> State</p>
                 <input
                   type="text"
-                  value={data.state}
+                  value={state}
                     onChange={(e) => setState(e.target.value)}
                   className="border  mx-12 mt-2"
                 />
@@ -75,7 +82,7 @@ function EditAddressModal({ visible, onClose, email }) {
                 <p className=" pt-4 font-serif"> District</p>
                 <input
                   type="text"
-                  value={data.district}
+                  value={district}
                     onChange={(e) => setDistrict(e.target.value)}
                   className="border   mt-2"
                 />
@@ -84,7 +91,7 @@ function EditAddressModal({ visible, onClose, email }) {
                 <p className="px-2 pt-4 font-serif"> Pincode</p>
                 <input
                   type="text"
-                  value={data.pincode}
+                  value={pincode}
                     onChange={(e) => setPincode(e.target.value)}
                   className="border  mx-2 mt-2"
                 />
@@ -95,7 +102,7 @@ function EditAddressModal({ visible, onClose, email }) {
                 <p className="px-2 pt-4 font-serif"> Street</p>
                 <input
                   type="text"
-                  value={data.street}
+                  value={street}
                     onChange={(e) => setStreet(e.target.value)}
                   className="border  mx-2 mt-2"
                 />
