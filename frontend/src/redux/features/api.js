@@ -1,1 +1,1 @@
-export const URL="http://13.200.178.233/api/"
+export const URL="http://swiftcarts.shop/api/"
