@@ -1,1 +1,1 @@
-export const URL="http://swiftcarts.shop/api/"
+export const URL="http://www.swiftcartss.shop/api/"
