@@ -63,7 +63,7 @@ const paymentVerify = (req, res) => {
 
 const PlaceOrder = async (req, res) => {
   const items = req.body.products.products;
-  console.log(req.body);
+  // console.log(req.body);
 
   // // console.log(req.body.products.totalPrice);
   const { user_id, iat } = jwt.decode(
@@ -92,7 +92,7 @@ const PlaceOrder = async (req, res) => {
           $inc: { Balance: -req.body.products.totalPrice },
         }
       );
-      console.log(data);
+      // console.log(data);
     }
   }
   // console.log(products);
@@ -102,7 +102,7 @@ const PlaceOrder = async (req, res) => {
   const specific = await ProductModel.findOne({ name: products.productName });
   // console.log(specific);
   products.products.map(async (product) => {
-    console.log(-product.quantity);
+    // console.log(-product.quantity);
 
     const stockManage = await ProductModel.findOneAndUpdate(
       { name: product.productName },
@@ -226,10 +226,10 @@ const PlaceOrder = async (req, res) => {
       datas.products.push(item);
     });
 
-    console.log(datas);
-
+    console.log(updateData);
+    // res.send(req.body)
     const result = await easyinvoice.createInvoice(datas);
-    console.log(result.pdf);
+    // console.log(result.pdf);
 
     const Transport = nodemailer.createTransport({
       service: "gmail",
@@ -255,14 +255,15 @@ const PlaceOrder = async (req, res) => {
         },
       ],
     });
-    console.log("hello world");
-    console.log(sendMail);
+    // console.log("hello world");
+    // console.log(sendMail);
 
     const deleteFromCart = await CartModel.findOneAndDelete(
       { userId: user_id },
       { new: true }
     );
-    res.send(deleteFromCart.Products);
+    console.log(updateData);
+    res.send(req.body);
   } else {
     let obj = {};
     let date = new Date();
@@ -378,10 +379,10 @@ const PlaceOrder = async (req, res) => {
       datas.products.push(item);
     });
 
-    console.log(datas);
+    // console.log(datas);
 
     const result = await easyinvoice.createInvoice(datas);
-    console.log(result.pdf);
+    // console.log(result.pdf);
 
     const Transport = nodemailer.createTransport({
       service: "gmail",
@@ -408,7 +409,7 @@ const PlaceOrder = async (req, res) => {
       ],
     });
     console.log("hello world");
-    console.log(sendMail);
+    // console.log(sendMail);
 
     // invoice;
     const cartDelete = await CartModel.findOneAndDelete(
@@ -416,7 +417,8 @@ const PlaceOrder = async (req, res) => {
       { new: true }
     );
     console.log(data);
-    res.send(cartDelete.Products);
+    // res.send(cartDelete.Products);
+    res.send(req.body)
   }
 };
 
