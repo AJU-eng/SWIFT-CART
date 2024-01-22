@@ -5,7 +5,7 @@ const { AddtoCart, getCartData, IncrementProduct, deleteCart, deleteCartData, De
 const { AddToList, getWishList, deleteWishlist } = require('../controller/WishListController')
 const { makeOrder, PlaceOrder, getOrder, cancelOrder, orderHistory, onlinePayment, salesReport, singleOrder } = require('../controller/OrderController')
 const auth=require("../Middleware/auth")
-const { addAddress, getAddresses, deleteAddress, findAddress, EditAddress } = require('../controller/AddressController')
+const { addAddress, getAddresses, deleteAddress, findAddress, EditAddress, getRecentAddress } = require('../controller/AddressController')
 const { returnRequest } = require('../controller/returnController')
 const getWallet = require('../controller/WalletController')
 
@@ -47,4 +47,5 @@ router.get("/getWallet",auth,getWallet)
 router.post("/deleteAddress",auth,deleteAddress)
 router.post("/findAdd",auth,findAddress)
 router.post("/editAddress",auth,EditAddress)
+router.get("/recentAddress",getRecentAddress)
 module.exports=router

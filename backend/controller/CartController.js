@@ -17,16 +17,34 @@ const AddtoCart = async (req, res) => {
   //   console.log(from);
   if (from) {
     console.log("user found");
-    const exData=await CartModel.findOne({"Products.productName":ProductName})
+    const exData = await CartModel.findOne({
+      "Products.productName": ProductName,
+    });
     if (exData) {
       const data = await CartModel.findOneAndUpdate(
         { userId: user_id, "Products.productName": ProductName },
         { $inc: { "Products.$.quantity": 1 } },
         { new: true }
       );
-    }
-    else{
-
+    } else if (from.Products.length === 0) {
+      const hel = await CartModel.findOneAndUpdate(
+        { userId: user_id },
+        {
+          $push: {
+            Products: {
+              productName: ProductName,
+              Price: Price,
+              productImage: ProductImage,
+            },
+          },
+        },
+        { new: true }
+      );
+      if (hel) {
+        console.log(hel);
+        res.send(hel);
+      }
+    } else {
       const hel = await CartModel.findOneAndUpdate(
         { userId: user_id },
         {
@@ -80,44 +98,43 @@ const getCartData = async (req, res) => {
 //Increment cart quantity
 const IncrementProduct = async (req, res) => {
   const { name } = req.body;
-try {
-  const { user_id, iat } = jwt.decode(
-    req.cookies.token,
-    process.env.SECRET_KEY
-  );
-  const stock = await ProductModel.findOne({ name: name });
-  const product = await CartModel.findOne({
-    userId: user_id,
-    "Products.productName": name,
-  });
-
-  if (stock && product) {
-    const quantity = product.Products.find(
-      (product) => product.productName === name
+  try {
+    const { user_id, iat } = jwt.decode(
+      req.cookies.token,
+      process.env.SECRET_KEY
     );
+    const stock = await ProductModel.findOne({ name: name });
+    const product = await CartModel.findOne({
+      userId: user_id,
+      "Products.productName": name,
+    });
 
-    if (Number(stock.stock) > quantity.quantity) {
-      const data = await CartModel.findOneAndUpdate(
-        { userId: user_id, "Products.productName": name },
-        { $inc: { "Products.$.quantity": 1 } },
-        { new: true }
+    if (stock && product) {
+      const quantity = product.Products.find(
+        (product) => product.productName === name
       );
 
-      // console.log(data);
-      res.send(data.Products);
-    } else {
-      console.log(product.Products);
-      // res.send(product.Products);
-      throw new Error("stock limit reached")
-    }
-  } else {
-    res.status(404).send("Product not found");
-  }
-} catch (error) {
-  console.log(error.message);
-  res.status(404).send("stock limit reached")
-}
+      if (Number(stock.stock) > quantity.quantity) {
+        const data = await CartModel.findOneAndUpdate(
+          { userId: user_id, "Products.productName": name },
+          { $inc: { "Products.$.quantity": 1 } },
+          { new: true }
+        );
 
+        // console.log(data);
+        res.send(data.Products);
+      } else {
+        console.log(product.Products);
+        // res.send(product.Products);
+        throw new Error("stock limit reached");
+      }
+    } else {
+      res.status(404).send("Product not found");
+    }
+  } catch (error) {
+    console.log(error.message);
+    res.status(404).send("stock limit reached");
+  }
 };
 
 const DecrementProduct = async (req, res) => {

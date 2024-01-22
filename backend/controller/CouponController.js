@@ -13,7 +13,9 @@ const AddCoupon = async (req, res) => {
     value:parseInt(value),
     status:"Active"
   });
-  res.send(data);
+  const dats=await CouponModel.find({})
+  console.log(dats);
+  res.send(dats);
 };
 
 const getCoupon = async (req, res) => {

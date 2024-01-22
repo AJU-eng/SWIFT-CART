@@ -1,5 +1,6 @@
 const AddressModel = require("../model/AddressModel");
 const jwt = require("jsonwebtoken");
+const OrderModel = require("../model/OrderModel");
 require("dotenv").config();
 
 const addAddress = async (req, res) => {
@@ -9,7 +10,7 @@ const addAddress = async (req, res) => {
   );
   const { name, email, number, state, district, pincode, street } = req.body;
   const address = await AddressModel.findOne({ userId: user_id });
-  if (address) {
+  if (address || address.Address.length===0 ) {
     const data = await AddressModel.findOneAndUpdate(
       { userId: user_id },
       { $push: { Address: req.body } },
@@ -93,10 +94,22 @@ const EditAddress = async (req, res) => {
   res.send(data)
 };
 
+const getRecentAddress=async(req,res)=>{
+  console.log("recent");
+  const {user_id,iat}=jwt.decode(req.cookies.token,process.env.SECRET_KEY)
+  
+  const data=await OrderModel.findOne({userId:user_id})
+  const recentOrders=data.orders[data.orders.length-1]
+  // console.log(recentOrders.Address);
+  res.send(recentOrders.Address)
+}
+
+
 module.exports = {
   addAddress,
   getAddresses,
   deleteAddress,
   findAddress,
   EditAddress,
+  getRecentAddress
 };

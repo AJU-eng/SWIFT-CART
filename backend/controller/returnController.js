@@ -79,12 +79,17 @@ const getRequest = async (req, res) => {
 };
 
 const singleReturn = async (req, res) => {
+  // console.log(req.body);
+  // console.log(req.body);
   const { id } = req.body;
-  const data = await returnModel.aggregate([
-    { $unwind: "$returns" },
-    { $match: { "returns.id": id } },
-  ]);
-  console.log(data);
+  // console.log(_id);
+  const returnRequest = await collection.findOne(
+    
+    { 'returns.$elemMatch': { 'id': id } }
+  );
+  console.log(data+'data');
+  // res.send(data)
+
 };
 module.exports = {
   returnRequest,
