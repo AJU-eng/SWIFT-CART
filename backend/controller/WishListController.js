@@ -10,7 +10,8 @@ const AddToList = async (req, res) => {
       process.env.SECRET_KEY
     );
     const data = await WishModel.findOne({ userId: user_id });
-    if (data || data.Products.length == 0) {
+    if (data ) {
+
       const items = await WishModel.findOne({ "Products.name": name });
       if (items) {
         throw new Error("item Already exists");
