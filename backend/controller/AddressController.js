@@ -10,7 +10,7 @@ const addAddress = async (req, res) => {
   );
   const { name, email, number, state, district, pincode, street } = req.body;
   const address = await AddressModel.findOne({ userId: user_id });
-  if (address || address.Address.length===0 ) {
+  if (address ) {
     const data = await AddressModel.findOneAndUpdate(
       { userId: user_id },
       { $push: { Address: req.body } },
