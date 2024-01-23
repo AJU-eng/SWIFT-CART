@@ -226,10 +226,11 @@ const PlaceOrder = async (req, res) => {
       datas.products.push(item);
     });
 
-    console.log(updateData);
-    // res.send(req.body)
+    // console.log(updateData);
+   
+    
     const result = await easyinvoice.createInvoice(datas);
-    // console.log(result.pdf);
+    
 
     const Transport = nodemailer.createTransport({
       service: "gmail",
@@ -262,8 +263,12 @@ const PlaceOrder = async (req, res) => {
       { userId: user_id },
       { new: true }
     );
-    console.log(updateData);
-    res.send(req.body);
+    const respond=await OrderModel.findOne({userId:user_id})
+    const dat=respond.orders[respond.orders.length-1]
+    console.log(dat);
+    res.send(dat)
+    // console.log(updateData);
+    // res.send(req.body);
   } else {
     let obj = {};
     let date = new Date();
@@ -288,11 +293,7 @@ const PlaceOrder = async (req, res) => {
     const userEmail = await userModel.findOne({ _id: user_id });
     // console.log(userEmail.email);
     const datas = {
-      // If not using the free version, set your API key
-      // "apiKey": "123abc", // Get apiKey through: https://app.budgetinvoice.com/register
-
-      // Customize enables you to provide your own templates
-      // Please review the documentation for instructions and examples
+      
       customize: {
         //  "template": fs.readFileSync('template.html', 'base64') // Must be base64 encoded html
       },
@@ -416,9 +417,12 @@ const PlaceOrder = async (req, res) => {
       { userId: user_id },
       { new: true }
     );
-    console.log(data);
+    // console.log(data);
     // res.send(cartDelete.Products);
-    res.send(req.body)
+    const respond=await OrderModel.findOne({userId:user_id})
+    const dats=respond.orders[respond.orders.length-1]
+    console.log(dats);
+    res.send(dats)
   }
 };
 
