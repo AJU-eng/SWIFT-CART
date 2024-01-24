@@ -5,7 +5,9 @@ const ReturnSchema = mongoose.Schema({
     ref: "User",
   },
 
- returns: [{ type: Object }],
+ returns: {
+  type:Object
+ },
 });
 
 
