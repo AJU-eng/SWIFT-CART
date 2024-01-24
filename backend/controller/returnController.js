@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const WalletModel = require("../model/WalletModel");
 const userModel = require("../model/userModel");
 const returnRequest = async (req, res) => {
+  const {user_id,iat}=jwt.decode(req.cookies.token,process.env.SECRET_KEY)
   const { name, price, reason } = req.body;
   const id = new Date().getTime();
   let obj = {
@@ -11,31 +12,21 @@ const returnRequest = async (req, res) => {
     reason: reason,
     status: "requested",
     id: id,
+    user:user_id
   };
-  const { user_id, iat } = jwt.decode(
-    req.cookies.token,
-    process.env.SECRET_KEY
-  );
-  const datas = await returnModel.findOne({ userId: user_id });
-  if (datas) {
-    const data = await returnModel.findOneAndUpdate(
-      { userId: user_id },
-      { $push: { returns: obj } },
-      { new: true }
-    );
-    console.log(data);
-  } else {
-    const data = await returnModel.create({ userId: user_id, returns: obj});
-    console.log(data);
-  }
+  
+ 
+    const data = await returnModel.create({ returns: obj});
+    
 };
 
 const requestApprove = async (req, res) => {
-  console.log(req.body.price);
-  const { id, price, user } = req.body;
+  console.log(req.body);
+ 
+  const { id,price,user} = req.body;
   const data = await returnModel.findOneAndUpdate(
     { "returns.id": id },
-    { $set: { "returns.$.status": "approved" } },
+    { $set: { "returns.status": "approved" } },
     { new: true }
   );
   const date = new Date();
@@ -56,21 +47,24 @@ const requestApprove = async (req, res) => {
       
       {new:true}
     );
-    console.log(data);
+    console.log(data,"updated");
   } else {
     const wallets = await WalletModel.create({ userId: user, wallet: obj ,Balance:price});
-    console.log(wallets);
+    console.log(wallets+"created");
   }
+  console.log(data+"hei");
+  res.send(data)
 };
 
 const requestReject = async (req, res) => {
   const { id } = req.body;
   const data = await returnModel.findOneAndUpdate(
     { "returns.id": id },
-    { $set: { "returns.$.status": "rejected" } },
+    { $set: { "returns.status": "rejected" } },
     { new: true }
   );
   console.log(data);
+  res.send(data)
 };
 
 const getRequest = async (req, res) => {
@@ -83,11 +77,11 @@ const singleReturn = async (req, res) => {
   // console.log(req.body);
   const { id } = req.body;
   // console.log(_id);
-  const returnRequest = await collection.findOne(
+  const returnRequest = await returnModel.findOne(
     
     { 'returns.$elemMatch': { 'id': id } }
   );
-  console.log(data+'data');
+  console.log(returnRequest+'data');
   // res.send(data)
 
 };

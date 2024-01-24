@@ -227,10 +227,8 @@ const PlaceOrder = async (req, res) => {
     });
 
     // console.log(updateData);
-   
-    
+
     const result = await easyinvoice.createInvoice(datas);
-    
 
     const Transport = nodemailer.createTransport({
       service: "gmail",
@@ -263,10 +261,10 @@ const PlaceOrder = async (req, res) => {
       { userId: user_id },
       { new: true }
     );
-    const respond=await OrderModel.findOne({userId:user_id})
-    const dat=respond.orders[respond.orders.length-1]
+    const respond = await OrderModel.findOne({ userId: user_id });
+    const dat = respond.orders[respond.orders.length - 1];
     console.log(dat);
-    res.send(dat)
+    res.send(dat);
     // console.log(updateData);
     // res.send(req.body);
   } else {
@@ -293,7 +291,6 @@ const PlaceOrder = async (req, res) => {
     const userEmail = await userModel.findOne({ _id: user_id });
     // console.log(userEmail.email);
     const datas = {
-      
       customize: {
         //  "template": fs.readFileSync('template.html', 'base64') // Must be base64 encoded html
       },
@@ -419,10 +416,10 @@ const PlaceOrder = async (req, res) => {
     );
     // console.log(data);
     // res.send(cartDelete.Products);
-    const respond=await OrderModel.findOne({userId:user_id})
-    const dats=respond.orders[respond.orders.length-1]
+    const respond = await OrderModel.findOne({ userId: user_id });
+    const dats = respond.orders[respond.orders.length - 1];
     console.log(dats);
-    res.send(dats)
+    res.send(dats);
   }
 };
 
@@ -456,12 +453,39 @@ const updateOrderStatus = async (req, res) => {
 };
 
 const cancelOrder = async (req, res) => {
-  const { price } = req.body;
+  console.log("hello world");
+  const { user_id, iat } =jwt.decode(req.cookies.token,process.env.SECRET_KEY);
+  const { price, mode } = req.body;
+  console.log(req.body);
   const status = await OrderModel.findOneAndUpdate(
     { "orders.totalPrice": price },
     { $set: { "orders.$.status": "cancelled" } },
     { new: true }
   );
+  if (mode === "NetBanking") {
+    const date = new Date();
+    const _id = new Date().getTime();
+    let obj = {
+      amount: price,
+      type: "credit",
+      Description: "Order Cancellation Refund",
+      Date: date,
+      id: _id,
+    };
+   const wallet=await WalletModel.findOne({userId:user_id})
+    if (wallet) {
+      const data = await WalletModel.findOneAndUpdate(
+        { userId: user_id },
+        { $push: { wallet: obj }, $inc: { Balance: price } },
+
+        { new: true }
+      );
+      console.log(data);
+    }else{
+      const wallets = await WalletModel.create({ userId: user_id, wallet: obj ,Balance:price});
+      console.log(wallets);
+    }
+  }
   console.log(status);
   res.send(status.orders);
   // const status=await OrderModel.findOne({"products.totalPrice":price})
