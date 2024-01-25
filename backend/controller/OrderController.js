@@ -12,8 +12,17 @@ const pdfmake = require("pdfmake");
 const createCsvWriter = require("csv-writer").createObjectCsvWriter;
 const fs = require("fs");
 const WalletModel = require("../model/WalletModel");
+const CouponModel = require("../model/CouponModel");
 
 require("dotenv").config();
+
+const Transport = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL,
+    pass:process.env.PASS,
+  },
+});
 const makeOrder = async (req, res) => {
   //   console.log(req.body);
   res.send(req.body);
@@ -71,6 +80,19 @@ const PlaceOrder = async (req, res) => {
     process.env.SECRET_KEY
   );
   let { products, paymentMode, AdressMail } = req.body;
+  if (products.totalPrice>250000) {
+    const coupon=await CouponModel.find({})
+    console.log(coupon);
+    const user=await userModel.findOne({_id:user_id})
+    const sendMail = await Transport.sendMail({
+      from: "swiftcart027@gmail.com",
+      to: user.email,
+      subject: "Welcome to SwiftCart", // Subject line
+      text: `${coupon.code}`, // plain text body
+      html: `<b>Congragulation You have Won an Coupon for Having a great Purchase <br>The CouponCode is ${coupon[0].code}}</b>`,
+    });
+    console.log("coupon will send");
+  }
   products.paymentMode = paymentMode;
   if (paymentMode === "wallet") {
     const date = new Date();
