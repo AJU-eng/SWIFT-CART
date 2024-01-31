@@ -58,7 +58,10 @@ const getWishList = async (req, res) => {
   );
   console.log(user_id);
   const data = await WishModel.findOne({ userId: user_id });
-  res.status(200).send(data.Products);
+  if (data) {
+    
+    res.status(200).send(data.Products);
+  }
   console.log(data);
 };
 const deleteWishlist = async (req, res) => {

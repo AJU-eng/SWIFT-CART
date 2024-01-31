@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+
 const OrderModel = require("../model/OrderModel");
 const CartModel = require("../model/CartModel");
 const ProductModel = require("../model/ProductModel");
@@ -147,6 +148,13 @@ const PlaceOrder = async (req, res) => {
     });
     products.OrderedAt = dateOnly;
     products.Address = obj1;
+    function insertFeild(array,feild,value) {
+      array.forEach((obj)=>{
+        obj[feild]=value
+      })
+    }
+
+    insertFeild(products.products,"return","not requested")
     const id = new Date().getTime();
     products.OrderId = id;
     const updateData = await OrderModel.findOneAndUpdate(
@@ -644,17 +652,73 @@ const yearlySales = async (req, res) => {
 };
 
 const report = async (req, res) => {
-  const { date } = req.body;
-  const data = await OrderModel.aggregate([
-    { $unwind: "$orders" },
-    { $match: { "orders.OrderedAt": `${date}` } },
-  ]);
-  // const data = await OrderModel.aggregate([
-  //   { $unwind: "$orders" },
-  //   { $match: { "orders.OrderedAt": { $gte: new Date(date), $lt: new Date(date + "T23:59:59.999Z") } } },
-  // ]);
-  console.log(data);
-  res.send(data);
+
+ 
+  
+  function convertJSONtoCSV(jsonData) {
+    const fields = [
+        "Order ID",
+        "User ID",
+        "Product Name",
+        "Price",
+        "Quantity",
+        "Total Price",
+        "Status",
+        "Payment Mode",
+        "Ordered At",
+        "Name",
+        "Email",
+        "Phone Number",
+        "State",
+        "District",
+        "Pincode",
+        "Street"
+    ];
+    let csvData = fields.join(',') + '\n';
+
+    jsonData.forEach(entry => {
+        entry.orders.forEach(order => {
+            order.products.forEach(product => {
+                const row = [
+                    order.OrderId,
+                    entry.userId,
+                    product.productName,
+                    product.Price,
+                    product.quantity,
+                    order.totalPrice,
+                    order.status,
+                    order.paymentMode,
+                    order.OrderedAt,
+                    order.Address.name,
+                    order.Address.email,
+                    order.Address.number,
+                    order.Address.state,
+                    order.Address.district,
+                    order.Address.pincode,
+                    order.Address.street
+                ];
+                csvData += row.join(',') + '\n';
+            });
+        });
+    });
+
+    return csvData;
+}
+const data=await OrderModel.find({})
+ 
+  const datas=JSON.stringify(data)
+  // const csvData=convertJSONtoCSV(data)
+  // console.log(csvData);
+  // fs.writeFileSync('orders.csv',csvData)
+  const csvData = convertJSONtoCSV(data);
+
+        // Set response headers to specify file type and attachment
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', 'attachment; filename=orders.csv');
+
+        // Send the CSV data as the response
+        res.send(csvData);
+ 
 };
 
 const singleOrder = async (req, res) => {

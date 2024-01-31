@@ -38,7 +38,7 @@ adminRouter.post("/addCoupon",AddCoupon)
 adminRouter.get("/getCoupon",getCoupon)
 adminRouter.post("/couponBlock",couponBlock),
 adminRouter.post("/couponUnBlock",couponUnblock)
-adminRouter.post("/report",report)
+adminRouter.get("/report",report)
 adminRouter.post("/BannerAdd",upload.any(),BannerAdd)
 adminRouter.get("/getBanner",getBanner)
 adminRouter.post("/deleteBanner",deleteBanner)

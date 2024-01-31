@@ -5,7 +5,7 @@ require("dotenv").config();
 
 // Adding items to cart
 const AddtoCart = async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   const { user_id, iat } = jwt.decode(
     req.cookies.token,
     process.env.SECRET_KEY
@@ -26,6 +26,9 @@ const AddtoCart = async (req, res) => {
         { $inc: { "Products.$.quantity": 1 } },
         { new: true }
       );
+      if (data) {
+        res.send(data)
+      }
     } else if (from.Products.length === 0) {
       const hel = await CartModel.findOneAndUpdate(
         { userId: user_id },
@@ -41,7 +44,7 @@ const AddtoCart = async (req, res) => {
         { new: true }
       );
       if (hel) {
-        console.log(hel);
+        // console.log(hel);
         res.send(hel);
       }
     } else {
@@ -76,6 +79,7 @@ const AddtoCart = async (req, res) => {
     });
     if (data) {
       res.send(data);
+      console.log(data);
       console.log("data saved");
     }
   }
