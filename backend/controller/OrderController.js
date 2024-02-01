@@ -21,7 +21,7 @@ const Transport = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: process.env.EMAIL,
-    pass:process.env.PASS,
+    pass: process.env.PASS,
   },
 });
 const makeOrder = async (req, res) => {
@@ -81,10 +81,10 @@ const PlaceOrder = async (req, res) => {
     process.env.SECRET_KEY
   );
   let { products, paymentMode, AdressMail } = req.body;
-  if (products.totalPrice>250000) {
-    const coupon=await CouponModel.find({})
+  if (products.totalPrice > 250000) {
+    const coupon = await CouponModel.find({});
     console.log(coupon);
-    const user=await userModel.findOne({_id:user_id})
+    const user = await userModel.findOne({ _id: user_id });
     const sendMail = await Transport.sendMail({
       from: "swiftcart027@gmail.com",
       to: user.email,
@@ -148,13 +148,13 @@ const PlaceOrder = async (req, res) => {
     });
     products.OrderedAt = dateOnly;
     products.Address = obj1;
-    function insertFeild(array,feild,value) {
-      array.forEach((obj)=>{
-        obj[feild]=value
-      })
+    function insertFeild(array, feild, value) {
+      array.forEach((obj) => {
+        obj[feild] = value;
+      });
     }
 
-    insertFeild(products.products,"return","not requested")
+    insertFeild(products.products, "return", "not requested");
     const id = new Date().getTime();
     products.OrderId = id;
     const updateData = await OrderModel.findOneAndUpdate(
@@ -467,7 +467,9 @@ const getOrder = async (req, res) => {
 
 const getAdminOrders = async (req, res) => {
   const Orders = await OrderModel.find();
-  res.send(Orders);
+  if (Orders) {
+    res.send(Orders);
+  }
 };
 
 const updateOrderStatus = async (req, res) => {
@@ -484,7 +486,10 @@ const updateOrderStatus = async (req, res) => {
 
 const cancelOrder = async (req, res) => {
   console.log("hello world");
-  const { user_id, iat } =jwt.decode(req.cookies.token,process.env.SECRET_KEY);
+  const { user_id, iat } = jwt.decode(
+    req.cookies.token,
+    process.env.SECRET_KEY
+  );
   const { price, mode } = req.body;
   console.log(req.body);
   const status = await OrderModel.findOneAndUpdate(
@@ -502,7 +507,7 @@ const cancelOrder = async (req, res) => {
       Date: date,
       id: _id,
     };
-   const wallet=await WalletModel.findOne({userId:user_id})
+    const wallet = await WalletModel.findOne({ userId: user_id });
     if (wallet) {
       const data = await WalletModel.findOneAndUpdate(
         { userId: user_id },
@@ -511,8 +516,12 @@ const cancelOrder = async (req, res) => {
         { new: true }
       );
       console.log(data);
-    }else{
-      const wallets = await WalletModel.create({ userId: user_id, wallet: obj ,Balance:price});
+    } else {
+      const wallets = await WalletModel.create({
+        userId: user_id,
+        wallet: obj,
+        Balance: price,
+      });
       console.log(wallets);
     }
   }
@@ -652,73 +661,69 @@ const yearlySales = async (req, res) => {
 };
 
 const report = async (req, res) => {
-
- 
-  
   function convertJSONtoCSV(jsonData) {
     const fields = [
-        "Order ID",
-        "User ID",
-        "Product Name",
-        "Price",
-        "Quantity",
-        "Total Price",
-        "Status",
-        "Payment Mode",
-        "Ordered At",
-        "Name",
-        "Email",
-        "Phone Number",
-        "State",
-        "District",
-        "Pincode",
-        "Street"
+      "Order ID",
+      "User ID",
+      "Product Name",
+      "Price",
+      "Quantity",
+      "Total Price",
+      "Status",
+      "Payment Mode",
+      "Ordered At",
+      "Name",
+      "Email",
+      "Phone Number",
+      "State",
+      "District",
+      "Pincode",
+      "Street",
     ];
-    let csvData = fields.join(',') + '\n';
+    let csvData = fields.join(",") + "\n";
 
-    jsonData.forEach(entry => {
-        entry.orders.forEach(order => {
-            order.products.forEach(product => {
-                const row = [
-                    order.OrderId,
-                    entry.userId,
-                    product.productName,
-                    product.Price,
-                    product.quantity,
-                    order.totalPrice,
-                    order.status,
-                    order.paymentMode,
-                    order.OrderedAt,
-                    order.Address.name,
-                    order.Address.email,
-                    order.Address.number,
-                    order.Address.state,
-                    order.Address.district,
-                    order.Address.pincode,
-                    order.Address.street
-                ];
-                csvData += row.join(',') + '\n';
-            });
+    jsonData.forEach((entry) => {
+      entry.orders.forEach((order) => {
+        order.products.forEach((product) => {
+          const row = [
+            order.OrderId,
+            entry.userId,
+            product.productName,
+            product.Price,
+            product.quantity,
+            order.totalPrice,
+            order.status,
+            order.paymentMode,
+            order.OrderedAt,
+            order.Address.name,
+            order.Address.email,
+            order.Address.number,
+            order.Address.state,
+            order.Address.district,
+            order.Address.pincode,
+            order.Address.street,
+          ];
+          csvData += row.join(",") + "\n";
         });
+      });
     });
 
     return csvData;
-}
-const data=await OrderModel.find({})
- 
-  const datas=JSON.stringify(data)
+  }
+  const data = await OrderModel.find({});
+
+  const datas = JSON.stringify(data);
   // const csvData=convertJSONtoCSV(data)
   // console.log(csvData);
   // fs.writeFileSync('orders.csv',csvData)
   const csvData = convertJSONtoCSV(data);
 
-        // Set response headers to specify file type and attachment
-        res.setHeader('Content-Type', 'text/csv');
-        res.setHeader('Content-Disposition', 'attachment; filename=orders.csv');
+  // Set response headers to specify file type and attachment
+  res.setHeader("Content-Type", "text/csv");
+  res.setHeader("Content-Disposition", "attachment; filename=orders.csv");
 
-        // Send the CSV data as the response
-        res.send(csvData);
- 
+  // Send the CSV data as the response
+  res.send(csvData);
 };
 
 const singleOrder = async (req, res) => {
