@@ -61,6 +61,8 @@ const getWishList = async (req, res) => {
   if (data) {
     
     res.status(200).send(data.Products);
+  }else{
+    res.send([])
   }
   console.log(data);
 };

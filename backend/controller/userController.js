@@ -248,6 +248,27 @@ const logout = async (req, res) => {
     .send(false);
 };
 
+const BlockedCheck=async(req,res)=>{
+  // const {user_id,iat}=jwt.decode(req.cookies.token,process.env.SECRET_KEY)
+  try {
+    const { user_id, iat } =  jwt.decode(
+      req.cookies.token,
+      process.env.SECRET_KEY
+    );
+  
+    const data =await userModel.findOne({_id:user_id})
+    if (data.status==="blocked") {
+      res.send(true)
+    }
+    else{
+      res.send(false)
+    }
+  } catch (error) {
+    console.log(error);
+  }
+ 
+}
+
 const login = async (req, res) => {
   console.log(req.body);
   try {
@@ -341,5 +362,6 @@ module.exports = {
   resetPassword,
   resentOtp,
   fetchUser,
-  editUser
+  editUser,
+  BlockedCheck
 };

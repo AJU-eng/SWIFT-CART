@@ -309,6 +309,13 @@ const PlaceOrder = async (req, res) => {
       }
     });
     products.Address = obj;
+    function insertFeild(array, feild, value) {
+      array.forEach((obj) => {
+        obj[feild] = value;
+      });
+    }
+
+    insertFeild(products.products, "return", "not requested");
     products.OrderedAt = dateOnly;
     const id = new Date().getTime();
     products.OrderId = id;
@@ -462,6 +469,8 @@ const getOrder = async (req, res) => {
   const Orders = await OrderModel.findOne({ userId: user_id });
   if (Orders) {
     res.send(Orders.orders);
+  }else{
+    res.send([])
   }
 };
 
@@ -540,9 +549,13 @@ const orderHistory = async (req, res) => {
     { $unwind: "$orders" },
     { $match: { "orders.status": "Delivered" } },
   ]);
-
-  console.log(pendingData.length);
-  res.send(pendingData);
+  if (pendingData) {
+    
+    console.log(pendingData.length);
+    res.send(pendingData);
+  }else{
+    res.send([])
+  }
 };
 
 ///Sales report

@@ -1,5 +1,5 @@
 const express=require('express')
-const { generate, verifyOtp,loggedIn,logout, login, forgetPasswordOtp, verifyForgetOtp, resetPassword, resentOtp, fetchUser, editUser } = require('../controller/userController')
+const { generate, verifyOtp,loggedIn,logout, login, forgetPasswordOtp, verifyForgetOtp, resetPassword, resentOtp, fetchUser, editUser, BlockedCheck } = require('../controller/userController')
 const { getProducts, findProduct } = require('../controller/ProductContoller')
 const { AddtoCart, getCartData, IncrementProduct, deleteCart, deleteCartData, DecrementProduct } = require('../controller/CartController')
 const { AddToList, getWishList, deleteWishlist } = require('../controller/WishListController')
@@ -48,4 +48,5 @@ router.post("/deleteAddress",auth,deleteAddress)
 router.post("/findAdd",auth,findAddress)
 router.post("/editAddress",auth,EditAddress)
 router.get("/recentAddress",getRecentAddress)
+router.get("/blockCheck",BlockedCheck)
 module.exports=router
