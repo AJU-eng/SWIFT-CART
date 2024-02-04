@@ -4,52 +4,55 @@ const WalletModel = require("../model/WalletModel");
 const userModel = require("../model/userModel");
 const OrderModel = require("../model/OrderModel");
 const returnRequest = async (req, res) => {
+
   const { user_id, iat } = jwt.decode(
     req.cookies.token,
     process.env.SECRET_KEY
   );
-  const { name, price, reason, _id } = req.body;
+  // console.log(req.body);
+  const { name, price, reason, productId,orderId } = req.body;
   const id = new Date().getTime();
   let obj = {
     productName: name,
     price: price,
     reason: reason,
     status: "requested",
-    productId: _id,
+    productId: productId,
+    orderId:orderId,
     id: id,
     user: user_id,
   };
 
   const data = await returnModel.create({ returns: obj });
-  // console.log(req.body);
-  // const update = await OrderModel.aggregate([
-  //   { $unwind: "$orders" },
-  //   { $unwind: "$orders.products" },
-  //   { $match: { "orders.products._id": _id } },
-  //   { $set: { "orders.products.return": "requested" } },
-  // ]);
-  // const update = await  OrderModel.updateOne(
-  //   { 
-  //      "orders.products._id": _id,
-  //      "userId": user_id
-  //   },
-  //   {
-  //      $set: { "orders.$[order].products.$[product].return": "requested" }
-  //   },
-  //   {
-  //      arrayFilters: [ { "order.products._id": _id}, { "product._id": _id } ]
-  //   }
-  // );
+
+  const updateData=await OrderModel.findOne({userId:user_id})
+
+  const hel= updateData.orders.map((order)=>{
+    if (order.OrderId.toString()===orderId.toString()) {
+      order.products.map((product)=>{
+        // console.log(product);
+        if (product._id.toString()===productId.toString()) {
+          product.return = "requested"
+        }
+        return product  
+      })
+    }
+    return order
+  })
   
- console.log(update);
+//  console.log(JSON.stringify(hel));
+
+const udpates=await OrderModel.findOneAndUpdate({userId:user_id},{orders:hel},{new:true})
+
+console.log(udpates);
  
  
 };
 
 const requestApprove = async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
 
-  const { id, price, user } = req.body;
+  const { id, price, user,orderId,productId } = req.body;
   const data = await returnModel.findOneAndUpdate(
     { "returns.id": id },
     { $set: { "returns.status": "approved" } },
@@ -64,6 +67,23 @@ const requestApprove = async (req, res) => {
     Date: date,
     id: _id,
   };
+
+  const orders=await OrderModel.findOne({userId:user})
+
+  const hel=orders.orders.map((order)=>{
+    if (order.OrderId.toString()===orderId.toString()) {
+     order.products.map((product)=>{
+      if (product._id.toString()===productId.toString()) {
+        product.return="returned"
+      }
+      return product
+     })
+    }
+    return order
+  })
+
+  const udpates=await OrderModel.findOneAndUpdate({userId:user},{orders:hel},{new:true})
+  console.log(JSON.stringify(udpates));
   // console.log(data);
   const dataAvailable = await WalletModel.findOne({ userId: user });
   if (dataAvailable) {
@@ -73,16 +93,18 @@ const requestApprove = async (req, res) => {
 
       { new: true }
     );
-    console.log(data, "updated");
+    // console.log(data, "updated");
   } else {
     const wallets = await WalletModel.create({
       userId: user,
       wallet: obj,
       Balance: price,
     });
-    console.log(wallets + "created");
+    // console.log(wallets + "created");
   }
-  console.log(data + "hei");
+
+
+  // console.log(data + "hei");
   res.send(data);
 };
 

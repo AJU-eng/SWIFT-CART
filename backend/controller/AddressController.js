@@ -76,8 +76,13 @@ const findAddress = async (req, res) => {
   //     console.log(element+"=======");
   //   }
   // });
-  const filteredData = data.Address.filter((item) => item.email === email);
-  res.send(filteredData);
+  if (data) {
+        
+    const filteredData = data.Address.filter((item) => item.email === email);
+    res.send(filteredData);
+  }else{
+    res.send([])
+  }
 };
 
 const EditAddress = async (req, res) => {

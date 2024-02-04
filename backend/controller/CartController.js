@@ -96,6 +96,8 @@ const getCartData = async (req, res) => {
   if (data) {
     // console.log(data.Products);
     res.status(200).send(data.Products);
+  }else{
+    res.send([])  
   }
 };
 
