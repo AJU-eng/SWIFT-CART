@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addCategory } from "../../../redux/features/AdminSlice";
+import { IoMdCloseCircleOutline } from "react-icons/io";
 
 function AddCategory({ visible, onClose }) {
   if (!visible) {
@@ -26,8 +27,11 @@ function AddCategory({ visible, onClose }) {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-20 backdrop-blur-sm flex justify-center items-center">
-      <button onClick={onClose}>x</button>
+      {/* <button onClick={onClose}>x</button> */}
       <div className="bg-white p-2 rounded w-96 px-5">
+        <div className="flex justify-end mr-3">
+          <IoMdCloseCircleOutline size={23} onClick={()=>onClose()}/>
+        </div>
         <form
           onSubmit={CategorySubmit}
           encType="multipart/form-data"

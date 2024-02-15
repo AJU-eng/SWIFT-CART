@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addCoupon } from "../../../redux/features/AdminSlice";
+import { IoMdCloseCircleOutline } from "react-icons/io";
 
 function CouponModal({ visible, onClose }) {
   const dispatch = useDispatch();
@@ -9,23 +10,36 @@ function CouponModal({ visible, onClose }) {
   const [expires, setExpires] = useState("");
   const [minPurchaseAmount, setminPurchaseAmount] = useState(0);
   const [maxPurchaseAmount, setmaxPurchaseAmount] = useState(0);
+  const [validation,setValidation]=useState("")
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(
-      addCoupon({
-        couponCode: code,
-        Date: expires,
-        value: value,
-        minPurchaseAmount: minPurchaseAmount,
-        maxPurchaseAmount: maxPurchaseAmount,
-      })
-    );
+    if (code!==""&&expires!==""&&value!==""&&minPurchaseAmount!==""&&maxPurchaseAmount!=="") {
+      
+      dispatch(
+        addCoupon({
+          couponCode: code,
+          Date: expires,
+          value: value,
+          minPurchaseAmount: minPurchaseAmount,
+          maxPurchaseAmount: maxPurchaseAmount,
+        })
+      );
+      onClose()
+    }
+    else{
+      setValidation("All Feilds are Required")
+    }
+
   };
 
   return (
     visible && (
       <div className="fixed inset-0 bg-black bg-opacity-10 backdrop-blur-sm flex justify-center items-center ">
         <div className="bg-white  w-[20rem] px-3 py-3 rounded-lg">
+        <div className="flex justify-end mr-4">
+          <IoMdCloseCircleOutline size={25} onClick={()=>onClose()}/>
+        </div>
+           <p className="text-red-500">{validation}</p>
           <form action="" onSubmit={handleSubmit}>
             <p className="text-sm text-slate-600 font-medium p-3">
               COUPON CODE
@@ -55,7 +69,7 @@ function CouponModal({ visible, onClose }) {
               COUPON VALUE
             </p>
             <input
-              type="text"
+              type="number"
               onChange={(e) => setValue(e.target.value)}
               className="border mx-4 "
             />
@@ -63,7 +77,7 @@ function CouponModal({ visible, onClose }) {
               COUPON EXPIRES
             </p>
             <input
-              type="text"
+              type="date"
               onChange={(e) => setExpires(e.target.value)}
               className="border mx-4"
             />

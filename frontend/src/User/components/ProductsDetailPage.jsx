@@ -2,23 +2,28 @@ import React, { useEffect, useState } from "react";
 import rating from "./product images/star.webp";
 import { useNavigate, useParams } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart, findProduct } from "../../redux/features/userslice";
+// import { addToCart, findProduct } from "../../redux/features/userslice";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import "./zoom.css";
+import Navbar from "./Navbar/Navbar";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { URL } from "../../redux/features/api";
+import { BASE_URI } from "../../redux/features/api";
 import { Rating } from "react-simple-star-rating";
+import { findProduct } from "../../redux/features/ProductSlice";
+import { addToCart } from "../../redux/features/cartSlice";
+import AuthenticatedNavbar from "./Navbar/AuthenticatedNavbar";
 function ProductsDetailPage() {
   const error = useSelector((state) => state.user.AuthError);
   const { id } = useParams();
   const nav = useNavigate();
   const dispatch = useDispatch();
-  const product = useSelector((state) => state.user.SingleProduct);
+  const product = useSelector((state) => state.products.SingleProduct);
  let price
-  const productPrice=useSelector((state)=>state.user.SingleProduct.offer)
-  const Loading = useSelector((state) => state.user.loading);
+  const productPrice=useSelector((state)=>state.products.SingleProduct.offer)
+  const Loading = useSelector((state) => state.products.loading);
+  const user=useSelector((state)=>state.user.logged)
   // Inside your component function
   const [isImageHovered, setIsImageHovered] = useState(false);
 
@@ -37,7 +42,7 @@ function ProductsDetailPage() {
   useEffect(() => {
     // Update currentImage when product data is available
     if (product && product.moreImage && product.moreImage.length > 0) {
-      setCurrentImage(`${URL}/images/${product.moreImage[0]}`);
+      setCurrentImage(`${BASE_URI}images/${product.moreImage[0]}`);
     }
     if (productPrice) {
       price=productPrice
@@ -47,9 +52,16 @@ function ProductsDetailPage() {
     }
   }, [product]);
 
+
+  useEffect(()=>{
+    
+  })
+
   console.log(product.name);
 
   return (
+    <>
+    {user?<AuthenticatedNavbar/>:<Navbar/>}
     <div className="flex ">
       {Loading ? (
         <div className="flex">
@@ -97,12 +109,12 @@ function ProductsDetailPage() {
                   className="bg-white shadow-lg w-24 h-10"
                   onClick={() =>
                     setCurrentImage(
-                      `${URL}images/${product.moreImage[1]}`
+                      `${BASE_URI}images/${product.moreImage[1]}`
                     )
                   }
                 >
                   <img
-                    src={`${URL}images/${product.moreImage[1]}`}
+                    src={`${BASE_URI}images/${product.moreImage[1]}`}
                     alt=""
                   />
                 </div>
@@ -112,12 +124,12 @@ function ProductsDetailPage() {
                   className="bg-white shadow-lg w-24 h-10 "
                   onClick={() =>
                     setCurrentImage(
-                      `${URL}images/${product.moreImage[2]}`
+                      `${BASE_URI}images/${product.moreImage[2]}`
                     )
                   }
                 >
                   <img
-                    src={`${URL}images/${product.moreImage[2]}`}
+                    src={`${BASE_URI}images/${product.moreImage[2]}`}
                     alt=""
                   />
                 </div>
@@ -127,12 +139,12 @@ function ProductsDetailPage() {
                   className="bg-white shadow-lg w-24 h-10"
                   onClick={() =>
                     setCurrentImage(
-                      `${URL}images/${product.moreImage[3]}`
+                      `${BASE_URI}images/${product.moreImage[3]}`
                     )
                   }
                 >
                   <img
-                    src={`${URL}images/${product.moreImage[3]}`}
+                    src={`${BASE_URI}images/${product.moreImage[3]}`}
                     alt=""
                   />
                 </div>
@@ -179,9 +191,10 @@ function ProductsDetailPage() {
                   <button
                     onClick={() => {
                       console.log(product.price + "hello guyse");
-                      if (error === "not logined") {
+                      if (!user) {
                         nav("/login");
                       } else {
+                        
                         if (product.offer) {
                           dispatch(
                             addToCart({
@@ -193,6 +206,7 @@ function ProductsDetailPage() {
                           );
                         }
                         else{
+
                           dispatch(
                             addToCart({
                               ProductName: product.name,
@@ -200,8 +214,7 @@ function ProductsDetailPage() {
                               ProductImage: product.moreImage[0],
                               
                             })
-                          );
-                        }
+                          )                        }
                        
                         toast.success("Great Choice ! Item added to Cart");
                       }
@@ -225,6 +238,7 @@ function ProductsDetailPage() {
       )}
       <ToastContainer />
     </div>
+    </>
   );
 }
 

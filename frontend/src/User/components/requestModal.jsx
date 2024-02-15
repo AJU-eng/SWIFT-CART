@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { returnOrder } from "../../redux/features/userslice";
+import { useNavigate } from "react-router";
 
 function RequestModal({ obj, visible }) {
   const [reason, setReason] = useState("");
   const dispatch = useDispatch();
+  const nav=useNavigate()
 
   if (!visible) {
     return null;
@@ -12,7 +14,15 @@ function RequestModal({ obj, visible }) {
 
   const handleSubmit = () => {
     // visible=false
-    dispatch(returnOrder({ name: obj.name, price: obj.price, reason: reason }));
+    dispatch(
+      returnOrder({
+        name: obj.name,
+        price: obj.price,
+        reason: reason,
+        orderId: obj.orderId,
+        productId: obj.productId,
+      })
+    );
   };
 
   return (
@@ -32,7 +42,10 @@ function RequestModal({ obj, visible }) {
           rows="10"
         ></textarea>
         <button
-          onClick={() => handleSubmit()}
+          onClick={() => {
+            handleSubmit();
+            nav("/routes/Orders")
+          }}
           className="bg-blue-500 w-[5rem] mx-[7rem] mt-4 mb-8 rounded-lg font-serif text-white"
         >
           submit

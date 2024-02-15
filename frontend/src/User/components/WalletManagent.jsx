@@ -3,18 +3,20 @@ import { IoWalletOutline } from "react-icons/io5";
 import { useDispatch, useSelector } from "react-redux";
 import { getWalletDetails } from "../../redux/features/userslice";
 import date from "date-and-time";
+import SyncLoader from "react-spinners/SyncLoader";
 function WalletManagent() {
   const dispatch = useDispatch();
   const wallet = useSelector((state) => state.user.Wallet);
+  const loading = useSelector((state) => state.user.loading);
+  // const loading = true
   useEffect(() => {
     dispatch(getWalletDetails());
   }, [dispatch]);
-  useEffect(()=>{
-    if(wallet)
-    {
-        console.log(wallet);
+  useEffect(() => {
+    if (wallet) {
+      console.log(wallet);
     }
-  },[wallet])
+  }, [wallet]);
   return (
     <div>
       <div className="">
@@ -24,9 +26,11 @@ function WalletManagent() {
             <IoWalletOutline size={100} color="grey" />
           </div>
           <div className="mx-12 mt-5">
-
-            {wallet && wallet.Balance >0?<h2 className="text-4xl">{`₹${wallet.Balance}`}</h2>:<h2 className="text-4xl">₹0</h2>}
-            
+            {wallet && wallet.Balance > 0 ? (
+              <h2 className="text-4xl">{`₹${wallet.Balance}`}</h2>
+            ) : (
+              <h2 className="text-4xl">₹0</h2>
+            )}
           </div>
         </div>
       </div>
@@ -57,6 +61,23 @@ function WalletManagent() {
           </tbody>
         </table>
       </div>
+      {loading && <div>
+        <div className="flex justify-center align-middle mt-28">
+          <SyncLoader
+            color={"lightBlue"}
+            // loading={loading}
+            // cssOverride={override
+            size={16}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
+        </div>
+        </div>}
+      {!wallet && wallet.length === 0 && !loading ? (
+        <div className="text-center pt-20 text-lg ">
+          <p>No Transactions Yet</p>
+        </div>
+      ) : null}
     </div>
   );
 }

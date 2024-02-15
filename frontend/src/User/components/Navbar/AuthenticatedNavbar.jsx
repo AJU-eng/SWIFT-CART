@@ -19,9 +19,9 @@ function AuthenticatedNavbar() {
         <img src={logo} className=" w-36 lg:w-48 mt-2 mx-5 lg:mx-2" alt="" />
       </div>
       <div className=" w-1/2  lg:flex justify-end">
-        <div className="hidden lg:flex justify-around space-x-10 mt-3 mx-5  text-xl font-serif ">
+        <div className="hidden lg:flex justify-around space-x-10 mt-3 mx-5 cursor-pointer text-xl font-serif ">
           <p onClick={() => nav("/")}>Home</p>
-          <p>Products</p>
+         <a href="#Products"> <p>Products</p></a>
           <p>Support</p>
           <div>
             <p

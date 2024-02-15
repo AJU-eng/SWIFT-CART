@@ -5,7 +5,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useDispatch, useSelector } from "react-redux";
 import { getBanner } from "../../../redux/features/userslice";
-import { URL } from "../../../redux/features/api";
+import { BASE_URI } from "../../../redux/features/api";
 function Banner() {
   const settings = {
     dots: true,
@@ -28,14 +28,14 @@ function Banner() {
     }
   });
   return (
-    <div className="">
+    <div className="relative -z-10">
       <Slider {...settings}>
         {Banners.length !== 0 &&
           Banners.map((banner) => {
             return (
               <div className="h-[42rem]">
                 <img
-                  src={`${URL}images/${banner.Image}`}
+                  src={`${BASE_URI}images/${banner.Image}`}
                   className="h-[38rem] w-full"
                   alt=""
                 />

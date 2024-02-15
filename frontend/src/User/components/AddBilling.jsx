@@ -1,24 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { AddAddress, getAddress } from "../../redux/features/userslice";
+import React from 'react'
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import validator from "validator";
 import { IoMdCloseCircleOutline } from "react-icons/io";
-
-function AddressModal({ visible, onClose }) {
-  if (!visible) {
-    return null;
-  }
-
-  const dispatch = useDispatch();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [number, setNumber] = useState("");
-  const [state, setState] = useState("");
-  const [district, setDistrict] = useState("");
-  const [pincode, setPincode] = useState("");
-  const [street, setStreet] = useState("");
-  const [Error,setError]=useState("")
-
+import { AddAddress } from '../../redux/features/userslice';
+function AddBilling({ visible, onClose }) {
+    if (!visible) {
+        return null;
+      }
+    
+      const dispatch = useDispatch();
+      const [name, setName] = useState("");
+      const [email, setEmail] = useState("");
+      const [number, setNumber] = useState("");
+      const [state, setState] = useState("");
+      const [district, setDistrict] = useState("");
+      const [pincode, setPincode] = useState("");
+      const [street, setStreet] = useState("");
+      const [Error,setError]=useState("")
   return (
     <div className="fixed inset-0 bg-black bg-opacity-20 backdrop-blur-sm flex justify-center items-center">
       <div className="bg-white rounded-md">
@@ -136,7 +135,7 @@ function AddressModal({ visible, onClose }) {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default AddressModal;
+export default AddBilling
