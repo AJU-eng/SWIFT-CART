@@ -10,8 +10,8 @@ const session=require('express-session');
 const router = require("./router/userRouter");
 const adminRouter = require("./router/adminRouter");
 app.use(cors({
-    // origin:" https://www.swiftcartss.shop",
-    origin:"http://localhost:5173",
+    origin:" https://www.swiftcartss.shop",
+    // origin:"http://localhost:5173",
     credentials:true
 }))
 app.use(cookie())
