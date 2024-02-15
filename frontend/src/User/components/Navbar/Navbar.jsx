@@ -2,7 +2,7 @@ import React from "react";
 import logo from "./logo.png";
 import { useNavigate } from "react-router";
 function Navbar() {
-  const nav=useNavigate()
+  const nav = useNavigate();
   return (
     <div className="flex justify-between sticky ">
       <div className=" w-1/2">
@@ -10,12 +10,17 @@ function Navbar() {
       </div>
       <div className=" w-1/2  lg:flex lg:justify-end">
         <div className="hidden lg:flex justify-around space-x-10 mt-3  text-xl font-serif ">
-          <p>Home</p>
-          <p>Products</p>
+          <p onClick={() => nav("/")}>Home</p>
+          <a href="#Products">
+            <p>Products</p>
+          </a>
           <p>Support</p>
         </div>
 
-        <button onClick={()=>nav('/login')} className="bg-blue-400 mx-14  text-xl rounded-md h-9 text-white font-serif   mt-2 w-20">
+        <button
+          onClick={() => nav("/login")}
+          className="bg-blue-400 mx-14  text-xl rounded-md h-9 text-white font-serif   mt-2 w-20"
+        >
           Login
         </button>
       </div>

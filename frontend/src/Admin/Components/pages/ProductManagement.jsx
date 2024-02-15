@@ -4,30 +4,36 @@ import { AiTwotoneDelete } from "react-icons/ai";
 import { FiEdit } from "react-icons/fi";
 import { FaUnlock } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { GetProducts } from "../../../redux/features/userslice";
 import date from "date-and-time";
 import EditProduct from "./EditProduct";
 import { Link, Navigate } from "react-router-dom";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
-import { URL } from "../../../redux/features/api";
+import { BASE_URI } from "../../../redux/features/api";
 import { useNavigate } from "react-router-dom";
 import {
   DeleteProduct,
   GetProductsAdmin,
-} from "../../../redux/features/AdminSlice";
+} from "../../../redux/features/ProductSlice";
 function ProductManagement() {
   const dispatch = useDispatch();
 
   const [searchTerm, setSearchTerm] = useState("");
   const nav = useNavigate();
-  const products = useSelector((state) => state.admin.Products);
+  const products = useSelector((state) => state.products.AdminProducts);
   useEffect(() => {
     dispatch(GetProductsAdmin());
   }, [dispatch]);
-  const filteredData = products.filter((item) =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  useEffect(() => {
+    if (products) {
+      console.log(products);
+    }
+  }, [products]);
+  if (products) {
+    var filteredData = products.filter((item) =>
+      item.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  }
   console.log(products);
   return (
     <>
@@ -57,7 +63,7 @@ function ProductManagement() {
                   <tr className="border border-b-2 text-center h-12 font-serif">
                     <td>
                       <img
-                        src={`${URL}images/${product.moreImage[0]}`}
+                        src={`${BASE_URI}images/${product.moreImage[0]}`}
                         alt=""
                         className="h-12 mx-11"
                       />

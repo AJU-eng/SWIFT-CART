@@ -2,16 +2,17 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AiFillCloseCircle } from "react-icons/ai";
 import {
-  AddProductspo,
-  EditProducts,
+  // AddProductspo,
+  // EditProducts,
   addCategory,
-  findEditProduct,
+  // findEditProduct,
   getCategory,
 } from "../../../redux/features/AdminSlice";
 import AddImages from "./add-button.png";
-import { json, useParams } from "react-router";
-import { findProduct } from "../../../redux/features/userslice";
-import { URL } from "../../../redux/features/api";
+import { json, useNavigate, useParams } from "react-router";
+// import { findProduct } from "../../../redux/features/userslice";
+import { BASE_URI } from "../../../redux/features/api";
+import { EditProducts, findEditProduct,findProduct } from "../../../redux/features/ProductSlice";
 function EditProduct() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -23,10 +24,11 @@ function EditProduct() {
   const [fetchedImages, setfetchedImages] = useState([]);
   const [ActualImages, setActualImages] = useState([]);
   const dispatch = useDispatch();
-  const SingleProduct = useSelector((state) => state.admin.ProductToEdit);
+  const SingleProduct = useSelector((state) => state.Orders.ProductToEdit);
   const Cateogries = useSelector((state) => state.admin.categories);
-  const ProductEdit = useSelector((state) => state.admin.ProductToEdit);
+  const ProductEdit = useSelector((state) => state.products.ProductToEdit);
   const id = useParams();
+  const nav=useNavigate()
 
   useEffect(() => {
     dispatch(getCategory());
@@ -51,24 +53,7 @@ function EditProduct() {
       fileInput.click();
     }
   };
-  // const handleFileChange = (e) => {
-  //   const selectedFile = e.target.files;
-  //   const ImageArray = Array.from(selectedFile);
-  //   const editIndex=e.target.getAttribute("data-edit-index");
-  //   if(editIndex!=null)
-  //   {
-  //     const updatedImages=[...fetchedImages];
-  //     updatedImages[editIndex]=ImageArray[0]
-  //     setfetchedImages(updatedImages)
 
-  //   }
-  //   else{
-  //     setfetchedImages(ImageArray)
-  //   }
-  //   console.log(ImageArray);
-  //   setfetchedImages(ImageArray);
-  //   console.log(fetchedImages);
-  // };
   const handleFileChange = (e) => {
     const selectedFile = e.target.files;
     const ImageArray = Array.from(selectedFile);
@@ -114,6 +99,7 @@ function EditProduct() {
     console.log(description);
 
     dispatch(EditProducts(formData));
+    nav("/admin/products")
   };
   return (
     <div>
@@ -222,7 +208,7 @@ function EditProduct() {
                     />
 
                     <img
-                      src={`${URL}images/${ProductEdit.moreImage[0]}`}
+                      src={`${BASE_URI}images/${ProductEdit.moreImage[0]}`}
                       onClick={triggerFileInput}
                       className="h-36 w-auto "
                       alt=""
@@ -253,7 +239,7 @@ function EditProduct() {
                             onClick={() => handleEditImage(index)}
                           />
                           <img
-                            src={`${URL}images/${ProductEdit.moreImage[index]}`}
+                            src={`${BASE_URI}images/${ProductEdit.moreImage[index]}`}
                             className="h-auto w-auto   "
                             alt=""
                           />

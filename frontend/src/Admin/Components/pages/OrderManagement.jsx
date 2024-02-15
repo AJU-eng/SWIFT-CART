@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { editOrderstatus, getOrders } from "../../../redux/features/AdminSlice";
-import { URL } from "../../../redux/features/api";
+import { editOrderstatus } from "../../../redux/features/AdminSlice";
+import { BASE_URI } from "../../../redux/features/api";
+import { getOrders } from "../../../redux/features/OrderSlice";
 function OrdersManagment() {
   const dispatch = useDispatch();
-  const orders = useSelector((state) => state.admin.Orders);
+  const orders = useSelector((state) => state.Orders.AdminOrders);
 
   useEffect(() => {
     dispatch(getOrders());
@@ -31,7 +32,7 @@ function OrdersManagment() {
           <p className="font-serif px-10">PAYMENT MODE</p>
           <p className="font-serif ">ACTION</p>
         </div>
-        {orders.map((item) => {
+        {orders&&orders.map((item) => {
           return item.orders.map((items) => {
             return (
               <div>
@@ -44,7 +45,7 @@ function OrdersManagment() {
                             <div className="">
                               <div className="  px-16    font-serif">
                                 <img
-                                  src={`${URL}images/${product.productImage}`}
+                                  src={`${BASE_URI}images/${product.productImage}`}
                                   className="h-14 "
                                   alt=""
                                 />
@@ -103,7 +104,7 @@ function OrdersManagment() {
                             <div className="h-7 w-20  rounded-lg bg-red-100">
                                 <p className="text-center pt-1 text-red-500 ">cancelled</p>
                             </div>
-                        ):( <select className="border mt-2" onChange={(e)=>dispatch(editOrderstatus({price:items.totalPrice,status:e.target.value}))} name="" id="">
+                        ):( <select className="border mt-2" onChange={(e)=>dispatch(editOrderstatus({id:items.OrderId,status:e.target.value}))} name="" id="">
                             <option value="In Progress">{items.status}</option>
                             <option value="Shipped" className="bg-slate-500">Shipped</option>
                             <option value="Delivered">Delivered</option>

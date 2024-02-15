@@ -24,13 +24,13 @@ function Authentication() {
     } else if (login_status == "admin logined") {
       nav("/admin");
     }
-  }, [nav, login_status]);
+  }, [login_status]);
 
   const loginUser = (e) => {
     e.preventDefault();
      console.log(hello);
     // console.log(email,password);
-    dispatch(userLogin(hello));
+    dispatch(userLogin(hello))
   };
   // console.log(login_err+"=======================================err");
   return (

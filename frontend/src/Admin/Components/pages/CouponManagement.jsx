@@ -20,6 +20,9 @@ function CouponManagement() {
       console.log(coupon);
     }
   });
+  const handleClose=()=>{
+    setVisible(false)
+  }
   return (
     <div>
       <div className="flex justify-end mr-5">
@@ -83,7 +86,7 @@ function CouponManagement() {
           </tbody>
         </table>
       </div>
-      <CouponModal visible={visible} />
+      <CouponModal visible={visible} onClose={handleClose} />
     </div>
   );
 }

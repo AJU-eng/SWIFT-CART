@@ -2,13 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AiFillCloseCircle } from "react-icons/ai";
 import {
-  AddProductspo,
+  // AddProductspo,
   CategoriesProductAdd,
   addCategory,
   getCategory,
 } from "../../../redux/features/AdminSlice";
 import AddImages from "./add-button.png";
-
+import { useNavigate } from "react-router";
+import { toast,ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { AddProductspo } from "../../../redux/features/ProductSlice";
 function AddProducts() {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -18,6 +21,7 @@ function AddProducts() {
   const [selectedImages, setselectedImages] = useState([]);
   const dispatch = useDispatch();
   const Cateogries = useSelector((state) => state.admin.CategoriesProduct);
+  const nav=useNavigate()
   useEffect(() => {
     dispatch(CategoriesProductAdd());
   }, [dispatch, getCategory]);
@@ -39,16 +43,26 @@ function AddProducts() {
 
   const addProducts = (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append("name", name);
-    formData.append("price", price);
-    formData.append("category", category);
-    formData.append("stock", stock);
-    formData.append("description", description);
-    selectedImages.forEach((image, index) => {
-      formData.append(`image${index}`, image);
-    });
-    dispatch(AddProductspo(formData));
+    if (name!==""&&price!==""&&category!==""&&stock!==""&&description!==""&&selectedImages.length!==0) {
+      
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("price", price);
+      formData.append("category", category);
+      formData.append("stock", stock);
+      formData.append("description", description);
+      selectedImages.forEach((image, index) => {
+        formData.append(`image${index}`, image);
+      });
+      
+      dispatch(AddProductspo(formData));
+      // nav("")
+      nav("/admin/products")
+      toast.success("product added Sucessfully")
+    }
+    else{
+      toast.error("All feilds are required")
+    }
   };
   return (
     <div>
@@ -225,6 +239,7 @@ function AddProducts() {
           </button>
         </form>
       </div>
+      <ToastContainer/>
     </div>
   );
 }

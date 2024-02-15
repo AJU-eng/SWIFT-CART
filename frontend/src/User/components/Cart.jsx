@@ -3,40 +3,50 @@ import AuthenticatedNavbar from "./Navbar/AuthenticatedNavbar";
 import iphone from "./product images/15plus/iphone main.webp";
 import { AiOutlineDelete } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
+import empty from "../components/assets/helu-removebg-preview.png";
 import {
   decrementProduct,
   deleteCartProduct,
   getCart,
   increment,
-  makeOrders,
-} from "../../redux/features/userslice";
+} from "../../redux/features/cartSlice";
+import { CiShoppingCart } from "react-icons/ci";
+import img from "../components/assets/hey-removebg-preview.png";
 import { useNavigate } from "react-router";
-import { getCouponCodes } from "../../redux/features/userslice";
-import { toast } from "react-toastify";
+import { getCouponCodes } from "../../redux/features/cartSlice";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { URL } from "../../redux/features/api";
+import { BASE_URI } from "../../redux/features/api";
+import { makeOrders } from "../../redux/features/OrderSlice";
+import ReactLoading from "react-loading";
+import { isBlocked } from "../../redux/features/userslice";
 function Cart() {
   const dispatch = useDispatch();
   // let [total,setTotal]=useState("")
-  const cartData = useSelector((state) => state.user.Cart);
-  const quantity = useSelector((state) => state.user.quantity);
-  const Orders = useSelector((state) => state.user.Orders);
-  const stock = useSelector((state) => state.cartStock);
+  const cartData = useSelector((state) => state.Cart.Cart);
+  const stock = useSelector((state) => state.Cart.cartStock);
+  const loading = useSelector((state) => state.Cart.loading);
+  // const loading=true
   const [discount, setDiscount] = useState(0);
   const [displayedTotal, setDisplayedTotal] = useState(0);
   const [couponError, setCouponError] = useState("");
   const [code, setCode] = useState("");
-  const CouponCode = useSelector((state) => state.user.coupon);
+  const CouponCode = useSelector((state) => state.Cart.coupon);
+  let limit = useSelector((state) => state.Cart.cartStock);
   const nav = useNavigate();
-
   useEffect(() => {
-    dispatch(getCart());
     dispatch(getCouponCodes());
+    dispatch(getCart());
+    dispatch(isBlocked())
   }, [dispatch]);
 
   useEffect(() => {
     if (cartData) {
       console.log(cartData);
+    }
+    if (limit) {
+      console.log(limit);
+      toast.error("stock limit reached");
     }
     if (CouponCode) {
       console.log(CouponCode);
@@ -82,9 +92,13 @@ function Cart() {
     // console.log(CouponCode.minPurchaseAmount);
     if (totalPrice() < CouponCode[0].minPurchaseAmount) {
       console.log(totalPrice());
-      setCouponError(`Min Purchase Amount is ${CouponCode[0].minPurchaseAmount}`);
+      setCouponError(
+        `Min Purchase Amount is ${CouponCode[0].minPurchaseAmount}`
+      );
     } else if (totalPrice() > CouponCode[0].maxPurchaseAmount) {
-      setCouponError(`Max Purchase Amount is ${CouponCode[0].maxPurchaseAmount}`);
+      setCouponError(
+        `Max Purchase Amount is ${CouponCode[0].maxPurchaseAmount}`
+      );
     } else {
       const data = CouponCode.find((i) => i.code === code);
       setDiscount(data.value);
@@ -102,15 +116,24 @@ function Cart() {
             <p className="font-serif px-7">QUANTITY</p>
             <p className="font-serif px-12">SUB TOTAL</p>
           </div>
-
-          {Array.isArray(cartData) &&
+          {loading && (
+            <div className="flex justify-center mt-20">
+              <ReactLoading
+                type="spin"
+                color="lightBlue"
+                height={"10%"}
+                width={"10%"}
+              />
+            </div>
+          )}
+          {Array.isArray(cartData) && cartData.length !== 0 && !loading ? (
             cartData.map((product) => {
               return (
                 <div className="h-[6rem] w-[49rem]  mt-1 rounded-lg bg-white shadow-lg">
                   <div className="flex ">
                     <div>
                       <img
-                        src={`${URL}images/${product.productImage}`}
+                        src={`${BASE_URI}images/${product.productImage}`}
                         className="h-20 mt-2 mx-5 "
                         alt=""
                       />
@@ -181,10 +204,18 @@ function Cart() {
                   </div>
                 </div>
               );
-            })}
+            })
+          ) : Array.isArray(cartData) && cartData.length === 0 ? (
+            <div>
+              <div className="flex justify-center align-middle mr-20">
+                <img src={img} className="h-64 pt-12" alt="" />
+              </div>
+              {/* <p className="text-center text-4xl font-serif mr-20">no items</p> */}
+            </div>
+          ) : null}
         </div>
         <div className="bg-gray-50">
-          <div className=" h-64 w-[15rem] bg-white shadow-xl mx-32 mt-10 font-serif">
+          <div className="  w-[15rem] bg-white shadow-xl mx-32 mt-10 font-serif">
             <p className="font-serif text-center pt-3 text-lg">Price Details</p>
             <div className="mt-2">
               <div className="flex justify-around font-serif">
@@ -209,12 +240,12 @@ function Cart() {
                 {cartData.length !== 0 ? (
                   <button
                     onClick={() => proceed()}
-                    className="h-9 w-32 text-white text-md rounded-lg shadow-lg font-serif mt-5 bg-blue-500 "
+                    className="h-9 w-32 mb-5 text-white text-md rounded-lg shadow-lg font-serif mt-5 bg-blue-500 "
                   >
                     Proceed to Buy
                   </button>
                 ) : (
-                  <button className="h-9 w-32 text-white text-md rounded-lg shadow-lg font-serif mt-5 bg-blue-500">
+                  <button className="h-9 w-32 text-white text-md rounded-lg shadow-lg mb-5 font-serif mt-5 bg-blue-500">
                     no items
                   </button>
                 )}
@@ -242,6 +273,7 @@ function Cart() {
             </button>
           </div>
         </div>
+        <ToastContainer />
       </div>
     </>
   );

@@ -1,16 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { approveReturns, getReturns, singleReturns } from "../../../redux/features/AdminSlice";
-import ReasonModal from "./ReturnReason";
+import {
+  approveReturns,
+  getReturns,
+  rejectReturns,
+  singleReturns,
+} from "../../../redux/features/AdminSlice";
+// import ReasonModal from "./ReturnReason";
+import ReasonModals from "./viewReason";
 
 function ReturnManagment() {
   const dispatch = useDispatch();
-  const returnso = useSelector((state) => state.admin.returns[0]);
+  const returnso = useSelector((state) => state.admin.returns);
   const [visible, setVisible] = useState(false);
+  const [reason, setReason] = useState("");
   useEffect(() => {
     dispatch(getReturns());
   }, [dispatch]);
- 
+  useEffect(() => {
+    if (returnso) {
+      console.log(returnso);
+    }
+  }, [returnso]);
+  const handleClose = () => {
+    setVisible(false);
+  };
   return (
     <div>
       <table className="w-full">
@@ -25,31 +39,55 @@ function ReturnManagment() {
         </thead>
         <tbody>
           {returnso &&
-            returnso.returns.map((ret) => {
+            returnso.map((ret) => {
               return (
                 <tr className="border border-b-2 text-center h-12 font-serif">
-                  <td>{ret.productName}</td>
-                  <td>{ret.price}</td>
-                  <td>{ret.status}</td>
+                  <td>{ret.returns.productName}</td>
+                  <td>{ret.returns.price}</td>
+                  <td>{ret.returns.status}</td>
                   <td
                     onClick={() => {
-                        dispatch(singleReturns({id:ret.id}))
-                    //   setVisible(true);
+                      setReason(ret.returns.reason);
+                      setVisible(true);
                     }}
                     className="cursor-pointer underline text-blue-400"
                   >
                     <p>View Reason</p>
                   </td>
-                  {ret.status === "requested" ? (
+                  {ret.returns.status === "requested" ? (
                     <td className="flex justify-around mt-2">
-                      <button onClick={()=>dispatch(approveReturns({id:ret.id,price:ret.price,user:returnso.userId}))} className="w-20 bg-blue-400 rounded-md text-white h-7">
+                      <button
+                        onClick={() =>
+                          dispatch(
+                            approveReturns({
+                              id: ret.returns.id,
+                              price: ret.returns.price,
+                              productId: ret.returns.productId,
+                              orderId: ret.returns.orderId,
+                              user: ret.returns.user,
+                            })
+                          )
+                        }
+                        className="w-20 bg-blue-400 rounded-md text-white h-7"
+                      >
                         Approve
                       </button>
-                      <button className="w-20 bg-red-400 rounded-md text-white">
+                      <button
+                        className="w-20 bg-red-400 rounded-md text-white"
+                        onClick={() =>
+                          dispatch(
+                            rejectReturns({
+                              id: ret.returns.id,
+                              productId: ret.returns.productId,
+                              orderId: ret.returns.orderId,
+                            })
+                          )
+                        }
+                      >
                         Reject
                       </button>
                     </td>
-                  ) : ret.status === "approved" ? (
+                  ) : ret.returns.status === "approved" ? (
                     <td className="flex justify-around mt-2">
                       <button className="w-40 bg-blue-400 rounded-md text-white h-7">
                         Already approved
@@ -67,7 +105,7 @@ function ReturnManagment() {
             })}
         </tbody>
       </table>
-      <ReasonModal visible={visible} />
+      <ReasonModals visible={visible} onClose={handleClose} reason={reason} />
     </div>
   );
 }

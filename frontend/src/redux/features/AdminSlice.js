@@ -2,48 +2,34 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import products from "../../User/components/products";
 import { BiAccessibility } from "react-icons/bi";
-
+import { BASE_URI } from "./api";
 const initialDataState = {
+  isBlocked:false,
   loading: false,
   users: [],
   categories: [],
-  returns:"",
-  csvfile:"",
-  singleReturn:"",
+  returns: "",
+  csvfile: "",
+  singleReturn: "",
   Banner: "",
   coupon: [],
   TotalData: "",
   sales: "",
   logged: "",
-  Orders: [],
-  Products: [],
   CategoriesProduct: [],
   err: "",
-  ProductToEdit: "",
   category_status: "",
   SingleCategory: "",
 };
 
 export const fetchUsers = createAsyncThunk("admin/FetchUser", () => {
-  return axios
-    .get(`${URL}admin/getUser`)
-    .then((res) => res.data);
+  return axios.get(`${BASE_URI}admin/getUser`).then((res) => res.data);
 });
-export const findEditProduct = createAsyncThunk(
-  "admin/productEdit",
-  async (id) => {
-    console.log(id);
-    const res = await axios.post(
-      `${URL}user/findProduct/${id}`
-    );
-    // console.log((await res).data);
-    return await res.data;
-  }
-);
+
 export const CategoriesProductAdd = createAsyncThunk(
   "admin/cateProduct",
   async () => {
-    const res = await axios.get(`${URL}admin/getCateProduct`);
+    const res = await axios.get(`${BASE_URI}admin/getCateProduct`);
     return res.data;
   }
 );
@@ -51,10 +37,7 @@ export const BlockUsers = createAsyncThunk(
   "admin/BlockUser",
   async (id, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        `${URL}admin/blockUser`,
-        { id }
-      );
+      const response = await axios.post(`${BASE_URI}admin/blockUser`, { id });
       return response.data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -65,7 +48,7 @@ export const UnblockUsers = createAsyncThunk(
   "admin/Unblock",
   async (id, { rejectWithValue }) => {
     try {
-      const res = await axios.post(`${URL}admin/userUnblock`, {
+      const res = await axios.post(`${BASE_URI}admin/userUnblock`, {
         id,
       });
       return res.data;
@@ -77,7 +60,7 @@ export const UnblockUsers = createAsyncThunk(
 export const getCouponCodesAdmin = createAsyncThunk(
   "admin/getCoupon",
   async () => {
-    const res = await axios.get(`${URL}admin/getCoupon`);
+    const res = await axios.get(`${BASE_URI}admin/getCoupon`);
     return res.data;
   }
 );
@@ -87,27 +70,23 @@ export const DeleteUser = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     console.log(id);
     try {
-      const res = await axios.delete(
-        `${URL}admin/userDelete/${id}`,
-        id
-      );
+      const res = await axios.delete(`${BASE_URI}admin/userDelete/${id}`, id);
       return res.data;
     } catch (err) {
       return rejectWithValue(err.message);
     }
   }
 );
-export const singleReturns=createAsyncThunk("admin/singleReturns",async(data)=>{
-  const res=await axios.post(`${URL}admin/singleReturn`,data)
-  return res.data
-})
-export const GetProductsAdmin = createAsyncThunk("user/products", async () => {
-  const res = await axios.get(`${URL}user/getProducts`);
-  return res.data;
-});
+export const singleReturns = createAsyncThunk(
+  "admin/singleReturns",
+  async (data) => {
+    const res = await axios.post(`${BASE_URI}admin/singleReturn`, data);
+    return res.data;
+  }
+);
 
 export const getCategory = createAsyncThunk("admin/getCat", async () => {
-  const res = await axios.get(`${URL}admin/getCategories`);
+  const res = await axios.get(`${BASE_URI}admin/getCategories`);
   return res.data;
 });
 
@@ -115,11 +94,9 @@ export const addCategory = createAsyncThunk(
   "admin/category",
   async (formData, { rejectWithValue }) => {
     try {
-      const res = await axios.post(
-        `${URL}admin/categoryAdd`,
-        formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
+      const res = await axios.post(`${BASE_URI}admin/categoryAdd`, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       return res.data;
     } catch (err) {
       return rejectWithValue(err.message);
@@ -129,7 +106,7 @@ export const addCategory = createAsyncThunk(
 export const findCategory = createAsyncThunk(
   "admin/CategoryEdit",
   async (id) => {
-    const res = await axios.post(`${URL}admin/findCategory`, {
+    const res = await axios.post(`${BASE_URI}admin/findCategory`, {
       id,
     });
     return res.data;
@@ -137,55 +114,21 @@ export const findCategory = createAsyncThunk(
 );
 export const EditCate = createAsyncThunk("admin/editCate", async (formdata) => {
   console.log(formdata);
-  const res = await axios.post(
-    `${URL}admin/editCategory`,
-    formdata,
-    { headers: { "Content-Type": "multipart/form-data" } }
-  );
+  const res = await axios.post(`${BASE_URI}admin/editCategory`, formdata, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
   return res.data;
 });
-export const EditProducts = createAsyncThunk(
-  "admin/editProduct",
-  async (formData) => {
-    const data = await axios.patch(
-      `${URL}admin/editProduct`,
-      formData
-    );
-    return data.data;
-  }
-);
-
-export const DeleteProduct = createAsyncThunk(
-  "admin/deleteProduct",
-  async (id) => {
-    console.log(id);
-    const data = await axios.delete(
-      `${URL}admin/deleteProduct/${id}`
-    );
-    return data.data;
-  }
-);
 
 export const adminLogged = createAsyncThunk("admin/logged", async () => {
-  const adminLog = axios.get(`${URL}admin/adminLogged`);
+  const adminLog = axios.get(`${BASE_URI}admin/adminLogged`);
   return (await adminLog).data;
 });
 
-export const getOrders = createAsyncThunk("admin/getOrdersAdmin", async () => {
-  const res = await axios.get(`${URL}admin/getOrder`);
-  return res.data;
-});
-export const AddProductspo = createAsyncThunk(
-  "admin/addProducts",
-  async (formData, { rejectWithValue }) => {
-    const res = axios.post(`${URL}admin/AddProducts`, formData);
-    return (await res).data;
-  }
-);
 export const blockCategory = createAsyncThunk(
   "admin/blockCategory",
   async (id) => {
-    const res = await axios.post(`${URL}admin/blockCategory`, {
+    const res = await axios.post(`${BASE_URI}admin/blockCategory`, {
       id,
     });
     return res.data;
@@ -194,94 +137,92 @@ export const blockCategory = createAsyncThunk(
 export const editOrderstatus = createAsyncThunk(
   "admin/editOrderstatus",
   async (status) => {
-    const edit = axios.post(
-      `${URL}admin/editOrderstatus`,
-      status
-    );
+    const edit = axios.post(`${BASE_URI}admin/editOrderstatus`, status);
   }
 );
 export const getTotalData = createAsyncThunk("admin/getTotals", async () => {
-  const res = await axios.get(`${URL}admin/getTotalData`);
+  const res = await axios.get(`${BASE_URI}admin/getTotalData`);
   return res.data;
 });
 
 export const unblocksCategory = createAsyncThunk(
   "admin/categoryunblock",
   async (id) => {
-    const res = await axios.post(
-      `${URL}admin/unblockCategory`,
-      { id }
-    );
+    const res = await axios.post(`${BASE_URI}admin/unblockCategory`, { id });
     return res.data;
   }
 );
 export const weeklySales = createAsyncThunk("admin/weekly", async () => {
-  const data = await axios.get(`${URL}admin/sales`);
+  const data = await axios.get(`${BASE_URI}admin/sales`);
   return data.data;
 });
 export const monthlySales = createAsyncThunk("admin/monthly", async () => {
-  const data = await axios.get(`${URL}admin/montly_sales`);
+  const data = await axios.get(`${BASE_URI}admin/montly_sales`);
   return data.data;
 });
 export const YearlySales = createAsyncThunk("admin/yearly", async () => {
-  const res = await axios.get(`${URL}admin/yearly`);
+  const res = await axios.get(`${BASE_URI}admin/yearly`);
   return res.data;
 });
 export const AddBanner = createAsyncThunk("admin/bannerAdd", async (data) => {
-  const res = await axios.post(`${URL}admin/BannerAdd`, data);
+  const res = await axios.post(`${BASE_URI}admin/BannerAdd`, data);
   return res.data;
 });
 export const addCoupon = createAsyncThunk("admin/addCoupon", async (data) => {
   console.log(data);
-  const res = await axios.post(`${URL}admin/addCoupon`, data);
+  const res = await axios.post(`${BASE_URI}admin/addCoupon`, data);
   return res.data;
 });
 
 export const BlockCoupon = createAsyncThunk(
   "admin/couponBlock",
   async (data) => {
-    const res = await axios.post(
-      `${URL}admin/couponBlock`,
-      data
-    );
+    const res = await axios.post(`${BASE_URI}admin/couponBlock`, data);
     return res.data;
   }
 );
-export const getBanners=createAsyncThunk("admin/getBanner",async()=>{
-  
-    
-    const res=await axios.get( `${URL}admin/getBanner`)
-    return res.data
-  
-})
-export const getReturns=createAsyncThunk("admin/returns",async()=>{
-  const res=await axios.get(`${URL}admin/getReturn`)
-  return res.data
-})
+export const getBanners = createAsyncThunk("admin/getBanner", async () => {
+  const res = await axios.get(`${BASE_URI}admin/getBanner`);
+  return res.data;
+});
+export const getReturns = createAsyncThunk("admin/returns", async () => {
+  const res = await axios.get(`${BASE_URI}admin/getReturn`);
+  return res.data;
+});
 export const unBlockCoupon = createAsyncThunk(
   "admin/unBlockCoupon",
   async (data) => {
-    const res = await axios.post(
-     ` ${URL}admin/couponunBlock`,
-      data
-    );
+    const res = await axios.post(` ${BASE_URI}admin/couponunBlock`, data);
     return res.data;
   }
 );
-export const deleteBanners=createAsyncThunk("admin/deleteBanner",async(id)=>{
-  const res=await axios.post(`${URL}admin/deleteBanner`,id)
-  return res.data
-})
+export const deleteBanners = createAsyncThunk(
+  "admin/deleteBanner",
+  async (id) => {
+    const res = await axios.post(`${BASE_URI}admin/deleteBanner`, id);
+    return res.data;
+  }
+);
 
-export const downloadReport=createAsyncThunk("admin/report",async(data)=>{
-    const res=await axios.post("http://localhost:300/admin/report",data)
-    return res.data
-})
+export const downloadReport = createAsyncThunk("admin/report", async (data) => {
+  const res = await axios.get(`${BASE_URI}admin/report`);
+  return res.data;
+});
 
-export const approveReturns=createAsyncThunk("admin/approveReturn",async(data)=>{
-   const res=await axios.post(`${URL}admin/approveReturn`,data)
-   
-})
+export const approveReturns = createAsyncThunk(
+  "admin/approveReturn",
+  async (data) => {
+    const res = await axios.post(`${BASE_URI}admin/approveReturn`, data);
+    return res.data;
+  }
+);
+export const rejectReturns = createAsyncThunk(
+  "admin/rejectReturn",
+  async (data) => {
+    const res = await axios.post(`${BASE_URI}admin/rejectReturn`, data);
+    return res.data;
+  }
+);
 const adminSlice = createSlice({
   name: "admin",
   initialState: { ...initialDataState },
@@ -304,9 +245,11 @@ const adminSlice = createSlice({
         if (user._id === action.payload._id) {
           user.status = action.payload.status;
         }
+
         return user;
       });
       state.users = blockuser;
+      state.isBlocked=true
     });
     builder.addCase(UnblockUsers.fulfilled, (state, action) => {
       const unblockuser = state.users.map((user) => {
@@ -316,6 +259,7 @@ const adminSlice = createSlice({
         return user;
       });
       state.users = unblockuser;
+      state.isBlocked=false
     });
     builder.addCase(DeleteUser.fulfilled, (state, action) => {
       state.users = state.users.filter(
@@ -350,25 +294,11 @@ const adminSlice = createSlice({
     builder.addCase(findCategory.fulfilled, (state, action) => {
       state.SingleCategory = action.payload;
     });
-    builder.addCase(GetProductsAdmin.fulfilled, (state, action) => {
-      state.Products = action.payload;
+
+    builder.addCase(downloadReport.fulfilled, (state, action) => {
+      state.csvfile = action.payload;
     });
-    builder.addCase(DeleteProduct.fulfilled, (state, action) => {
-      state.Products = state.Products.filter(
-        (product) => product._id !== action.payload._id
-      );
-    });
-    builder.addCase(downloadReport.fulfilled,(state,action)=>{
-        state.csvfile=action.payload
-    })
-    builder.addCase(findEditProduct.fulfilled, (state, action) => {
-      // console.log(JSON.stringify(action.payload)+"=======================reduxstate");
-      state.ProductToEdit = action.payload;
-      console.log(
-        JSON.stringify(state.ProductToEdit) +
-          "=============================redux"
-      );
-    });
+
     builder.addCase(adminLogged.fulfilled, (state, action) => {
       state.logged = action.payload;
       console.log(state.logged + "===============logged slice");
@@ -376,9 +306,7 @@ const adminSlice = createSlice({
     builder.addCase(CategoriesProductAdd.fulfilled, (state, action) => {
       state.CategoriesProduct = action.payload;
     });
-    builder.addCase(getOrders.fulfilled, (state, action) => {
-      state.Orders = action.payload;
-    });
+
     builder.addCase(getTotalData.fulfilled, (state, action) => {
       state.TotalData = action.payload;
     });
@@ -417,20 +345,42 @@ const adminSlice = createSlice({
     builder.addCase(AddBanner.fulfilled, (state, action) => {
       state.Banner = action.payload;
     });
-    builder.addCase(getBanners.fulfilled,(state,action)=>{
-      state.Banner=action.payload
-    })
-    builder.addCase(deleteBanners.fulfilled,(state,action)=>{
-      state.Banner=state.Banner.filter((item)=>{
-        item._id!==action.payload._id
-      })
-    })
-    builder.addCase(getReturns.fulfilled,(state,action)=>{
-      state.returns=action.payload
-    })
-    builder.addCase(singleReturns.fulfilled,(state,action)=>{
-      state.returns=action.payload
-    })
+    builder.addCase(getBanners.fulfilled, (state, action) => {
+      state.Banner = action.payload;
+    });
+    builder.addCase(deleteBanners.fulfilled, (state, action) => {
+      state.Banner = state.Banner.filter((item) => {
+        item._id !== action.payload._id;
+      });
+    });
+    builder.addCase(getReturns.fulfilled, (state, action) => {
+      state.returns = action.payload;
+    });
+    builder.addCase(singleReturns.fulfilled, (state, action) => {
+      state.returns = action.payload;
+    });
+    builder.addCase(addCoupon.fulfilled, (state, action) => {
+      state.coupon = action.payload;
+    });
+    builder.addCase(approveReturns.fulfilled, (state, action) => {
+      const approved = state.returns.map((ret) => {
+        if (ret.returns.id === action.payload.returns.id) {
+          ret.returns.status = action.payload.returns.status;
+        }
+        return ret;
+      });
+      state.returns = approved;
+    });
+
+    builder.addCase(rejectReturns.fulfilled, (state, action) => {
+      const rejected = state.returns.map((ret) => {
+        if (ret.returns.id === action.payload.returns.id) {
+          ret.returns.status = action.payload.returns.status;
+        }
+        return ret;
+      });
+      state.returns = rejected;
+    });
   },
 });
 

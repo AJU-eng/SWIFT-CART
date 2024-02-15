@@ -17,7 +17,7 @@ import AuthenticatedNavbar from "./User/components/Navbar/AuthenticatedNavbar";
 import UnAuthorizedHome from "./User/UnAuthorizedHome";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { logged } from "./redux/features/userslice";
+import { isBlocked, logged } from "./redux/features/userslice";
 import Category from "./User/components/Category";
 import CateogryManagment from "./Admin/Components/pages/CateogryManagment";
 import ForgetPassword from "./User/components/forgetPassword";
@@ -31,17 +31,33 @@ import SIdebarRoutes from "./User/components/SIdebarRoutes";
 import Checkout from "./User/components/Checkout";
 import OrderSucessPage from "./User/components/OrderSucessPage";
 import OrderDetails from "./User/components/OrderDetails";
+import Products from "./User/components/products"
+import BlockedPage from "./User/components/BlockedPage";
 axios.defaults.withCredentials = true;
 
 function App() {
-  const user = useSelector((state) => state.logged.logged);
+  const user = useSelector((state) => state.user.logged);
   const admin = useSelector((state) => state.admin.logged);
+  const isBlock=useSelector((state)=>state.user.Blocked)
+  // const nav=useNavigate()
+  console.log(isBlock);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(logged());
     dispatch(adminLogged());
-  }, [dispatch,user]);
+   dispatch(isBlocked())
+   console.log(isBlock,"blockedjhgbjhgjhgjhgjhgjhgjhgjhgjhgjhgjhgjhgjhgjhgjhgjhgjhgjhgjhgjhg");
+    // alert('d')
+    // console.log(a,"()");
+  }, [user,isBlock,dispatch]);
+
+  useEffect(()=>{
+    if (isBlock) {
+      // nav("/login")
+    }
+  },[])
+
 
   // const ProtectRoute=({element})=>{
   //   // const user=useSelector((state)=>state.logged.user)
@@ -56,19 +72,19 @@ function App() {
             <Route path="/register" element={<FormAuth />} />
             <Route path="/otp" element={<Otp />} />
             {/* <Route path="/home" element={<ProtectRoute element={<Home />} />} /> */}
-            <Route path="/home" element={<Home />} />
+            <Route path="/home" element={user && !isBlock?<Home />:isBlock?<BlockedPage/>:  <Authentication/>} />
             <Route path="/login" element={<Authentication />} />
             <Route path="/ProductDetail/:id" element={<ProductsDetailPage />} />
-            <Route path="/routes/*"  element={<SIdebarRoutes/>}/>
+            <Route path="/routes/*"  element={user && !isBlock?<SIdebarRoutes/>:isBlock?<BlockedPage/>: <Authentication/>}/>
             <Route path="/admin/*" element={<Main />} />
-            <Route path="/orderSucess"  element={<OrderSucessPage/>}/>
-            <Route path="/checkout" element={<Checkout/>}/>
-            <Route path="/cart"  element={<Cart/>}/>
+            <Route path="/orderSucess"  element={user && !isBlock?<OrderSucessPage/>:isBlock?<BlockedPage/>:<Authentication/>}/>
+            <Route path="/checkout" element={user&& !isBlock?<Checkout/>:isBlock?<BlockedPage/>:<Authentication/>}/>
+            <Route path="/cart"  element={user && !isBlock?<Cart/>:isBlock?<BlockedPage/>:<Authentication/>}/>
             <Route path="/forgetPassword" element={<ForgetPassword />} />
-            <Route path="/otpForgetPassword" element={<ForgetOtp />} />
-            <Route path="/resetPass" element={<ResetPassword />} />
-            <Route path="/sucesPage" element={<VerificationPage />} />
-           
+            <Route path="/otpForgetPassword" element={isBlock?<BlockedPage/>:<ForgetOtp />} />
+            <Route path="/resetPass" element={isBlock?<BlockedPage/>:<ResetPassword />} />
+            <Route path="/sucesPage" element={isBlock?<BlockedPage/>:<VerificationPage />} />
+            <Route  path="/products" element={<Products/>}/>
           </Routes>
         </BrowserRouter>
       </SkeletonTheme>

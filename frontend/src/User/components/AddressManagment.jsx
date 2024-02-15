@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { IoIosAdd } from "react-icons/io";
 import AddressModal from "./AddressModal";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteAddress, getAddress } from "../../redux/features/userslice";
+import { deleteAddress, getAddress, isBlocked } from "../../redux/features/userslice";
 import { MdDeleteOutline } from "react-icons/md";
 import EditAddressModal from "./EditAddressModal";
 import { CiEdit } from "react-icons/ci";
+import RingLoader from "react-spinners/RingLoader";
 
 function AddressManagment() {
   const [visible, setVisible] = useState(false);
@@ -13,8 +14,11 @@ function AddressManagment() {
   const [email, setEmail] = useState("");
   const dispatch = useDispatch();
   const address = useSelector((state) => state.user.Address);
+  const loading = useSelector((state) => state.user.loading);
+  // const loading=true
   useEffect(() => {
     dispatch(getAddress());
+    dispatch(isBlocked())
   }, [dispatch]);
   const handleclose = () => {
     setVisible(false);
@@ -33,38 +37,52 @@ function AddressManagment() {
           </div>
         </div>
       </div>
-      <div className="flex space-x-6">
-        {address.length !== 0 &&
-          address.Address.map((addres) => {
-            return (
-              <div className="w-72 flex justify-between px-10 mt-40 bg-white  shadow-md pb-4 pt-2   space-y-2">
-                <div>
-                  <p>{addres.name}</p>
-                  <p>{addres.number}</p>
-                  <p>{addres.email}</p>
-                  <p>{addres.state}</p>
-                  <p>{addres.district}</p>
-                  <p>{addres.street}</p>
+      {loading ? (
+        <div className="flex justify-center align-middle mt-28">
+          <RingLoader
+            color={"lightBlue"}
+            // loading={loading}
+            // cssOverride={override}
+            size={150}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
+        </div>
+      ) : (
+        <div className="flex space-x-6">
+          {address.length !== 0 &&
+            address.Address.map((addres) => {
+              return (
+                <div className="w-72 flex justify-between px-10 mt-40 bg-white  shadow-md pb-4 pt-2   space-y-2">
+                  <div>
+                    <p>{addres.name}</p>
+                    <p>{addres.number}</p>
+                    <p>{addres.email}</p>
+                    <p>{addres.state}</p>
+                    <p>{addres.district}</p>
+                    <p>{addres.street}</p>
+                  </div>
+                  <div className="flex space-x-2">
+                    <MdDeleteOutline
+                      onClick={() =>
+                        dispatch(deleteAddress({ email: addres.email }))
+                      }
+                      size={22}
+                    />
+                    <CiEdit
+                      size={22}
+                      onClick={() => {
+                        showModal(true);
+                        setEmail(addres.email);
+                      }}
+                    />
+                  </div>
                 </div>
-                <div className="flex space-x-2">
-                  <MdDeleteOutline
-                    onClick={() =>
-                      dispatch(deleteAddress({ email: addres.email }))
-                    }
-                    size={22}
-                  />
-                  <CiEdit
-                    size={22}
-                    onClick={() => {
-                      showModal(true);
-                      setEmail(addres.email)
-                    }}
-                  />
-                </div>
-              </div>
-            );
-          })}
-      </div>
+              );
+            })}
+        </div>
+      )}
+
       <AddressModal visible={visible} onClose={handleclose} />
       <EditAddressModal visible={modal} onClose={handleclose} email={email} />
     </div>
