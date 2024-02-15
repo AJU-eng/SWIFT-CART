@@ -469,8 +469,8 @@ const getOrder = async (req, res) => {
   const Orders = await OrderModel.findOne({ userId: user_id });
   if (Orders) {
     res.send(Orders.orders);
-  }else{
-    res.send([])
+  } else {
+    res.send([]);
   }
 };
 
@@ -483,9 +483,9 @@ const getAdminOrders = async (req, res) => {
 
 const updateOrderStatus = async (req, res) => {
   console.log(req.body);
-  const { price, status } = req.body;
+  const { id, status } = req.body;
   const data = await OrderModel.findOneAndUpdate(
-    { "orders.totalPrice": price },
+    { "orders.OrderId": id },
     { $set: { "orders.$.status": status } },
     { new: true, multi: true }
   );
@@ -499,14 +499,41 @@ const cancelOrder = async (req, res) => {
     req.cookies.token,
     process.env.SECRET_KEY
   );
-  const { price, mode } = req.body;
+  const { orderId, price, mode } = req.body;
   console.log(req.body);
   const status = await OrderModel.findOneAndUpdate(
-    { "orders.totalPrice": price },
+    { "orders.OrderId": orderId },
     { $set: { "orders.$.status": "cancelled" } },
     { new: true }
   );
   if (mode === "NetBanking") {
+    const date = new Date();
+    const _id = new Date().getTime();
+    let obj = {
+      amount: price,
+      type: "credit",
+      Description: "Order Cancellation Refund",
+      Date: date,
+      id: _id,
+    };
+    const wallet = await WalletModel.findOne({ userId: user_id });
+    if (wallet) {
+      const data = await WalletModel.findOneAndUpdate(
+        { userId: user_id },
+        { $push: { wallet: obj }, $inc: { Balance: price } },
+
+        { new: true }
+      );
+      console.log(data);
+    } else {
+      const wallets = await WalletModel.create({
+        userId: user_id,
+        wallet: obj,
+        Balance: price,
+      });
+      console.log(wallets);
+    }
+  } else if (mode === "wallet") {
     const date = new Date();
     const _id = new Date().getTime();
     let obj = {
@@ -550,11 +577,10 @@ const orderHistory = async (req, res) => {
     { $match: { "orders.status": "Delivered" } },
   ]);
   if (pendingData) {
-    
     console.log(pendingData.length);
     res.send(pendingData);
-  }else{
-    res.send([])
+  } else {
+    res.send([]);
   }
 };
 
@@ -677,7 +703,7 @@ const report = async (req, res) => {
   function convertJSONtoCSV(jsonData) {
     const fields = [
       "Order ID",
-      "User ID",
+      
       "Product Name",
       "Price",
       "Quantity",
@@ -700,7 +726,6 @@ const report = async (req, res) => {
         order.products.forEach((product) => {
           const row = [
             order.OrderId,
-            entry.userId,
             product.productName,
             product.Price,
             product.quantity,

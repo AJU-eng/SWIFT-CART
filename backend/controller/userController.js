@@ -249,6 +249,7 @@ const logout = async (req, res) => {
 };
 
 const BlockedCheck=async(req,res)=>{
+  console.log("hello world");
   // const {user_id,iat}=jwt.decode(req.cookies.token,process.env.SECRET_KEY)
   try {
     const { user_id, iat } =  jwt.decode(
@@ -257,14 +258,16 @@ const BlockedCheck=async(req,res)=>{
     );
   
     const data =await userModel.findOne({_id:user_id})
+    
     if (data.status==="blocked") {
-      res.send(true)
+      res.status(200).json({"success":true})
     }
     else{
-      res.send(false)
+      res.status(200).json({"success":false})
     }
   } catch (error) {
     console.log(error);
+    res.status(404).json({"err":error.message})
   }
  
 }
