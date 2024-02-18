@@ -18,6 +18,7 @@ const AddtoCart = async (req, res) => {
   if (from) {
     console.log("user found");
     const exData = await CartModel.findOne({
+      "userId":user_id,
       "Products.productName": ProductName,
     });
     if (exData) {
