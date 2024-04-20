@@ -46,7 +46,7 @@ function Authentication() {
         <form
           action=""
           onSubmit={loginUser}
-          className="max-w-[400px] w-full mx-auto bg-white p-4"
+          className="max-w-[400px] w-full mx-auto  bg-white p-4"
         >
           <h2 className="text-4xl font-medium text-center py-6 font-serif">
             Welcome Back..!

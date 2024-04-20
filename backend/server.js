@@ -5,24 +5,24 @@ require('dotenv').config()
 const monngoose=require('mongoose')
 const cookie=require('cookie-parser')
 const cors=require('cors')
-const session=require('express-session');
+// const session=require('express-session');
 // const { default: App } = require("../frontend/src/App");
 const router = require("./router/userRouter");
 const adminRouter = require("./router/adminRouter");
 app.use(cors({
-    origin:" https://www.swiftcartss.shop",
-    // origin:"http://localhost:5173",
+    // origin:" https://www.swiftcartss.shop",
+    origin:"http://localhost:5173",
     credentials:true
 }))
 app.use(cookie())
 app.use(express.urlencoded({extended:true}))
 app.use("/api/images",express.static(path.join(__dirname,"public/products")));
 app.use(express.json())
-app.use(session({
-    secret:'ajau',
-    resave:false,
-    saveUninitialized:true
-}))
+// app.use(session({
+//     secret:'ajau',
+//     resave:false,
+//     saveUninitialized:true
+// }))
 app.use('/api/user',router)
 app.use('/api/admin',adminRouter)
 
