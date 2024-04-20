@@ -1,4 +1,5 @@
-const otp = require("otp-generator");
+// const otp = require("otp-generator");
+const otp=require("otp-generator")
 const nodemailer = require("nodemailer");
 const { json } = require("express");
 const validator = require("validator");
