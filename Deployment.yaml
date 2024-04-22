@@ -77,8 +77,10 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: swiftcart-frontend
+  labels:
+    app: swiftcart-frontend
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: swiftcart-frontend
