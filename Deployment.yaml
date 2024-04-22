@@ -1,0 +1,154 @@
+# # Deployment for Image A
+
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#    name: SwiftCart-frontend-deployment
+# spec:
+#    replicas: 2
+#    selector:
+#       matchLabels:
+#         app: SwiftCart-frontend
+#    template:
+#        metadata:
+#         labels:
+#           app: SwiftCart-frontend
+#        spec:
+#          containers:
+#            - name: SwiftCart-frontend-container
+#              image: aju404/swiftcart-frontend
+#              port:
+#                -containerPort: 5173
+
+# ---
+
+# apiVersion: v1 
+# kind: Service 
+# metadata:
+#    name: swiftcart-frontend-service
+# spec:
+#   selector:
+#      app: SwiftCart-frontend
+# ports:
+#   - protocol: TCP
+#     port: 80
+#     targetPort: 5173
+
+# ---
+
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#    name: SwiftCart-backend-deployment
+# spec:
+#    replicas: 2
+#    selector:
+#       matchLabels:
+#         app: SwiftCart-backend
+#    template:
+#        metadata:
+#         labels:
+#           app: SwiftCart-backend
+#        spec:
+#          containers:
+#            - name: SwiftCart-backend-container
+#              image: aju404/swiftcart-backend
+#              port: 
+#               -containerPort: 3000
+
+
+# ---
+
+# apiVersion: v1 
+# kind: Service 
+# metadata:
+#    name: swiftcart-backend-service
+# spec:
+#   selector:
+#      app: SwiftCart-backend
+# ports:
+#   - protocol: TCP
+#     port: 80
+#     targetPort: 8080
+
+# Deployment for Image A (SwiftCart-frontend)
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: swiftcart-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: swiftcart-frontend
+  template:
+    metadata:
+      labels:
+        app: swiftcart-frontend
+    spec:
+      containers:
+      - name: swiftcart-frontend
+        image: aju404/swiftcart-frontend
+        ports:
+         - containerPort:  5173
+         
+
+---
+
+# Service for SwiftCart-frontend
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: swiftcart-frontend-service
+spec:
+  selector:
+    app: swiftcart-frontend
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 5173  # Correct indentation
+
+---
+
+# Deployment for Image B (SwiftCart-backend)
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: swiftcart-backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: swiftcart-backend
+  template:
+    metadata:
+      labels:
+        app: swiftcart-backend
+    spec:
+      containers:
+      - name: swiftcart-backend
+        image: aju404/swiftcart-backend
+        ports:
+          - containerPort: 3000
+          
+
+---
+
+# Service for SwiftCart-backend
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: swiftcart-backend-service
+spec:
+  selector:
+    app: swiftcart-backend
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080  # Correct indentation
+
+

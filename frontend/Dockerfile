@@ -10,6 +10,13 @@ RUN npm  install --legacy-peer-deps
 
 COPY . .
 
+
+
+# Run the build process manually to see detailed error messages
+RUN npm run build
+
+
+
 EXPOSE 5173
 
 CMD [ "npm","run","dev" ]

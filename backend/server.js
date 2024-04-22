@@ -26,6 +26,8 @@ app.use(express.json())
 app.use('/api/user',router)
 app.use('/api/admin',adminRouter)
 
+
+
 monngoose.connect(process.env.MONGO_URI).then(()=>app.listen(3000,()=>console.log("server started")))
 
 

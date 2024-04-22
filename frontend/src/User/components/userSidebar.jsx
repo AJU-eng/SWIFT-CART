@@ -12,7 +12,7 @@ import { MdMenu } from "react-icons/md";
 // import logo from "./logo.png";
 import { HiOutlineLogout } from "react-icons/hi";
 import profile from "../components/assets/Profile.svg";
-import WishList from "../components/assets/WishList.svg";
+import WishList from "../components/assets/wishList.svg";
 import Orders from "../components/assets/Orders.svg";
 import history from "../components/assets/Orderhistory.svg";
 import { IoWalletOutline } from "react-icons/io5";
