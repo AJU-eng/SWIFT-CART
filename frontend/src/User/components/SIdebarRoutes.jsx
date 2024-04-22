@@ -1,12 +1,11 @@
 import React from 'react'
 import RootLayoutUser from './RootLayoutUser'
 import { Outlet, Route, Routes } from "react-router";
-import UserProfile from './userProfile';
+import UserProfile from './UserProfile';
 import Wishlist from './Wishlist';
 import Orders from './Orders';
 import AddressManagment from './AddressManagment';
 import OrderDetails from './OrderDetails';
-// import OrderHistory from './OrderHistroy';
 import ReturnModal from "../components/requestModal"
 import WalletManagent from './WalletManagent';
 import AddressModal from './AddressModal';
